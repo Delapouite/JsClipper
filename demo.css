@@ -1,0 +1,270 @@
+.textarea_hide_buttons {
+  margin-bottom: 6px;
+  margin-top: 4px;
+}
+body {
+  background-color:#F8F8F8;
+}
+p {
+  margin:0px;
+  padding:0px;
+}
+th {
+  background-color:#DDDDDD;
+  font-weight:bold;
+  padding: 0px;
+}
+body, th, td, input, legend, fieldset, p, b, button, select, textarea {
+  font-size:13px;
+  font-family:Arial, Helvetica, sans-serif;
+}
+#p, #_p {
+  background-color:#ffffff;
+  border: 2px solid #AAAAAA;
+}
+.svg_mypath {
+  stroke:black;
+  stroke-width:1;
+  fill:black;
+  fill-opacity:0.3;
+}
+#p1, #_p1 {
+  fill:#00009C;
+  fill-opacity:0.06;
+  stroke:#D3D3DA;
+  stroke-opacity:1.0;
+  stroke-width:0.8;
+}
+#p2, #_p2 {
+  fill:#9C0000;
+  fill-opacity:0.06;
+  stroke:#FFA07A;
+  stroke-opacity:1.0;
+  stroke-width:0.8;
+}
+#p3, #_p3 {
+  fill:#80ff9C;
+  fill-opacity:0.5;
+  stroke:#003300;
+  stroke-opacity:1.0;
+  stroke-width:0.8;
+}
+#svg_source_textarea {
+  width: 1215px;
+  height: 300px;
+}
+#benchmark_exports_textarea {
+  width:1215px;
+  height:300px;
+}
+div#svgcontainer {
+  margin-right: 2px;
+  margin-top: 6px;
+}
+div#benchmark_div_outer {
+  width:100%;
+}
+div#benchmark_div {
+  width:100%;
+}
+#benchmark_fieldset {
+  width:367px;
+  min-width:367px;
+  height:350px;
+}
+.buttons {
+  display:inline-block;
+  padding:0px;
+  padding-left:12px;
+  padding-right:12px;
+  background-color:#666666;
+  color:white;
+  border-radius:10px;
+  text-align:center;
+  line-height:20px;
+  font-size:13px;
+  cursor:pointer;
+  margin-bottom:2px;
+  margin-top:2px;
+  font-family:Helvetica, Arial, sans-serif;
+  white-space:nowrap;
+}
+LEGEND {
+  font-weight:bold;
+}
+FIELDSET {
+  background-color:#EEEEEE;
+  /*
+  border-radius: 4px 4px 7px 7px;
+  -moz-border-radius: 4px 4px 7px 7px;
+  -webkit-border-radius: 4px 4px 7px 7px;
+  */
+  border: 2px solid #AAAAAA;
+  white-space:nowrap;
+}
+table {
+  border:0px;
+}
+.subpolylinks {
+  cursor:pointer;
+  font-size:13px;
+  padding:2px;
+}
+.subpolylinks:hover {
+  background-color:#BBBBBB;
+}
+.subpolylinks_disabled {
+  font-size:13px;
+  padding:2px;
+}
+/* To prevent odd text resizing in mobile Safari */
+@media only screen and (max-device-width: 480px) {
+  .body, p, fieldset, td, th {
+    -webkit-text-size-adjust:100%
+  }
+}
+.polygon_explorer {
+  text-align:left;
+  border-collapse:collapse;
+  white-space:normal;
+  width: 461px;
+}
+.polygon_explorer th {
+  font-weight:bold;
+}
+.polygon_explorer > tr > th, .polygon_explorer > tr > td,
+.polygon_explorer > tbody > tr > th, .polygon_explorer > tbody > tr > td
+{
+  border:1px solid #666666;
+  padding: 3px 4px 3px 4px;
+  vertical-align:top;
+}
+.polygons_fieldset {
+  border-collapse:collapse;
+  width:100%;
+}
+.polygons_fieldset td {
+  vertical-align:top;
+  white-space:nowrap;
+  padding:0px;
+  padding-right:10px;
+}
+.polygons_fieldset input[type=radio] {
+  margin-left:0px;
+}
+.random {
+  border-collapse:collapse;
+  width:100%;
+}
+.random td {
+  padding: 0px;
+  padding-right:10px;
+}
+.random_inputs {
+  width:25px
+}
+.random th {
+  padding: 0px;
+  padding-right:
+}
+.random th {
+  background-color:transparent;
+}
+.random_new_th {
+  background-color:transparent;
+}
+.random_new_th button {
+  margin:0px;
+}
+.random button, .random input {
+  margin-bottom:0px;
+  margin-top:0px;
+}
+#subj_polygon_count {
+  margin-bottom:2px;
+}
+.filltype_cliptype {
+  border-collapse: collapse;
+}
+.filltype_cliptype td {
+  vertical-align:top;
+  padding:0px;
+}
+.offset_outer {
+  border-collapse:collapse;
+  width:100%;
+}
+.offset_outer td {
+  vertical-align:top;
+  white-space:nowrap;
+  padding:0px;
+}
+.offset_outer input[type=radio] {
+  margin-left:0px;
+}
+.offset_inner input[type=text] {
+  margin-bottom:2px;
+}
+.offset_inner {
+  border-collapse: collapse;
+}
+.offset_inner td {
+  vertical-align:top;
+  height:100%;
+}
+#custom_polygons_fieldset {
+  display: none;
+}
+#random_polygons_fieldset {
+  display: none;
+}
+#misc_fieldset {
+  min-height:81px;
+}
+.custom_polygon_input {
+  width:285px;
+  height:15px;
+  padding: 2px;
+  line-height: 15px;
+}
+#polygon_explorer_string_inp {
+  margin:0px;
+  height:15px;
+  width: 371px;
+  padding: 2px;
+  line-height: 15px;
+}
+#custom_polygon_inputs {
+  display: block;
+}
+#custom_poly_message_box_green {
+  display:none;
+  opacity:0;
+  position:absolute;
+  top:0px;
+  left:0px;
+  height:0px;
+  width:200px;
+  vertical-align:middle;
+  text-align:center;
+  border:2px solid #106712;
+  background-color:#A3F1A5;
+  padding: 8px;
+  padding-left: 11px;
+  padding-right: 11px;
+  border-radius: 6px;
+  font-size:16px;
+  z-index:2;
+}
+.custom_polygon_inputs_table {
+  border-collapse: collapse;
+}
+#help_builtin_polygon_sets, #help_output_format, #help_custom_polygon {
+  padding-left: 7px;
+  padding-right: 7px;
+}
+/*
+#outertable > tbody > tr > td {
+border:1px solid red;
+}
+*/
