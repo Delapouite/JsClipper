@@ -38,8 +38,8 @@
     <table id="outertable" style="margin-bottom:5px">
       <tr>
         <td id="td0" style="vertical-align:top;width:353px;min-width:353px">
-          <FIELDSET id="PolygonsFieldset">
-            <LEGEND title="Builtin polygons">Polygons</LEGEND>
+          <fieldset id="PolygonsFieldset">
+            <legend title="Builtin polygons">Polygons</legend>
             <table class="polygons_fieldset">
               <tr>
                 <td>
@@ -74,9 +74,9 @@
                 </td>
               </tr>
             </table>
-          </FIELDSET>
-          <FIELDSET id="custom_polygons_fieldset" style="position:relative">
-            <LEGEND>Your own custom polygons</LEGEND>
+          </fieldset>
+          <fieldset id="custom_polygons_fieldset" style="position:relative">
+            <legend>Your own custom polygons</legend>
             <select name="custom_polygons_select"
             id="custom_polygons_select" title="Saved custom polygon sets"></select>
             <select name="sample_custom_polygon" id="sample_custom_polygon" title="Get Builtin polygon set">
@@ -119,9 +119,9 @@
               <button id="help_custom_polygon" title="Get help about custom polygons">?</button>
             </div>
             <div id="custom_poly_message_box_green"></div>
-          </FIELDSET>
-          <FIELDSET id="random_polygons_fieldset">
-            <LEGEND>Random polygon settings</LEGEND>
+          </fieldset>
+          <fieldset id="random_polygons_fieldset">
+            <legend>Random polygon settings</legend>
             <table class="random">
               <thead>
                 <tr>
@@ -166,34 +166,34 @@
                   </td>
                 </tr>
             </table>
-          </FIELDSET>
+          </fieldset>
           <table id="filltype_cliptype_table" class="filltype_cliptype" style="width:100%">
             <tr>
               <td>
-                <FIELDSET>
-                  <LEGEND>Subject FillType</LEGEND>
+                <fieldset>
+                  <legend>Subject FillType</legend>
                   <input type="radio" name="subject_fillType" value="0">EvenOdd&nbsp;
-                  <input type="radio" name="subject_fillType" value="1">NonZero</FIELDSET>
+                  <input type="radio" name="subject_fillType" value="1">NonZero</fieldset>
               </td>
               <td>
-                <FIELDSET>
-                  <LEGEND>Clip FillType</LEGEND>
+                <fieldset>
+                  <legend>Clip FillType</legend>
                   <input type="radio" name="clip_fillType" value="0">EvenOdd&nbsp;
-                  <input type="radio" name="clip_fillType" value="1">NonZero</FIELDSET>
+                  <input type="radio" name="clip_fillType" value="1">NonZero</fieldset>
               </td>
             </tr>
           </table>
-          <FIELDSET id="ClipTypeFieldset">
-            <LEGEND>Clip type (operation)</LEGEND>
+          <fieldset id="ClipTypeFieldset">
+            <legend>Clip type (operation)</legend>
             <p>
               <input type="radio" name="clipType" value="">No&nbsp;&nbsp;
               <input type="radio" name="clipType" value="0">Intersect&nbsp;&nbsp;
               <input type="radio" name="clipType" value="1">Union&nbsp;&nbsp;
               <input type="radio" name="clipType" value="2">Difference&nbsp;&nbsp;
               <input type="radio" name="clipType" value="3" checked>Xor</p>
-          </FIELDSET>
-          <FIELDSET id="CleaningFieldset">
-            <LEGEND>Cleaning and simplifying</LEGEND>
+          </fieldset>
+          <fieldset id="CleaningFieldset">
+            <legend>Cleaning and simplifying</legend>
             <p>
               <b>Clean</b><input type="checkbox" id="clean" 
               title="Clean. Joins sequential vertices if they are almost coincident. This is needed to prevent polygon breakage when offsetting. Not included in original Clipper, yet. This operation is done before offsetting."
@@ -209,9 +209,9 @@
               <input style="width:28px;" type="text" value="" id="lighten_distance"
             title="Tolerance. The distance that is used when lightening polygon. Removes middle vertex of three sequential vertices, if the middle vertex is under (or at) this distance of the line between start and end vertex.">
            </p>
-          </FIELDSET>
-          <FIELDSET id="OffsettingFieldset">
-            <LEGEND>Offsetting</LEGEND>
+          </fieldset>
+          <fieldset id="OffsettingFieldset">
+            <legend>Offsetting</legend>
             <table class="offset_outer">
               <tr>
                 <td style="padding-right:6px;">
@@ -259,9 +259,9 @@
                 </td>
               </tr>
             </table>
-          </FIELDSET>
-          <FIELDSET id="ScaleFieldset">
-            <LEGEND>Scale</LEGEND>
+          </fieldset>
+          <fieldset id="ScaleFieldset">
+            <legend>Scale</legend>
             <p style="width:200px;">
               <button id="scale_minus">&nbsp;-&nbsp;</button>
               <input type="text" id="scale" value="" style="width:80px">
@@ -269,9 +269,9 @@
               <span
               id="biginteger_used"></span>
             </p>
-          </FIELDSET>
-          <FIELDSET id="misc_fieldset">
-            <LEGEND>Misc</LEGEND>
+          </fieldset>
+          <fieldset id="misc_fieldset">
+            <legend>Misc</legend>
             <button id="show_svg_source" title="Show current SVG source in textarea at the bottom of the page">Show SVG source B</button>
             &nbsp;<b>Bevel</b>
             <input type="checkbox" id="bevel"
@@ -284,12 +284,12 @@
             <button id="benchmark1b" title="Execute Normal benchmark 5x">Run NB 5x</button>
             <button id="benchmark2" title="Execute Big Integer benchmark">Run BIB</button>
             <button id="benchmark2b" title="Execute Big Integer benchmark 5x">Run BIB 5x</button>
-          </FIELDSET>
+          </fieldset>
         </td>
         <td id="td1" style="vertical-align:top;width:506px;">
           <div id="svgcontainer"></div>
-          <FIELDSET id="polygon_explorer_fieldset">
-            <LEGEND>Polygon explorer</LEGEND>
+          <fieldset id="polygon_explorer_fieldset">
+            <legend>Polygon explorer</legend>
             <div id="polygon_explorer_div" style="overflow-y:auto;overflow-x:visible;padding-left:1px;max-height:300px">
 	            <table class="polygon_explorer">
 	              <tr>
@@ -390,16 +390,16 @@
 	              </tr>
 	            </table>
 	          </div>
-          </FIELDSET>
+          </fieldset>
         </td>
         <td id="td2" style="width:353px;vertical-align:top;">
-          <FIELDSET id="benchmark_fieldset_f" style="min-height:517px">
-            <LEGEND id="#benchmark_fieldset">Benchmark</LEGEND>
+          <fieldset id="benchmark_fieldset_f" style="min-height:517px">
+            <legend id="#benchmark_fieldset">Benchmark</legend>
             <div id="benchmark_div_outer">
               <div id="benchmark_div"></div>
               <div id="benchmark_multiple_table_cont"></div>
             </div>
-          </FIELDSET>
+          </fieldset>
         </td>
         <td id="td3" style="vertical-align:top;">
           <div id="svg_source_container2"></div>
