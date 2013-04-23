@@ -110,7 +110,7 @@ window.onload = function () {
   else {
     ClipperLib_MaxSteps_original = ClipperLib.MaxSteps;
     browserg = get_browser();
-    bench = new benchmark("bench");
+    bench = new Benchmark("bench");
     p = SVG.create();
     main();
   }
@@ -191,7 +191,7 @@ function normalize_clipper_poly(polystr, quiet) {
   }
   // if only points without "X" and "Y"
   var temp_n = [], i;
-  if (isArray(poly) && poly.length && typeof (poly[0]) == "number") {
+  if (isArray(poly) && poly.length && typeof(poly[0]) == "number") {
     var len = poly.length;
     for (i = 0; i < len; i = i + 2) {
       temp_n.push({
@@ -813,11 +813,7 @@ function popup_path(i, fr) {
 // when hovered
 function show_path(i, fr) {
   if (benchmark_running) return false;
-  var d;
-  if (typeof(i) == "undefined")
-    d = scaled_paths[fr].join(" ");
-  else
-    d = scaled_paths[fr][i];
+  var d = (typeof(i) == "undefined") ? scaled_paths[fr].join(" ") : d = scaled_paths[fr][i];
   mypath = p.path(d);
   $(mypath.node).removeAttr('fill stroke').attr('class', 'svg_mypath');
   $(mypath.node).attr('fill-rule', $('#p' + fr).attr('fill-rule'));
@@ -960,9 +956,9 @@ function update_fieldset_heights() {
   misc_fieldset_height += (max_td_height - children_heights_arr[0]);
   polygon_explorer_fieldset_height += (max_td_height - children_heights_arr[1]);
   benchmark_fieldset_f_height += (max_td_height - children_heights_arr[2]);
-  $("#misc_fieldset").css("min-height",misc_fieldset_height+"px");
-  $("#polygon_explorer_fieldset").css("min-height",polygon_explorer_fieldset_height+"px");
-  $("#benchmark_fieldset_f").css("min-height",benchmark_fieldset_f_height+"px");
+  $("#misc_fieldset").css("min-height", misc_fieldset_height+"px");
+  $("#polygon_explorer_fieldset").css("min-height", polygon_explorer_fieldset_height+"px");
+  $("#benchmark_fieldset_f").css("min-height", benchmark_fieldset_f_height+"px");
 }
 function resize() {
   myresize();
@@ -1015,8 +1011,7 @@ function svg_source_enlarge() {
     $("#_p1,#_p2,#_p3").css("stroke-width", 0.8 * (original_height / window_height));
   }
   $("#svg_source_textarea").css("display", "none");
-  if (benchmark_running) var disabled = "disabled";
-  else disabled = "";
+  var disabled = (benchmark_running) ? "disabled" : "";
   $("#svg_source_enlarge_button").html('<button ' + disabled + ' class="textarea_hide_buttons" onClick="show_svg_source_f()" title="Show SVG source">Show SVG source</button>');
   update_enlarged_SVG_source = true;
   update_enlarged_SVG = true;
@@ -1026,8 +1021,7 @@ function show_svg_source_f() {
   $("#svg_source_textarea").css("display", "block");
   show_svg_source_click("non_click");
   $("#enlarged_svg").html("");
-  if (benchmark_running) var disabled = "disabled";
-  else disabled = "";
+  var disabled = (benchmark_running) ? "disabled" : "";
   $("#svg_source_enlarge_button").html('<button ' + disabled + ' class="textarea_hide_buttons" onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button>');
   update_enlarged_SVG_source = true;
   update_enlarged_SVG = false;
@@ -1052,8 +1046,7 @@ function show_svg_source_click(non_click) {
     }
     var textarea_str = '<div id="svg_source_textarea_div">';
     textarea_str += '<button class="textarea_hide_buttons" onClick="$(\'#svg_source_textarea_div\').remove();update_enlarged_SVG_source=false;update_enlarged_SVG=false" title="Hide SVG source">Hide</button>';
-    if (benchmark_running) var disabled = "disabled";
-    else disabled = "";
+    var disabled = (benchmark_running) ? "disabled" : "";
     textarea_str += '<span id="svg_source_enlarge_button"><button ' + disabled + ' class="textarea_hide_buttons" onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button></span><br>';
     textarea_str += '<div style="display:none" id="enlarged_svg"></div>';
     textarea_str += '<textarea id="svg_source_textarea"></textarea>';
@@ -1125,8 +1118,7 @@ function benchmark2(i) {
     var multiple_runs_table = bench.print_multiple_runs();
     if ($("#benchmark_multiple_table").length) $("#benchmark_multiple_table").remove();
     $("#benchmark_multiple_table_cont").append(multiple_runs_table);
-  }
-  else if (i == bench_glob.length - 1) {
+  } else if (i == bench_glob.length - 1) {
     if (!$("#benchmark_exports_textarea").length) {
       var textarea_str = '<div id="benchmark_exports_textarea_div">';
       textarea_str += '<button class="textarea_hide_buttons" onClick="$(\'#benchmark_exports_textarea_div\').remove()" title="Hide Benchmark exports">Hide</button><br>';
@@ -1150,8 +1142,7 @@ function benchmark2(i) {
     if (repeat < repeat_times) {
       benchmark_automatic_click = 1;
       $("#" + clicked_benchmark_button_id).trigger("click");
-    }
-    else {
+    } else {
       bench_glob.length = 0;
       repeat = 0;
       benchmark_running = 0;
@@ -1165,7 +1156,7 @@ function benchmark2(i) {
 }
 
 (function (window) {
-  var benchmark = function (varname) {
+  var Benchmark = function (varname) {
     if (typeof (varname) == "string") this.varname = varname;
     else this.varname = "";
     this.list = [];
@@ -1185,7 +1176,7 @@ function benchmark2(i) {
   // returns index
   // cat = category, which name belongs to
   // name = code region name or function, which is measured
-  benchmark.prototype.start = function (cat, name) {
+  Benchmark.prototype.start = function (cat, name) {
     if (cat == "") return;
     if (name == "") return;
     var b = {};
@@ -1195,12 +1186,12 @@ function benchmark2(i) {
     this.list.push(b);
     return this.list.length - 1;
   };
-  benchmark.prototype.end = function (index) {
+  Benchmark.prototype.end = function (index) {
     this.list[index].end = new Date().getTime();
     this.list[index].time = this.list[index].end - this.list[index].start;
     var this_list_cat = this.list[index].cat;
     var this_list_cat_counts = this_list_cat + "_counts";
-    var this_list_cat_time_sum = this_list_cat + "_time_sum"
+    var this_list_cat_time_sum = this_list_cat + "_time_sum";
     if (typeof (this.cats[this_list_cat_counts]) == "undefined") this.cats.arr.push(this_list_cat);
     if (typeof (this.cats[this_list_cat_time_sum]) == "undefined") this.cats[this_list_cat_time_sum] = 0;
     if (typeof (this.cats[this_list_cat_counts]) == "undefined") this.cats[this_list_cat_counts] = 0;
@@ -1210,14 +1201,14 @@ function benchmark2(i) {
       this.list[index].bench_glob_index = window.last_completed_bench;
     }
   };
-  benchmark.prototype.clear = function () {
+  Benchmark.prototype.clear = function () {
     this.list = [];
     this.cats = [];
     this.cats.arr = [];
     this.includeSVG = true;
     return true;
   };
-  benchmark.prototype.print = function (all) {
+  Benchmark.prototype.print = function (all) {
     var tbl = '<style>';
     tbl += '.bench {width:317px;border-collapse:collapse;white-space:nowrap;}';
     tbl += '.bench td, .bench th{font-size:12px;text-align:left;border:1px solid #444444; padding:2px}';
@@ -1327,7 +1318,7 @@ function benchmark2(i) {
     tbl += '<button ' + disabled + ' onClick="try { $(\'#benchmark_div\').html(' + this.varname + '.print(1)); } catch (e) {return false}">Show all</button>';
     return tbl;
   };
-  benchmark.prototype.print_multiple_runs = function (str) {
+  Benchmark.prototype.print_multiple_runs = function (str) {
     var tbl2 = "";
     tbl2 += '<table id="benchmark_multiple_table" style="margin-top:10px;margin-bottom:10px" class="bench"><thead><tr>';
     tbl2 += '<th>Num</th>';
@@ -1384,7 +1375,7 @@ function benchmark2(i) {
     tbl2 += '</tbody>';
     return tbl2;
   };
-  window.benchmark = benchmark;
+  window.Benchmark = Benchmark;
 })(window);
 
 // Programmer: Larry Battle
@@ -2334,8 +2325,7 @@ function main() {
       if (this_id == "benchmark1" || this_id == "benchmark1b") {
         scaleLocal = 100;
         if (count === 1) continue;
-      }
-      else if (this_id == "benchmark2" || this_id == "benchmark2b") {
+      } else if (this_id == "benchmark2" || this_id == "benchmark2b") {
         scaleLocal = 100000000;
         if (count === 1) continue;
       }
@@ -2344,8 +2334,7 @@ function main() {
         if (polygon_id == 4 || polygon_id == 5) {
           fillTypeLocal_start = 0;
           fillTypeLocal_end = 1;
-        }
-        else {
+        } else {
           fillTypeLocal_start = 1;
           fillTypeLocal_end = 1;
         }
@@ -2354,8 +2343,7 @@ function main() {
             if (clipTypeLocal === 0) {
               offsettable_polyLocal_start = 1;
               offsettable_polyLocal_end = 2;
-            }
-            else {
+            } else {
               offsettable_polyLocal_start = 3;
               offsettable_polyLocal_end = 3;
             }
@@ -2367,8 +2355,7 @@ function main() {
                   if (joinTypeLocal == 2 && deltaLocal !== 0) {
                     miterLimitLocal_start = 1;
                     miterLimitLocal_end = 6;
-                  }
-                  else {
+                  } else {
                     miterLimitLocal_start = 1;
                     miterLimitLocal_end = 1;
                   }
@@ -2422,8 +2409,8 @@ function main() {
   $('input[type="radio"][name="clip_fillType"][value="' + clip_fillType + '"]').attr('checked', 'checked');
   $('input[type="radio"][name="polygons"][value="' + polygons_default + '"]').attr('checked', 'checked').change();
   var polygon = parseInt(polygons_default, 10);
-  if (polygon == 4) rnd_sett = rnd_sett_defaults.rects.default;
-  else rnd_sett = rnd_sett_defaults.norm.default;
+  if (polygon == 4) rnd_sett = rnd_sett_defaults.rects['default'];
+  else rnd_sett = rnd_sett_defaults.norm['default'];
   $('input[type="radio"][name="offsettable_poly"][value="' + offsettable_poly + '"]').attr('checked', 'checked');
   $('#subj_polygon_count').val(rnd_sett.subj_polygon_count);
   $('#subj_point_count').val(rnd_sett.subj_point_count);
