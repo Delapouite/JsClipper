@@ -701,8 +701,7 @@ function deserialize_clipper_poly(polystr) {
   SVG.total = null;
   SVG.polys2path = function (a, fr) {
     scaled_paths[fr] = [];
-    var path = "",
-      i, j, link, d;
+    var path = "", i, j, link, d;
     this.sub_poly_counts = [];
     this.sub_poly_links = "";
     this.total = 0;
@@ -769,12 +768,11 @@ function popup_path(i, fr) {
           area += ClipperLib.Clipper.Area(polygon);
         }
       }
-      $("#area").html("Area: "+area);
     } else {
       $("#polygon_explorer_string_inp").val(format_output(points_string).replace(/^\[\[/,"[").replace(/\]\]$/,"]"));
       area = ClipperLib.Clipper.Area(JSON.parse(points_string.replace(/^\[\[/,"[").replace(/\]\]$/,"]")));
-      $("#area").html("Area: "+area);
     }
+    $("#area").html("Area: " + area);
   } else {
     $("#polygon_explorer_string_inp").val("Some error occurred when parsing polygon points!");
   }
@@ -809,7 +807,7 @@ function popup_path(i, fr) {
 // Shows mypath ( = black partially transparent path) when hovered
 function show_path(i, fr) {
   if (benchmark_running) return false;
-  var d = (typeof(i) == "undefined") ? scaled_paths[fr].join(" ") : d = scaled_paths[fr][i];
+  var d = (typeof(i) == "undefined") ? scaled_paths[fr].join(" ") : scaled_paths[fr][i];
   mypath = p.path(d);
   $(mypath.node).removeAttr('fill stroke').attr('class', 'svg_mypath');
   $(mypath.node).attr('fill-rule', $('#p' + fr).attr('fill-rule'));
@@ -841,14 +839,12 @@ function hide_path() {
 }
 
 function set_default_custom_polygon() {
-  var subj = default_custom_subject_polygon;
-  var clip = default_custom_clip_polygon;
   var def_obj = {
-    "subj": subj,
-    "clip": clip
+    subj: default_custom_subject_polygon,
+    clip: default_custom_clip_polygon
   };
   var arr = $.totalStorage('custom_polygons');
-  if (typeof (arr) == "undefined" || arr === null || !isArray(arr) || arr.length == 0) arr = [];
+  if (typeof (arr) == "undefined" || arr === null || !isArray(arr) || arr.length === 0) arr = [];
   arr[0] = def_obj;
   $.totalStorage('custom_polygons', arr);
 }
@@ -1748,9 +1744,10 @@ function main() {
     if (typeof ($.totalStorage('custom_polygons')) == "undefined" || $.totalStorage('custom_polygons') === null) {
       set_default_custom_polygon();
     }
-    var polygon_set = {};
-    polygon_set.subj = subj;
-    polygon_set.clip = clip;
+    var polygon_set = {
+      subj: subj,
+      clip: clip
+    };
     var arr2 = $.totalStorage('custom_polygons');
     var selected_value = $("#custom_polygons_select").val();
     if (selected_value+"" !== "0" && selected_value) {
