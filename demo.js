@@ -747,8 +747,7 @@ function deserialize_clipper_poly(polystr) {
 function toint(a) {
   return parseInt(a, 10);
 }
-// Englarges mypath ( = black partially transparent path)
-// when clicked
+// Englarges mypath ( = black partially transparent path) when clicked
 function popup_path(i, fr) {
   if (benchmark_running) return false;
 
@@ -807,8 +806,7 @@ function popup_path(i, fr) {
   });
 }
 
-// Shows mypath ( = black partially transparent path)
-// when hovered
+// Shows mypath ( = black partially transparent path) when hovered
 function show_path(i, fr) {
   if (benchmark_running) return false;
   var d = (typeof(i) == "undefined") ? scaled_paths[fr].join(" ") : d = scaled_paths[fr][i];
@@ -931,7 +929,7 @@ function update_fieldset_heights() {
   var max_td_height = Array_max(td_heights);
   var max_index;
   var children_heights;
-  var children_heights_arr=[];
+  var children_heights_arr = [];
 
   for (var i = 0; i < td_heights.length; i++) {
     children_heights=0;
@@ -946,7 +944,6 @@ function update_fieldset_heights() {
       });
     }
     children_heights_arr.push(children_heights);
-    //console.log("-------------");
   }
   var misc_fieldset_height = $("#misc_fieldset").height();
   var polygon_explorer_fieldset_height = $("#polygon_explorer_fieldset").height();
@@ -958,10 +955,8 @@ function update_fieldset_heights() {
   $("#polygon_explorer_fieldset").css("min-height", polygon_explorer_fieldset_height+"px");
   $("#benchmark_fieldset_f").css("min-height", benchmark_fieldset_f_height+"px");
 }
+
 function resize() {
-  myresize();
-}
-function myresize() {
   var freeheight = $(window).height();
   var polygon_explorer_div_max_height = freeheight - 360;
   if (polygon_explorer_div_max_height < 170) polygon_explorer_div_max_height = 170;
@@ -1001,9 +996,8 @@ function svg_source_enlarge() {
     $("#_p").attr("width", window_width);
     $("#_p").attr("height", parseInt((window_width / original_width) * original_height));
     $("#_p1,#_p2,#_p3").css("stroke-width", 0.8 * (original_width / window_width));
-  }
-  else // at the right
-  {
+  // at the right
+  } else {
     $("#_p").attr("height", window_height);
     $("#_p").attr("width", parseInt((window_height / original_height) * original_width));
     $("#_p1,#_p2,#_p3").css("stroke-width", 0.8 * (original_height / window_height));
@@ -2203,7 +2197,7 @@ function main() {
   });
   $("#output_format").val(output_format);
 
-  myresize();
+  resize();
 
   $("document").mousedown(function(){
     ismousedown = true;
