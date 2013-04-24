@@ -91,9 +91,8 @@ var default_custom_subject_polygon = '[[{"X":-29.42,"Y":106.23},{"X":-26.7,"Y":1
 // The Phantom Scull Ring
 var default_custom_clip_polygon = '[[{"X":385.77,"Y":166.95},{"X":386.68,"Y":182.21},{"X":386.15,"Y":187.13},{"X":384.96,"Y":190.99},{"X":382.95,"Y":194.32},{"X":379.91,"Y":197.42},{"X":375.8,"Y":200.17},{"X":370.59,"Y":202.47},{"X":364.37,"Y":204.13},{"X":357.67,"Y":204.95},{"X":350.93,"Y":204.85},{"X":344.71,"Y":203.87},{"X":339.59,"Y":202.19},{"X":335.52,"Y":199.95},{"X":332.61,"Y":197.37},{"X":330.67,"Y":194.53},{"X":329.62,"Y":191.41},{"X":329.4,"Y":187.83},{"X":330.02,"Y":183.99},{"X":331.34,"Y":181.14},{"X":333.27,"Y":179.05},{"X":336.11,"Y":177.4},{"X":340.71,"Y":176.05},{"X":352.22,"Y":173.98},{"X":356.3,"Y":172.51},{"X":361.25,"Y":169.4},{"X":370.03,"Y":163.12},{"X":373.94,"Y":161.22},{"X":377.01,"Y":160.6},{"X":379.53,"Y":160.94},{"X":381.9,"Y":162.19},{"X":384.3,"Y":164.67},{"X":385.77,"Y":166.93},{"X":385.77,"Y":166.95}],[{"X":270.77,"Y":163.84},{"X":273.88,"Y":163.4},{"X":276.36,"Y":163.91},{"X":280.12,"Y":166.08},{"X":285.42,"Y":169.2},{"X":291.02,"Y":171.33},{"X":299.79,"Y":173.33},{"X":307.68,"Y":175.13},{"X":311.52,"Y":176.78},{"X":314.01,"Y":178.71},{"X":315.73,"Y":181.15},{"X":316.83,"Y":184.41},{"X":317.2,"Y":188.89},{"X":316.7,"Y":192.44},{"X":315.33,"Y":195.6},{"X":313.05,"Y":198.56},{"X":309.77,"Y":201.19},{"X":305.39,"Y":203.45},{"X":299.95,"Y":205.12},{"X":293.7,"Y":205.99},{"X":287.12,"Y":205.96},{"X":280.75,"Y":205},{"X":275.02,"Y":203.24},{"X":270.05,"Y":200.77},{"X":266.08,"Y":197.81},{"X":263.1,"Y":194.47},{"X":260.95,"Y":190.7},{"X":259.68,"Y":186.54},{"X":259.29,"Y":181.92},{"X":259.86,"Y":176.86},{"X":261.36,"Y":171.68},{"X":263.13,"Y":168.56},{"X":265.48,"Y":166.25},{"X":268.64,"Y":164.55},{"X":270.77,"Y":163.84},{"X":270.77,"Y":163.84}],[{"X":303.94,"Y":227.57},{"X":303.74,"Y":222.63},{"X":304.44,"Y":218.35},{"X":305.94,"Y":214.59},{"X":308.24,"Y":211.27},{"X":311.35,"Y":208.46},{"X":315.13,"Y":206.32},{"X":319.55,"Y":204.91},{"X":324.31,"Y":204.37},{"X":329.09,"Y":204.77},{"X":333.4,"Y":206.03},{"X":337.08,"Y":208.03},{"X":339.99,"Y":210.61},{"X":342.11,"Y":213.69},{"X":343.43,"Y":217.19},{"X":343.94,"Y":221.2},{"X":343.59,"Y":225.38},{"X":342.53,"Y":228.01},{"X":340.69,"Y":230.17},{"X":337.79,"Y":232.02},{"X":333.81,"Y":233.34},{"X":328.46,"Y":234.03},{"X":322.02,"Y":233.83},{"X":315.23,"Y":232.68},{"X":309.37,"Y":230.81},{"X":305.39,"Y":228.73},{"X":303.99,"Y":227.61},{"X":303.94,"Y":227.57}],[{"X":421.16,"Y":64.34},{"X":421.16,"Y":64.45},{"X":422.7,"Y":96.81},{"X":424.28,"Y":149.29},{"X":425.26,"Y":216.18},{"X":425.57,"Y":327.02},{"X":220.65,"Y":327.02},{"X":220.41,"Y":312.05},{"X":219.69,"Y":230.46},{"X":219.9,"Y":144.66},{"X":221.01,"Y":65.92},{"X":233.74,"Y":65.34},{"X":264.63,"Y":64.78},{"X":325.38,"Y":65.31},{"X":363.93,"Y":65.31},{"X":393.46,"Y":64.48},{"X":420.05,"Y":62.8},{"X":420.8,"Y":62.92},{"X":421.16,"Y":64.34}],[{"X":404.57,"Y":215.13},{"X":404.58,"Y":215.08},{"X":405.83,"Y":205.87},{"X":406.55,"Y":194.49},{"X":406.3,"Y":183.7},{"X":405.16,"Y":173.57},{"X":403.17,"Y":164.03},{"X":400.34,"Y":155.01},{"X":396.73,"Y":146.61},{"X":392.34,"Y":138.76},{"X":387.23,"Y":131.54},{"X":381.47,"Y":125.02},{"X":375.05,"Y":119.16},{"X":368.04,"Y":114.01},{"X":360.39,"Y":109.58},{"X":352.3,"Y":105.99},{"X":343.88,"Y":103.28},{"X":335.22,"Y":101.47},{"X":326.42,"Y":100.59},{"X":317.57,"Y":100.64},{"X":308.77,"Y":101.63},{"X":300.3,"Y":103.53},{"X":292.06,"Y":106.33},{"X":284.32,"Y":109.94},{"X":277.01,"Y":114.36},{"X":270.11,"Y":119.65},{"X":263.83,"Y":125.67},{"X":258.83,"Y":131.66},{"X":253.44,"Y":139.77},{"X":248.35,"Y":149.13},{"X":244.11,"Y":158.88},{"X":241,"Y":168.28},{"X":239,"Y":177.21},{"X":238.09,"Y":185.4},{"X":238.17,"Y":192.9},{"X":239.13,"Y":199.57},{"X":240.91,"Y":205.61},{"X":243.45,"Y":211.04},{"X":246.09,"Y":214.67},{"X":249.63,"Y":217.9},{"X":254.56,"Y":221.04},{"X":270.07,"Y":228.23},{"X":275.76,"Y":231.57},{"X":279.77,"Y":234.93},{"X":282.82,"Y":238.64},{"X":285.08,"Y":242.87},{"X":286.61,"Y":247.72},{"X":287.31,"Y":253.67},{"X":287.19,"Y":274.82},{"X":287.8,"Y":281.39},{"X":288.94,"Y":285.57},{"X":290.57,"Y":288.43},{"X":292.56,"Y":290.24},{"X":295.1,"Y":291.3},{"X":295.83,"Y":283.75},{"X":296,"Y":265.6},{"X":296.31,"Y":250.76},{"X":297.29,"Y":241.67},{"X":299.29,"Y":240.75},{"X":303.08,"Y":239.94},{"X":307.26,"Y":240},{"X":307.66,"Y":242.7},{"X":309.02,"Y":256.43},{"X":310.57,"Y":291.19},{"X":311.49,"Y":291.54},{"X":314.95,"Y":293.31},{"X":316.6,"Y":294.82},{"X":316.6,"Y":295.52},{"X":315.35,"Y":295.94},{"X":315.99,"Y":296.02},{"X":317.2,"Y":295.47},{"X":318.2,"Y":293.99},{"X":319.04,"Y":290.81},{"X":319.39,"Y":284.37},{"X":318.41,"Y":262.35},{"X":318.37,"Y":251.85},{"X":319.08,"Y":245.75},{"X":320.27,"Y":242.05},{"X":321.29,"Y":240.77},{"X":323.08,"Y":240.08},{"X":328.27,"Y":240},{"X":329.31,"Y":244.13},{"X":330.19,"Y":252.03},{"X":330.63,"Y":273.92},{"X":331.25,"Y":284.25},{"X":332.33,"Y":289.99},{"X":333.7,"Y":293.31},{"X":335.26,"Y":295.12},{"X":337.01,"Y":295.94},{"X":337.81,"Y":294.94},{"X":339.33,"Y":291.52},{"X":340.32,"Y":286.68},{"X":340.61,"Y":279.64},{"X":339.38,"Y":260.18},{"X":339.31,"Y":251.49},{"X":340.05,"Y":245.84},{"X":341.39,"Y":241.87},{"X":342.36,"Y":240.75},{"X":344.31,"Y":240.04},{"X":351.49,"Y":240},{"X":351.67,"Y":240.9},{"X":352.45,"Y":248.35},{"X":352.58,"Y":274.14},{"X":353.27,"Y":282.2},{"X":354.5,"Y":287.31},{"X":356.13,"Y":290.68},{"X":358.13,"Y":292.86},{"X":359.27,"Y":289.89},{"X":360.62,"Y":284.2},{"X":361.32,"Y":276.58},{"X":361.16,"Y":258.89},{"X":361.45,"Y":247.8},{"X":365.47,"Y":242.21},{"X":370.89,"Y":236.4},{"X":377.72,"Y":230.54},{"X":385.94,"Y":224.78},{"X":395.31,"Y":219.41},{"X":404.57,"Y":215.13}]]';
 var output_format = 1;
-var ClipperLib_MaxSteps_original; // this hold the original ClipperLib.MaxSteps value
-                                  // during benchmarks, ClipperLib.MaxSteps is set to 10
-                                  // to make benchmarks comparable
+// this hold the original ClipperLib.MaxSteps value during benchmarks, ClipperLib.MaxSteps is set to 10 to make benchmarks comparable
+var ClipperLib_MaxSteps_original;
 var ismousedown = false; // Not yet in use
 var bench_glob = [];
 var bench_elapsed_time = 0;
@@ -250,15 +249,14 @@ function normalize_clipper_poly(polystr, quiet) {
 
 // helper function for normalize_clipper_poly()
 function svgpath_to_clipper_polygons(d) {
-  var arr;
   d = d.trim();
-  arr = Raphael.parsePathString(d); // str to array
+  var arr = Raphael.parsePathString(d); // str to array
   arr = Raphael._pathToAbsolute(arr); // mahvstcsqz -> uppercase
-  var str = arr.flatten().join(" ");
-  var paths = str.replace(/M/g, '|M').split("|");
-  var k, polygons_arr = [],
+  var str = arr.flatten().join(" "),
+    paths = str.replace(/M/g, '|M').split("|"),
+    polygons_arr = [],
     polygon_arr = [];
-  for (k = 0; k < paths.length; k++) {
+  for (var k = 0; k < paths.length; k++) {
     if (paths[k].trim() === "") continue;
     arr = Raphael.parsePathString(paths[k].trim());
     polygon_arr = [];
@@ -317,12 +315,12 @@ function format_output(polystr) {
     console.warn("Unable to parse polygon for output", err.message);
     return "";
   }
-  var i, j, m, n, newpolystr = "";
+  var i, j, n, newpolystr = "";
   // Clipper
   if (output_format === 0) {
     return polystr;
   }
-  m = poly.length;
+  var m = poly.length;
   // Plain
   if (output_format == 1) {
     for (i = 0; i < m; i++) {
@@ -582,7 +580,7 @@ function deserialize_clipper_poly(polystr) {
   "use strict";
   SVG.create = function () {
     p = Raphael("svgcontainer", 500, 350);
-    p.canvas.setAttribute("id", "p");
+    p.canvas.id = "p";
     var str = "<filter id='innerbewel' x0='-50%' y0='-50%' width='200%' height='200%' >";
     str += "<feGaussianBlur in='SourceAlpha' stdDeviation='2' result='blur'/>";
     str += "<feOffset dy='3' dx='3'/>";
@@ -1557,8 +1555,7 @@ function update_enlarged_SVG_if_needed() {
   if (update_enlarged_SVG) {
     show_svg_source_click("non_click");
     svg_source_enlarge();
-  }
-  else if (update_enlarged_SVG_source && !update_enlarged_SVG) {
+  } else if (update_enlarged_SVG_source && !update_enlarged_SVG) {
     show_svg_source_click("non_click");
   }
 }
@@ -1758,8 +1755,7 @@ function main() {
     var selected_value = $("#custom_polygons_select").val();
     if (selected_value+"" === "0") {
       alert("Cannot remove the default polygon.");
-    }
-    else if (selected_value) {
+    } else if (selected_value) {
       if (confirm("Remove custom polygon " + selected_value + "?")) {
         var arr = $.totalStorage('custom_polygons');
         arr[selected_value] = null;
@@ -1799,8 +1795,7 @@ function main() {
       $.totalStorage('custom_polygons', arr2);
       update_custom_polygons_select();
       show_alert(e, this, "Polygon " + (selected_value) + " updated!");
-    }
-    else if (selected_value+"" === "0") {
+    } else if (selected_value+"" === "0") {
       alert("The default custom polygon cannot be overwrited. If you want to modify it, save it first as a new.");
     }
     else alert("Polygon update failed!");
@@ -1886,8 +1881,7 @@ function main() {
     if ($('input[type="radio"][name="clipType"][value=""]').is(":checked")) {
       $('input[type="radio"][name="offsettable_poly"][value="1"]').attr('checked', 'checked');
       offsettable_poly = 1;
-    }
-    else {
+    } else {
       $("#offsettable_poly3").attr('checked', 'checked');
       offsettable_poly = 3;
     }
@@ -1907,8 +1901,7 @@ function main() {
     offsettable_poly = parseInt(this.value, 10);
     // When offsettable poly is set to Subject or Clip, then boolean operations are not done.
     // To show this to user, set clipType to "No"
-    if (offsettable_poly == 1 || offsettable_poly == 2)
-    {
+    if (offsettable_poly == 1 || offsettable_poly == 2) {
       $('input[type="radio"][name="clipType"][value=""]').attr('checked', 'checked');
       clipType = "";
     }
@@ -2033,17 +2026,13 @@ function main() {
   });
 
   $("#clean").change(function () {
-    if ($(this).attr('checked'))
-    {
-      if ($("#cleandelta").val()+"".trim() == "")
-      {
+    if ($(this).attr('checked')) {
+      if ($("#cleandelta").val()+"".trim() == "") {
         cleandelta = cleandelta_default;
         $("#cleandelta").val(cleandelta);
       }
       clean = true;
-    }
-    else
-    {
+    } else {
       clean = false;
     }
     make_clip();
@@ -2061,9 +2050,7 @@ function main() {
         $("#lighten_distance").val(lighten_distance);
       }
       lighten = true;
-    }
-    else
-    {
+    } else {
       lighten = false;
     }
     make_clip();
@@ -2225,8 +2212,7 @@ function main() {
     if ($(this).attr('checked')) {
       bevel = true;
       $("#p3").attr("filter", "url(#innerbewel)");
-    }
-    else {
+    } else {
       bevel = false;
       $("#p3").removeAttr("filter");
     }
@@ -2241,8 +2227,7 @@ function main() {
       if (p2) p2.remove();
       if (p3) p3.remove();
       SVG.addpaths(ss, cc, off_result, subject_fillType, clip_fillType);
-    }
-    else {
+    } else {
       sub_poly_links_update = 0;
       $("#subj_subpolygons, #subj_points_in_subpolygons, #subj_points_total, #clip_subpolygons, #clip_points_in_subpolygons, #clip_points_total, #solution_subpolygons, #solution_points_in_subpolygons, #solution_points_total, #points_total, #all_subpolygons").html("");
     }
@@ -2273,8 +2258,7 @@ function main() {
       $("button,input,select").removeAttr('disabled');
       $('#sub_poly_links_update').trigger("change");
       return;
-    }
-    else {
+    } else {
       // disable buttons that are not allowed to click when running
       $("button,input,select").attr('disabled', 'disabled');
       $("#benchmark1,#benchmark2,#benchmark1b,#benchmark2b").each(function () {
@@ -2413,45 +2397,30 @@ function main() {
 } // main()
 
 function make_offset() {
-  // --------------------------------
-  // SELECT OFSETTABLE POLYGON STARTS
-  // --------------------------------
+  // Select ofsettable polygon
   var off_poly, off_poly1, off_poly2, off_poly3;
   offsettable_poly = parseInt($('input[type="radio"][name="offsettable_poly"]:checked').val(), 10);
   if (offsettable_poly == 1) {
     off_poly = ClipperLib.Clone(ss);
-  }
-  else if (offsettable_poly == 2) {
+  } else if (offsettable_poly == 2) {
     off_poly = ClipperLib.Clone(cc);
-  }
-  else if (offsettable_poly == 3) {
+  } else if (offsettable_poly == 3) {
     off_poly = sss;
   }
 
   if (typeof(off_poly)=="undefined" || !(sss instanceof Array)) off_poly = [[]];
 
-  // ------------------------------
-  // SELECT OFSETTABLE POLYGON ENDS
-  // ------------------------------
   if (ClipperLib.biginteger_used === null) ClipperLib.biginteger_used = 0;
 
-  // -------------
-  // CLEAN STARTS
-  // -------------
+  // Clean
   if (clean) {
     off_poly = ClipperLib.Clean(off_poly, cleandelta * scale);
   }
 
-//if (isArray(off_poly) && off_poly.length)
-//console.log(JSON.stringify(off_poly[0]));
+  //if (isArray(off_poly) && off_poly.length)
+  //console.log(JSON.stringify(off_poly[0]));
 
-  // -------------
-  // CLEAN ENDS
-  // -------------
-
-  // ---------------
-  // SIMPLIFY STARTS
-  // ---------------
+  // Simplify
   // Must simplify before offsetting, to get offsetting right in certain cases.
   // Other operations (boolean ones) doesn't need this.
   // This is needed when offsetting polygons that has selfintersecting parts ( eg. 5-point star needs this )
@@ -2460,29 +2429,24 @@ function make_offset() {
     // results of boolean operations are already simplified.
     // Note! if clip polygon is the same as subject polygon
     // then it seems that simplifying is needed also for result of boolean operation (ie. solution).
-    if (offsettable_poly == 1) // subj
-    {
+    // subj
+    if (offsettable_poly == 1) {
       off_poly = cpr.SimplifyPolygons(off_poly, subject_fillType);
     }
-    if (offsettable_poly == 2) // clip
-    {
+    // clip
+    if (offsettable_poly == 2) {
       off_poly = cpr.SimplifyPolygons(off_poly, clip_fillType);
     }
-    if (offsettable_poly == 3) // solution
-    {
+    // solution
+    if (offsettable_poly == 3) {
       off_poly = cpr.SimplifyPolygons(off_poly, clip_fillType);
       if (subject_fillType !== clip_fillType) {
         console.log("Subject filltype and Clip filltype are different. We used Clip filltype in SimplifyPolygons().");
       }
     }
   }
-  // -------------
-  // SIMPLIFY ENDS
-  // -------------
 
-  // ------------------------------
-  // ACTUAL OFFSET OPERATION STARTS
-  // ------------------------------
+  // Actual offset operation
   if (delta) {
     cpr.Clear();
     var param_delta = round_to(delta * scale, 3);
@@ -2493,30 +2457,18 @@ function make_offset() {
   } else {
     off_result = off_poly;
   }
-  // ----------------------------
-  // ACTUAL OFFSET OPERATION ENDS
-  // ------------------------------
 
-  // ----------------------------
-  // LIGHTENING STARTS
-  // ------------------------------
-
+  // Lightening
   if (lighten) {
     off_result = ClipperLib.Lighten(off_result, lighten_distance * scale);
     // Because lighten may produce self-intersections,
-    // must Simplify to be sure that result is free of them,
-    // but only if user wants
+    // must Simplify to be sure that result is free of them, but only if user wants
     if (Simplify) {
       off_result = cpr.SimplifyPolygons(off_result, subject_fillType);
     }
   }
-  // ----------------------------
-  // LIGHTENING ENDS
-  // ------------------------------
 
-  // --------------------------------
-  // SVG UPDATE STARTS
-  // --------------------------------
+  // SVG Update
   if (!p) p = SVG.create();
   if (p1) p1.remove();
   if (p2) p2.remove();
@@ -2524,28 +2476,20 @@ function make_offset() {
   if (bench.includeSVG) var B3 = bench.start("SVG", "addpaths(ss, cc, off_result,  " + subject_fillType + ", " + clip_fillType + ")");
   SVG.addpaths(ss, cc, off_result, subject_fillType, clip_fillType);
   if (bench.includeSVG) bench.end(B3);
-  // --------------------------------
-  // SVG UPDATE ENDS
-  // --------------------------------
 
-  // --------------------------------
-  // UPDATE BIGINTEGERS TOGGLE STARTS
-  // --------------------------------
+  // Update BigIntegers Toggle
   if (ClipperLib.biginteger_used !== null) {
     if (ClipperLib.biginteger_used) $("#biginteger_used").html("true");
     else $("#biginteger_used").html("false");
   }
   else $("#biginteger_used").html("unknown");
   ClipperLib.biginteger_used = null;
-  // ------------------------------
-  // UPDATE BIGINTEGERS TOGGLE ENDS
-  // ------------------------------
 
-  // UPDATE DELTA TO FORM
+  // Update delta to form
   $('#delta').val(to_printable(delta));
-  // UPDATE MITERLIMIT TO FORM
+  // Update miterlimit to form
   $('#miterLimit').val(to_printable(miterLimit));
-  // PRINT BENCHMARKS
+  // Print benchmark
   $("#benchmark_div").html(bench.print());
   update_enlarged_SVG_if_needed();
   update_fieldset_heights();
@@ -2555,8 +2499,9 @@ function make_clip() {
   ClipperLib.biginteger_used = null;
   if (!cpr) {
     cpr = new ClipperLib.Clipper();
+  } else {
+    cpr.Clear();
   }
-  else cpr.Clear();
   get_polys();
   if (clipType !== "" && offsettable_poly == 3) {
     cpr.AddPolygons(ss, ClipperLib.PolyType.ptSubject);
