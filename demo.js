@@ -428,7 +428,7 @@ function get_glyph_and_grid() {
 function get_custom_poly() {
   var selected_value = $("#custom_polygons_select").val();
   var arr = $.totalStorage('custom_polygons');
-  if (selected_value !== "") {
+  if (selected_value) {
     //selected_value = parseInt(selected_value,10);
     return {
       "ss": deserialize_clipper_poly(arr[selected_value].subj),
@@ -1567,52 +1567,24 @@ function to_printable(a) {
 function get_polys(scale_again) {
   var polygon = parseInt($('input[type="radio"][name="polygons"]:checked').val(), 10);
   var polys;
-  if (polygon === 0) {
-    polys = get_gb_and_arrow();
+  if(polygon != 4 && polygon != 5) {
+    var polygons = [
+      get_gb_and_arrow(),
+      get_text_polys(),
+      get_rectangle_polys(),
+      get_same_self_intersecting_polys(),
+      // TODO reorder 4 & 5
+      null, null,
+      get_star_and_rect(),
+      get_spiral_and_rects(),
+      get_rounded_grid_and_star(),
+      get_glyph_and_grid(),
+      get_custom_poly()
+    ];
+    polys = polygons[polygon];
     ss = polys.ss;
     cc = polys.cc;
-  }
-  else if (polygon == 1) {
-    polys = get_text_polys();
-    ss = polys.ss;
-    cc = polys.cc;
-  }
-  else if (polygon == 2) {
-    polys = get_rectangle_polys();
-    ss = polys.ss;
-    cc = polys.cc;
-  }
-  else if (polygon == 3) {
-    polys = get_same_self_intersecting_polys();
-    ss = polys.ss;
-    cc = polys.cc;
-  }
-  else if (polygon == 6) {
-    polys = get_star_and_rect();
-    ss = polys.ss;
-    cc = polys.cc;
-  }
-  else if (polygon == 7) {
-    polys = get_spiral_and_rects();
-    ss = polys.ss;
-    cc = polys.cc;
-  }
-  else if (polygon == 8) {
-    polys = get_rounded_grid_and_star();
-    ss = polys.ss;
-    cc = polys.cc;
-  }
-  else if (polygon == 9) {
-    polys = get_glyph_and_grid();
-    ss = polys.ss;
-    cc = polys.cc;
-  }
-  else if (polygon == 10) {
-    polys = get_custom_poly();
-    ss = polys.ss;
-    cc = polys.cc;
-  }
-  else if (polygon == 4 || polygon == 5) {
+  } else {
     if (!random_subj) random_subj = get_random_polys("subj");
     if (!random_clip) random_clip = get_random_polys("clip");
     if (scale_again) {
@@ -1621,8 +1593,7 @@ function get_polys(scale_again) {
       ss = random_subj;
       cc = random_clip;
       rnd_sett.scale = scale;
-    }
-    else {
+    } else {
       ss = random_subj;
       cc = random_clip;
     }
@@ -1630,9 +1601,7 @@ function get_polys(scale_again) {
   sss = [[]];
 }
 
-// Main function which setups defaults
-// and attach events
-// and finally draw the default svg image
+// setups defaults, attach events and finally draw the default svg image
 function main() {
   // formats internal representation of polygons to
   // specified output format and prints them on input fields
