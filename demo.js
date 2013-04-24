@@ -1544,18 +1544,6 @@ function RGBColor(color_string) {
     return this.toHex();
   };
 }
-// Not used, because using mouse and repeated events is better
-function offset_key(e) {
-  return;
-  if (e.which == 38) {
-    make_offset(1);
-  }
-  else if (e.which == 40) {
-    make_offset(-1);
-  }
-  e.stopPropagation();
-  e.preventDefault();
-}
 
 function round_to(num, dec) {
   if (typeof (num) == "undefined" || typeof (dec) == "undefined" || isNaN(dec)) {
