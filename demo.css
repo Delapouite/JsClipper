@@ -268,3 +268,9 @@ table {
 border:1px solid red;
 }
 */
+
+.bench {width:317px;border-collapse:collapse;white-space:nowrap;}
+.bench td, .bench th{font-size:12px;text-align:left;border:1px solid #444444; padding:2px}
+.bench th{background-color:#DDDDDD;}
+.bench tfoot td{background-color:#DDDDDD;}
+.bench_foot{font-weight:bold;}';

@@ -1142,14 +1142,7 @@ Benchmark.prototype.clear = function () {
   return true;
 };
 Benchmark.prototype.print = function (all) {
-  var tbl = '<style>';
-  tbl += '.bench {width:317px;border-collapse:collapse;white-space:nowrap;}';
-  tbl += '.bench td, .bench th{font-size:12px;text-align:left;border:1px solid #444444; padding:2px}';
-  tbl += '.bench th{background-color:#DDDDDD;}';
-  tbl += '.bench tfoot td{background-color:#DDDDDD;}';
-  tbl += '.bench_foot{font-weight:bold;}';
-  tbl += '</style>';
-  tbl += '<table class="bench"><thead><tr>';
+  tbl = '<table class="bench"><thead><tr>';
   tbl += '<th>Num</th>';
   tbl += '<th>Name</th>';
   tbl += '<th>Category</th>';
