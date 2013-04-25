@@ -1456,17 +1456,12 @@ function main() {
       $("#polygon_explorer_string_inp").val(format_output(polygon_explorer_string));
     }
   });
+  // Select dropdown
   $("#sample_custom_polygon").change(function () {
     var polygon = parseInt($(this).val(), 10);
-    var polys;
+    var polys, subj = "", clip = "";
     global_do_not_round_and_scale = true;
-    var subj = "",
-      clip = "";
-    if (polygon === "") {
-      subj = "";
-      clip = "";
-    }
-    else if (polygon === 0) {
+    if (polygon === 0) {
       polys = get_gb_and_arrow();
       subj = polys.ss;
       clip = polys.cc;
@@ -1674,10 +1669,6 @@ function main() {
     random_subj = get_random_polys("subj");
     random_clip = get_random_polys("clip");
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $("input[name='clipType']").change(function () {
     if ($('input[type="radio"][name="clipType"][value=""]').is(":checked")) {
@@ -1717,10 +1708,6 @@ function main() {
     if (scale <= 0) scale = 1.0;
     $('#scale').val(to_printable(scale));
     $('#scale').trigger('change');
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $('#scale').change(function () {
     if (this.value && !isNaN(this.value) && parseInt(this.value, 10).toString() !== "0") {
@@ -1738,20 +1725,12 @@ function main() {
     scale = Math.round(scale / scale_addition) * scale_addition;
     $('#scale').val(to_printable(scale));
     $('#scale').trigger('change');
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $('#delta_minus').hold(function () {
     var delta_orig = $('#delta').val();
     if (!isNaN(delta_orig)) delta = parseFloat(delta_orig);
     delta = delta - 1;
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $('#delta').change(function (e) {
     var delta_orig = $('#delta').val();
@@ -1763,10 +1742,6 @@ function main() {
     if (!isNaN(delta_orig)) delta = parseFloat(delta_orig);
     delta = delta + 1;
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $("input[name='joinType']").change(function () {
     joinType = parseInt(this.value, 10);
@@ -1779,10 +1754,6 @@ function main() {
     miterLimit = miterLimit - 0.1;
     if (miterLimit < 1.0) miterLimit = 1.0;
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $("#miterLimit").change(function () {
     miterLimit = parseFloat(this.value);
@@ -1811,10 +1782,6 @@ function main() {
     miterLimit = miterLimit + 0.1;
     if (miterLimit < 1.0) miterLimit = 1.0;
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $("#AutoFix").change(function () {
     AutoFix = $(this).prop('checked');
@@ -1864,10 +1831,6 @@ function main() {
     random_subj = get_random_polys("subj");
     random_clip = get_random_polys("clip");
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $('#subj_polygon_count').change(function (e) {
     var subj_polygon_count_orig = $('#subj_polygon_count').val();
@@ -1888,10 +1851,6 @@ function main() {
     random_subj = get_random_polys("subj");
     random_clip = get_random_polys("clip");
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $('#subj_point_count_minus').hold(function () {
     var subj_point_count_orig = $('#subj_point_count').val();
@@ -1902,10 +1861,6 @@ function main() {
     random_subj = get_random_polys("subj");
     random_clip = get_random_polys("clip");
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $('#subj_point_count').change(function (e) {
     var subj_point_count_orig = $('#subj_point_count').val();
@@ -1926,10 +1881,6 @@ function main() {
     random_subj = get_random_polys("subj");
     random_clip = get_random_polys("clip");
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $('#clip_polygon_count_minus').hold(function () {
     var clip_polygon_count_orig = $('#clip_polygon_count').val();
@@ -1940,10 +1891,6 @@ function main() {
     random_subj = get_random_polys("subj");
     random_clip = get_random_polys("clip");
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $('#clip_polygon_count').change(function (e) {
     var clip_polygon_count_orig = $('#clip_polygon_count').val();
@@ -1964,10 +1911,6 @@ function main() {
     random_subj = get_random_polys("subj");
     random_clip = get_random_polys("clip");
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $('#clip_point_count_minus').hold(function () {
     var clip_point_count_orig = $('#clip_point_count').val();
@@ -1978,10 +1921,6 @@ function main() {
     random_subj = get_random_polys("subj");
     random_clip = get_random_polys("clip");
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   $('#clip_point_count').change(function (e) {
     var clip_point_count_orig = $('#clip_point_count').val();
@@ -2002,10 +1941,6 @@ function main() {
     random_subj = get_random_polys("subj");
     random_clip = get_random_polys("clip");
     make_clip();
-  }, {
-    duration: 300,
-    speed: 0,
-    min: 150
   });
   // Bevel checkbox
   $("#bevel").change(function () {
