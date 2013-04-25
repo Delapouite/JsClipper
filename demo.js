@@ -1091,226 +1091,223 @@ function benchmark2(i) {
   }
 }
 
-(function (window) {
-  var Benchmark = function (varname) {
-    this.varname = (typeof (varname) == "string") ? varname : "";
-    this.list = [];
-    this.cats = [];
-    this.cats.arr = [];
-    this.type = "benchmark";
-    this.includeSVG = true;
-    this.totals = "";
-    this.totals_arr = [];
-    this.totals_arr_multiple = [];
-    this.max_point_x = Number.NEGATIVE_INFINITY;
-    this.min_point_x = Number.POSITIVE_INFINITY;
-    this.max_point_y = Number.NEGATIVE_INFINITY;
-    this.min_point_y = Number.POSITIVE_INFINITY;
-    this.points = [];
-  };
-  // returns index
-  // cat = category, which name belongs to
-  // name = code region name or function, which is measured
-  Benchmark.prototype.start = function (cat, name) {
-    if (cat == "" || name == "") return;
-    this.list.push({
-      start: new Date().getTime(),
-      name: name,
-      cat: cat
-    });
-    return this.list.length - 1;
-  };
-  Benchmark.prototype.end = function (index) {
-    this.list[index].end = new Date().getTime();
-    this.list[index].time = this.list[index].end - this.list[index].start;
-    var this_list_cat = this.list[index].cat;
-    var this_list_cat_counts = this_list_cat + "_counts";
-    var this_list_cat_time_sum = this_list_cat + "_time_sum";
-    if (typeof (this.cats[this_list_cat_counts]) == "undefined") this.cats.arr.push(this_list_cat);
-    if (typeof (this.cats[this_list_cat_time_sum]) == "undefined") this.cats[this_list_cat_time_sum] = 0;
-    if (typeof (this.cats[this_list_cat_counts]) == "undefined") this.cats[this_list_cat_counts] = 0;
-    this.cats[this_list_cat_time_sum] += this.list[index].time;
-    this.cats[this_list_cat_counts]++;
-    if (typeof (bench_glob) != "undefined" && bench_glob.length > 0) {
-      this.list[index].bench_glob_index = window.last_completed_bench;
+var Benchmark = function (varname) {
+  this.varname = (typeof (varname) == "string") ? varname : "";
+  this.list = [];
+  this.cats = [];
+  this.cats.arr = [];
+  this.type = "benchmark";
+  this.includeSVG = true;
+  this.totals = "";
+  this.totals_arr = [];
+  this.totals_arr_multiple = [];
+  this.max_point_x = Number.NEGATIVE_INFINITY;
+  this.min_point_x = Number.POSITIVE_INFINITY;
+  this.max_point_y = Number.NEGATIVE_INFINITY;
+  this.min_point_y = Number.POSITIVE_INFINITY;
+  this.points = [];
+};
+// returns index
+// cat = category, which name belongs to
+// name = code region name or function, which is measured
+Benchmark.prototype.start = function (cat, name) {
+  if (cat == "" || name == "") return;
+  this.list.push({
+    start: new Date().getTime(),
+    name: name,
+    cat: cat
+  });
+  return this.list.length - 1;
+};
+Benchmark.prototype.end = function (index) {
+  this.list[index].end = new Date().getTime();
+  this.list[index].time = this.list[index].end - this.list[index].start;
+  var this_list_cat = this.list[index].cat;
+  var this_list_cat_counts = this_list_cat + "_counts";
+  var this_list_cat_time_sum = this_list_cat + "_time_sum";
+  if (typeof (this.cats[this_list_cat_counts]) == "undefined") this.cats.arr.push(this_list_cat);
+  if (typeof (this.cats[this_list_cat_time_sum]) == "undefined") this.cats[this_list_cat_time_sum] = 0;
+  if (typeof (this.cats[this_list_cat_counts]) == "undefined") this.cats[this_list_cat_counts] = 0;
+  this.cats[this_list_cat_time_sum] += this.list[index].time;
+  this.cats[this_list_cat_counts]++;
+  if (typeof (bench_glob) != "undefined" && bench_glob.length > 0) {
+    this.list[index].bench_glob_index = window.last_completed_bench;
+  }
+};
+Benchmark.prototype.clear = function () {
+  this.list = [];
+  this.cats = [];
+  this.cats.arr = [];
+  this.includeSVG = true;
+  return true;
+};
+Benchmark.prototype.print = function (all) {
+  var tbl = '<style>';
+  tbl += '.bench {width:317px;border-collapse:collapse;white-space:nowrap;}';
+  tbl += '.bench td, .bench th{font-size:12px;text-align:left;border:1px solid #444444; padding:2px}';
+  tbl += '.bench th{background-color:#DDDDDD;}';
+  tbl += '.bench tfoot td{background-color:#DDDDDD;}';
+  tbl += '.bench_foot{font-weight:bold;}';
+  tbl += '</style>';
+  tbl += '<table class="bench"><thead><tr>';
+  tbl += '<th>Num</th>';
+  tbl += '<th>Name</th>';
+  tbl += '<th>Category</th>';
+  tbl += '<th>Time</th>';
+  tbl += '</tr></thead>';
+  tbl += '<tbody>';
+  var time, totaltime = 0,
+    i, m;
+  if (this.list && this.list.length) {
+    m = this.list.length;
+    // print all
+    var start_index = 0;
+    if (!all) {
+      if (bench_glob.length) start_index = m - 3;
+      else start_index = m - 16;
+      if (start_index < 0) start_index = 0;
     }
-  };
-  Benchmark.prototype.clear = function () {
-    this.list = [];
-    this.cats = [];
-    this.cats.arr = [];
-    this.includeSVG = true;
-    return true;
-  };
-  Benchmark.prototype.print = function (all) {
-    var tbl = '<style>';
-    tbl += '.bench {width:317px;border-collapse:collapse;white-space:nowrap;}';
-    tbl += '.bench td, .bench th{font-size:12px;text-align:left;border:1px solid #444444; padding:2px}';
-    tbl += '.bench th{background-color:#DDDDDD;}';
-    tbl += '.bench tfoot td{background-color:#DDDDDD;}';
-    tbl += '.bench_foot{font-weight:bold;}';
-    tbl += '</style>';
-    tbl += '<table class="bench"><thead><tr>';
-    tbl += '<th>Num</th>';
-    tbl += '<th>Name</th>';
-    tbl += '<th>Category</th>';
-    tbl += '<th>Time</th>';
-    tbl += '</tr></thead>';
-    tbl += '<tbody>';
-    var time, totaltime = 0,
-      i, m;
-    if (this.list && this.list.length) {
-      m = this.list.length;
-      // print all
-      var start_index = 0;
-      if (!all) {
-        if (bench_glob.length) start_index = m - 3;
-        else start_index = m - 16;
-        if (start_index < 0) start_index = 0;
-      }
-      for (i = start_index; i < m; i++) {
-        time = (this.list[i].time);
-        tbl += '<tr><td>';
-        tbl += (i + 1);
-        tbl += '</td><td>';
-        tbl += this.list[i].name;
-        tbl += '</td><td>';
-        tbl += this.list[i].cat;
-        tbl += '</td><td>';
-        tbl += time;
-        tbl += '</td></tr>';
-      }
+    for (i = start_index; i < m; i++) {
+      time = (this.list[i].time);
+      tbl += '<tr><td>';
+      tbl += (i + 1);
+      tbl += '</td><td>';
+      tbl += this.list[i].name;
+      tbl += '</td><td>';
+      tbl += this.list[i].cat;
+      tbl += '</td><td>';
+      tbl += time;
+      tbl += '</td></tr>';
     }
-    tbl += '</tbody>';
-    tbl += '</table>';
-    var tbl2 = "";
-    tbl2 += '<table style="margin-top:10px;margin-bottom:10px" class="bench"><thead><tr>';
-    tbl2 += '<th>Num</th>';
-    tbl2 += '<th>Category</th>';
-    tbl2 += '<th>Calls</th>';
-    tbl2 += '<th>Sum</th>';
-    tbl2 += '<th>Avg</th>';
-    tbl2 += '</tr></thead>';
-    tbl2 += '<tbody>';
-    m = this.cats.arr.length;
-    var item;
-    this.totals = "";
-    this.totals_arr = [];
-    var totals_arr_item = [];
-    var counts_sum = 0,
-      cat_time_sum = 0,
-      cat_time_avg = 0,
-      this_list_i_cat,
-      this_list_i_cat_time_sum, this_list_i_cat_counts;
-    if (m > 0) for (i = 0; i < m; i++) {
-      tbl2 += '<tr><td>';
-      item = (i + 1);
-      tbl2 += item;
-      tbl2 += '</td><td>';
-      this_list_i_cat = this.cats.arr[i];
-      item = this_list_i_cat;
-      tbl2 += item;
-      tbl2 += '</td><td>';
-      this_list_i_cat_counts = this.cats[this_list_i_cat + "_counts"];
-      item = this_list_i_cat_counts;
-      tbl2 += item;
-      counts_sum += this_list_i_cat_counts;
-      tbl2 += '</td><td>';
-      this_list_i_cat_time_sum = this.cats[this_list_i_cat + "_time_sum"];
-      item = this_list_i_cat_time_sum;
-      tbl2 += item;
-      cat_time_sum += this_list_i_cat_time_sum;
-      tbl2 += '</td><td>';
-      item = (this_list_i_cat_time_sum / this_list_i_cat_counts).toFixed(4);
-      tbl2 += item;
-      tbl2 += '</td></tr>';
-    }
-    tbl2 += '</tbody>';
-    if (m > 0) {
-      tbl2 += '<tfoot><tr><td class="bench_foot" colspan="2">Total</td>';
-      item = (counts_sum);
-      totals_arr_item.push(item);
-      this.totals += item + ";";
-      tbl2 += '<td>' + item + '</td>';
-      item = (cat_time_sum);
-      totals_arr_item.push(item);
-      this.totals += item + ";";
-      tbl2 += '<td>' + item + '</td>';
-      item = (cat_time_sum / counts_sum).toFixed(4);
-      totals_arr_item.push(item);
-      this.totals += item;
-      tbl2 += '<td style="padding: 4px; background-color: hsl(125, 73%, 80%); border: 3px solid black; font-weight: bold; font-size: 16px;">' + item + '</td>';
-      tbl2 += '</tr>';
-      tbl2 += '</tfoot>';
-    }
-    tbl2 += '</table>';
-    this.totals_arr.push(totals_arr_item);
-    tbl += tbl2;
-    if (benchmark_running) var disabled = "disabled";
-    else disabled = "";
-    tbl += '<button ' + disabled + ' onClick="try { ' + this.varname + '.clear();$(\'#benchmark_div\').html(' + this.varname + '.print()); return true; } catch (e) {return false}">Clear Benchmarks</button>';
-    tbl += '<button ' + disabled + ' onClick="try { $(\'#benchmark_div\').html(' + this.varname + '.print(1)); } catch (e) {return false}">Show all</button>';
-    return tbl;
-  };
-  Benchmark.prototype.print_multiple_runs = function (str) {
-    var tbl2 = "";
-    tbl2 += '<table id="benchmark_multiple_table" style="margin-top:10px;margin-bottom:10px" class="bench"><thead><tr>';
-    tbl2 += '<th>Num</th>';
-    tbl2 += '<th>Calls</th>';
-    tbl2 += '<th>Sum</th>';
-    tbl2 += '<th>Avg</th>';
-    tbl2 += '</tr></thead>';
-    tbl2 += '<tbody>';
-    var item, counts_sum = 0,
-      time_sum = 0;
-    var times_array = [];
-    for (var i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
-      times_array.push(this.totals_arr_multiple[i][1]);
-    }
-    var max = _.max(times_array);
-    var min = _.min(times_array);
-    var range = max - min;
-    var average = getAverageFromNumArr(times_array, 4);
-    var stdev = getStandardDeviation(times_array, 4);
-    var minus_range = min - average;
-    var plus_range = max - average;
-    for (var i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
-      tbl2 += '<tr><td>';
-      item = (i + 1);
-      tbl2 += item;
-      tbl2 += '</td><td>';
-      item = this.totals_arr_multiple[i][0];
-      tbl2 += item;
-      tbl2 += '</td><td>';
-      item = this.totals_arr_multiple[i][1];
-      tbl2 += item;
-      time_sum += item;
-      tbl2 += '</td><td>';
-      item = this.totals_arr_multiple[i][2];
-      tbl2 += item;
-      tbl2 += '</td></tr>';
-    }
-    tbl2 += '<tr><td colspan="4" id="benchmark_multiple_status" style="display:none"></td></tr>';
-    if (!isNaN(average)) {
-      tbl2 += '<tr><td colspan="4">';
-      tbl2 += '<b>Average:</b> ' + average + " ms<br>";
-      tbl2 += '<b>Min:</b> ' + min + " ms<br>";
-      tbl2 += '<b>Max:</b> ' + max + " ms<br>";
-      tbl2 += '<b>Range:</b> ' + range.toFixed(4) + " ms<br>";
-      tbl2 += '<b>Minus-Range:</b> ' + minus_range.toFixed(4) + " ms<br>";
-      tbl2 += '<b>Plus-Range:</b> ' + plus_range.toFixed(4) + " ms<br>";
-      tbl2 += '<b>Stdev:</b> ' + stdev + " ms<br>";
-      tbl2 += '<b>Range/Average %:</b> ' + (range / average * 100).toFixed(4) + "<br>";
-      tbl2 += '<b>Minus-Range/Average %:</b> ' + (minus_range / average * 100).toFixed(4) + "<br>";
-      tbl2 += '<b>Plus-Range/Average %:</b> ' + (plus_range / average * 100).toFixed(4) + "<br>";
-      tbl2 += '<b>Stdev/Average %:</b> ' + (stdev / average * 100).toFixed(4) + "<br>";
-      tbl2 += '</td></tr>';
-    }
-    tbl2 += '</tbody>';
-    return tbl2;
-  };
-  window.Benchmark = Benchmark;
-})(window);
+  }
+  tbl += '</tbody>';
+  tbl += '</table>';
+  var tbl2 = "";
+  tbl2 += '<table style="margin-top:10px;margin-bottom:10px" class="bench"><thead><tr>';
+  tbl2 += '<th>Num</th>';
+  tbl2 += '<th>Category</th>';
+  tbl2 += '<th>Calls</th>';
+  tbl2 += '<th>Sum</th>';
+  tbl2 += '<th>Avg</th>';
+  tbl2 += '</tr></thead>';
+  tbl2 += '<tbody>';
+  m = this.cats.arr.length;
+  var item;
+  this.totals = "";
+  this.totals_arr = [];
+  var totals_arr_item = [];
+  var counts_sum = 0,
+    cat_time_sum = 0,
+    cat_time_avg = 0,
+    this_list_i_cat,
+    this_list_i_cat_time_sum, this_list_i_cat_counts;
+  if (m > 0) for (i = 0; i < m; i++) {
+    tbl2 += '<tr><td>';
+    item = (i + 1);
+    tbl2 += item;
+    tbl2 += '</td><td>';
+    this_list_i_cat = this.cats.arr[i];
+    item = this_list_i_cat;
+    tbl2 += item;
+    tbl2 += '</td><td>';
+    this_list_i_cat_counts = this.cats[this_list_i_cat + "_counts"];
+    item = this_list_i_cat_counts;
+    tbl2 += item;
+    counts_sum += this_list_i_cat_counts;
+    tbl2 += '</td><td>';
+    this_list_i_cat_time_sum = this.cats[this_list_i_cat + "_time_sum"];
+    item = this_list_i_cat_time_sum;
+    tbl2 += item;
+    cat_time_sum += this_list_i_cat_time_sum;
+    tbl2 += '</td><td>';
+    item = (this_list_i_cat_time_sum / this_list_i_cat_counts).toFixed(4);
+    tbl2 += item;
+    tbl2 += '</td></tr>';
+  }
+  tbl2 += '</tbody>';
+  if (m > 0) {
+    tbl2 += '<tfoot><tr><td class="bench_foot" colspan="2">Total</td>';
+    item = (counts_sum);
+    totals_arr_item.push(item);
+    this.totals += item + ";";
+    tbl2 += '<td>' + item + '</td>';
+    item = (cat_time_sum);
+    totals_arr_item.push(item);
+    this.totals += item + ";";
+    tbl2 += '<td>' + item + '</td>';
+    item = (cat_time_sum / counts_sum).toFixed(4);
+    totals_arr_item.push(item);
+    this.totals += item;
+    tbl2 += '<td style="padding: 4px; background-color: hsl(125, 73%, 80%); border: 3px solid black; font-weight: bold; font-size: 16px;">' + item + '</td>';
+    tbl2 += '</tr>';
+    tbl2 += '</tfoot>';
+  }
+  tbl2 += '</table>';
+  this.totals_arr.push(totals_arr_item);
+  tbl += tbl2;
+  if (benchmark_running) var disabled = "disabled";
+  else disabled = "";
+  tbl += '<button ' + disabled + ' onClick="try { ' + this.varname + '.clear();$(\'#benchmark_div\').html(' + this.varname + '.print()); return true; } catch (e) {return false}">Clear Benchmarks</button>';
+  tbl += '<button ' + disabled + ' onClick="try { $(\'#benchmark_div\').html(' + this.varname + '.print(1)); } catch (e) {return false}">Show all</button>';
+  return tbl;
+};
+Benchmark.prototype.print_multiple_runs = function (str) {
+  var tbl2 = "";
+  tbl2 += '<table id="benchmark_multiple_table" style="margin-top:10px;margin-bottom:10px" class="bench"><thead><tr>';
+  tbl2 += '<th>Num</th>';
+  tbl2 += '<th>Calls</th>';
+  tbl2 += '<th>Sum</th>';
+  tbl2 += '<th>Avg</th>';
+  tbl2 += '</tr></thead>';
+  tbl2 += '<tbody>';
+  var item, counts_sum = 0,
+    time_sum = 0;
+  var times_array = [];
+  for (var i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
+    times_array.push(this.totals_arr_multiple[i][1]);
+  }
+  var max = _.max(times_array);
+  var min = _.min(times_array);
+  var range = max - min;
+  var average = getAverageFromNumArr(times_array, 4);
+  var stdev = getStandardDeviation(times_array, 4);
+  var minus_range = min - average;
+  var plus_range = max - average;
+  for (var i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
+    tbl2 += '<tr><td>';
+    item = (i + 1);
+    tbl2 += item;
+    tbl2 += '</td><td>';
+    item = this.totals_arr_multiple[i][0];
+    tbl2 += item;
+    tbl2 += '</td><td>';
+    item = this.totals_arr_multiple[i][1];
+    tbl2 += item;
+    time_sum += item;
+    tbl2 += '</td><td>';
+    item = this.totals_arr_multiple[i][2];
+    tbl2 += item;
+    tbl2 += '</td></tr>';
+  }
+  tbl2 += '<tr><td colspan="4" id="benchmark_multiple_status" style="display:none"></td></tr>';
+  if (!isNaN(average)) {
+    tbl2 += '<tr><td colspan="4">';
+    tbl2 += '<b>Average:</b> ' + average + " ms<br>";
+    tbl2 += '<b>Min:</b> ' + min + " ms<br>";
+    tbl2 += '<b>Max:</b> ' + max + " ms<br>";
+    tbl2 += '<b>Range:</b> ' + range.toFixed(4) + " ms<br>";
+    tbl2 += '<b>Minus-Range:</b> ' + minus_range.toFixed(4) + " ms<br>";
+    tbl2 += '<b>Plus-Range:</b> ' + plus_range.toFixed(4) + " ms<br>";
+    tbl2 += '<b>Stdev:</b> ' + stdev + " ms<br>";
+    tbl2 += '<b>Range/Average %:</b> ' + (range / average * 100).toFixed(4) + "<br>";
+    tbl2 += '<b>Minus-Range/Average %:</b> ' + (minus_range / average * 100).toFixed(4) + "<br>";
+    tbl2 += '<b>Plus-Range/Average %:</b> ' + (plus_range / average * 100).toFixed(4) + "<br>";
+    tbl2 += '<b>Stdev/Average %:</b> ' + (stdev / average * 100).toFixed(4) + "<br>";
+    tbl2 += '</td></tr>';
+  }
+  tbl2 += '</tbody>';
+  return tbl2;
+};
 
 // Programmer: Larry Battle
 // Date: Mar 06, 2011
