@@ -92,7 +92,6 @@ var default_custom_clip_polygon = '[[{"X":385.77,"Y":166.95},{"X":386.68,"Y":182
 var output_format = 1;
 // this hold the original ClipperLib.MaxSteps value during benchmarks, ClipperLib.MaxSteps is set to 10 to make benchmarks comparable
 var ClipperLib_MaxSteps_original;
-var ismousedown = false; // Not yet in use
 var bench_glob = [];
 var bench_elapsed_time = 0;
 
@@ -2056,13 +2055,6 @@ function main() {
   $("#output_format").val(output_format);
 
   resize();
-
-  $("document").mousedown(function(){
-    ismousedown = true;
-  });
-  $("document").mouseup(function(){
-    ismousedown = false;
-  });
 
   $("#benchmark1,#benchmark2,#benchmark1b,#benchmark2b").click(function () {
     clicked_benchmark_button_id = $(this).attr("id");
