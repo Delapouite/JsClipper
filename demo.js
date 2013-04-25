@@ -1093,8 +1093,7 @@ function benchmark2(i) {
 
 (function (window) {
   var Benchmark = function (varname) {
-    if (typeof (varname) == "string") this.varname = varname;
-    else this.varname = "";
+    this.varname = (typeof (varname) == "string") ? varname : "";
     this.list = [];
     this.cats = [];
     this.cats.arr = [];
@@ -1113,13 +1112,12 @@ function benchmark2(i) {
   // cat = category, which name belongs to
   // name = code region name or function, which is measured
   Benchmark.prototype.start = function (cat, name) {
-    if (cat == "") return;
-    if (name == "") return;
-    var b = {};
-    b.start = new Date().getTime();
-    b.name = name;
-    b.cat = cat;
-    this.list.push(b);
+    if (cat == "" || name == "") return;
+    this.list.push({
+      start: new Date().getTime(),
+      name: name,
+      cat: cat
+    });
     return this.list.length - 1;
   };
   Benchmark.prototype.end = function (index) {
