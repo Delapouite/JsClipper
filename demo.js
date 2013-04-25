@@ -1745,7 +1745,6 @@ function main() {
     miterLimit = parseFloat(this.value);
     make_clip();
   });
-
   $("#cleandelta").change(function () {
     var cleandelta_orig = $(this).val();
     var this_value = parseFloat(this.value);
@@ -1753,15 +1752,6 @@ function main() {
     //else cleandelta = cleandelta_orig;
     make_clip();
   });
-
-  $("#lighten_distance").change(function () {
-    var lighten_distance_orig = $(this).val();
-    var this_value = parseFloat(this.value);
-    if (!isNaN(this_value)) lighten_distance = this_value;
-    //else lighten_distance = lighten_distance_orig;
-    make_clip();
-  });
-
   $('#miterLimit_plus').hold(function () {
     var miterLimit_orig = $('#miterLimit').val();
     if (!isNaN(miterLimit_orig)) miterLimit = parseFloat(miterLimit_orig);
@@ -1777,7 +1767,6 @@ function main() {
     Simplify = $(this).prop('checked');
     make_clip();
   });
-
   $("#clean").change(function () {
     if ($(this).attr('checked')) {
       if ($("#cleandelta").val()+"".trim() == "") {
@@ -1792,22 +1781,21 @@ function main() {
   });
   $("#lighten").change(function () {
     lighten = $(this).prop('checked');
-    make_clip();
-  });
-
-  $("#lighten").change(function () {
-    if ($(this).attr('checked')) {
-      if ($("#lighten_distance").val()+"".trim() == "") {
+    if (lighten) {
+      if (!$("#lighten_distance").val()+"".trim()) {
         lighten_distance = lighten_distance_default;
         $("#lighten_distance").val(lighten_distance);
       }
-      lighten = true;
-    } else {
-      lighten = false;
     }
     make_clip();
   });
-
+  $("#lighten_distance").change(function () {
+    var lighten_distance_orig = $(this).val();
+    var this_value = parseFloat(this.value);
+    if (!isNaN(this_value)) lighten_distance = this_value;
+    //else lighten_distance = lighten_distance_orig;
+    make_clip();
+  });
   $('#subj_polygon_count_minus').hold(function () {
     var subj_polygon_count_orig = $('#subj_polygon_count').val();
     if (!isNaN(subj_polygon_count_orig)) rnd_sett.subj_polygon_count = parseFloat(subj_polygon_count_orig);
