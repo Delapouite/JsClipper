@@ -96,10 +96,6 @@ var ismousedown = false; // Not yet in use
 var bench_glob = [];
 var bench_elapsed_time = 0;
 
-window.onerror = function(message, url, linenumber) {
-	console.log("JavaScript error: " + message + " on line " + linenumber + " for " + url);
-};
-
 window.onload = function () {
   "use strict";
   if (typeof (jQuery) == "undefined") alert("Failed to load jQuery. Please reload the page. If this fails repeatedly, please check the path of the jQuery library or use an own copy of jQuery.");
