@@ -497,6 +497,7 @@ function round(a) {
   if (global_do_not_round_and_scale) return a;
   return Math.floor(a * scale);
 }
+
 window.lsk = 0;
 
 function deserialize_clipper_poly(polystr) {
@@ -693,15 +694,11 @@ function deserialize_clipper_poly(polystr) {
   window.SVG = SVG;
 })();
 
-function toint(a) {
-  return parseInt(a, 10);
-}
 // Englarges mypath ( = black partially transparent path) when clicked
 function popup_path(i, fr) {
   if (benchmark_running) return false;
 
-  if (typeof(i) == "undefined") d = scaled_paths[fr].join(" ");
-  else d = scaled_paths[fr][i];
+  d = (typeof(i) == "undefined") ? scaled_paths[fr].join(" ") : scaled_paths[fr][i];
 
   var points_string = normalize_clipper_poly(d, true); // quiet
   var area;
@@ -730,8 +727,8 @@ function popup_path(i, fr) {
   $(mypath.node).attr('fill-rule', $('#p' + fr).attr('fill-rule'));
   $(mypath.node).attr('vector-effect', 'non-scaling-stroke'); // This is not supported in IE 9 and IE10 pre!
   var bb = mypath.node.getBBox();
-  var svg_w = toint($('#p').attr('width'));
-  var svg_h = toint($('#p').attr('height'));
+  var svg_w = parseInt($('#p').attr('width'), 10);
+  var svg_h = parseInt($('#p').attr('height'), 10);
   var x_scale = (svg_w - 20) / bb.width;
   var y_scale = (svg_h - 20) / bb.height;
   var scal = Math.min(x_scale, y_scale);
@@ -878,7 +875,7 @@ function update_fieldset_heights() {
   var children_heights_arr = [];
 
   for (var i = 0; i < td_heights.length; i++) {
-    children_heights=0;
+    children_heights = 0;
     if (td_heights!=max_td_height || 1==1) {
       $("#td"+i).children().each(function() {
         if ($(this).css("display") != "none") {
@@ -897,16 +894,15 @@ function update_fieldset_heights() {
   misc_fieldset_height += (max_td_height - children_heights_arr[0]);
   polygon_explorer_fieldset_height += (max_td_height - children_heights_arr[1]);
   benchmark_fieldset_f_height += (max_td_height - children_heights_arr[2]);
-  $("#misc_fieldset").css("min-height", misc_fieldset_height+"px");
-  $("#polygon_explorer_fieldset").css("min-height", polygon_explorer_fieldset_height+"px");
-  $("#benchmark_fieldset_f").css("min-height", benchmark_fieldset_f_height+"px");
+  $("#misc_fieldset").css("min-height", misc_fieldset_height + "px");
+  $("#polygon_explorer_fieldset").css("min-height", polygon_explorer_fieldset_height + "px");
+  $("#benchmark_fieldset_f").css("min-height", benchmark_fieldset_f_height + "px");
 }
 
 function resize() {
-  var freeheight = $(window).height();
-  var polygon_explorer_div_max_height = freeheight - 360;
+  var polygon_explorer_div_max_height = $(window).height() - 360;
   if (polygon_explorer_div_max_height < 170) polygon_explorer_div_max_height = 170;
-  $("#polygon_explorer_div").css("max-height", polygon_explorer_div_max_height +"px");
+  $("#polygon_explorer_div").css("max-height", polygon_explorer_div_max_height + "px");
 }
 
 // ADDITIONAL SVG WINDOW STARTS
@@ -984,7 +980,7 @@ function show_svg_source_click(non_click) {
     }
     var textarea_str = '<div id="svg_source_textarea_div">';
     textarea_str += '<button class="textarea_hide_buttons" onClick="$(\'#svg_source_textarea_div\').remove();update_enlarged_SVG_source=false;update_enlarged_SVG=false" title="Hide SVG source">Hide</button>';
-    var disabled = (benchmark_running) ? "disabled" : "";
+    var disabled = benchmark_running ? "disabled" : "";
     textarea_str += '<span id="svg_source_enlarge_button"><button ' + disabled + ' class="textarea_hide_buttons" onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button></span><br>';
     textarea_str += '<div style="display:none" id="enlarged_svg"></div>';
     textarea_str += '<textarea id="svg_source_textarea"></textarea>';
@@ -1038,7 +1034,7 @@ function benchmark2(i) {
   // update next timeouts
   for (var lsk = i + 1; lsk < bench_glob.length; lsk++) {
     clearTimeout(bench_glob[lsk].setTimeout);
-    bench_glob[lsk].setTimeout = setTimeout("benchmark2(" + (lsk) + ")",
+    bench_glob[lsk].setTimeout = setTimeout("benchmark2(" + lsk + ")",
     bench_glob[lsk].elapsed_time + lsk * bench_glob[lsk].time);
   }
   var results = '';
