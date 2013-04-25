@@ -1656,6 +1656,20 @@ function main() {
     random_clip = get_random_polys("clip");
     make_clip();
   });
+
+  // Subject FillType
+  $("input[name='subject_fillType']").change(function () {
+    subject_fillType = parseInt(this.value, 10);
+    make_clip();
+  });
+
+  // Clip FillType
+  $("input[name='clip_fillType']").change(function () {
+    clip_fillType = parseInt(this.value, 10);
+    make_clip();
+  });
+
+  // Clip type (operation)
   $("input[name='clipType']").change(function () {
     if ($('input[type="radio"][name="clipType"][value=""]').is(":checked")) {
       $('input[type="radio"][name="offsettable_poly"][value="1"]').attr('checked', 'checked');
@@ -1668,14 +1682,8 @@ function main() {
     if (clipType !== "") clipType = parseInt(clipType, 10);
     make_clip();
   });
-  $("input[name='subject_fillType']").change(function () {
-    subject_fillType = parseInt(this.value, 10);
-    make_clip();
-  });
-  $("input[name='clip_fillType']").change(function () {
-    clip_fillType = parseInt(this.value, 10);
-    make_clip();
-  });
+
+  // Offsetting
   $("input[name='offsettable_poly']").change(function () {
     offsettable_poly = parseInt(this.value, 10);
     // When offsettable poly is set to Subject or Clip, then boolean operations are not done.
@@ -1686,6 +1694,92 @@ function main() {
     }
     make_clip();
   });
+  $("input[name='joinType']").change(function () {
+    joinType = parseInt(this.value, 10);
+    //make_offset();
+    make_clip();
+  });
+  $('#delta_minus').hold(function () {
+    var delta_orig = $('#delta').val();
+    if (!isNaN(delta_orig)) delta = parseFloat(delta_orig);
+    delta = delta - 1;
+    make_clip();
+  });
+  $('#delta').change(function (e) {
+    var delta_orig = $('#delta').val();
+    if (!isNaN(delta_orig)) delta = parseFloat(delta_orig);
+    make_clip();
+  });
+  $('#delta_plus').hold(function () {
+    var delta_orig = $('#delta').val();
+    if (!isNaN(delta_orig)) delta = parseFloat(delta_orig);
+    delta = delta + 1;
+    make_clip();
+  });
+  $('#miterLimit_minus').hold(function () {
+    var miterLimit_orig = $('#miterLimit').val();
+    if (!isNaN(miterLimit_orig)) miterLimit = parseFloat(miterLimit_orig);
+    miterLimit = miterLimit - 0.1;
+    if (miterLimit < 1.0) miterLimit = 1.0;
+    make_clip();
+  });
+  $("#miterLimit").change(function () {
+    miterLimit = parseFloat(this.value);
+    make_clip();
+  });
+  $('#miterLimit_plus').hold(function () {
+    var miterLimit_orig = $('#miterLimit').val();
+    if (!isNaN(miterLimit_orig)) miterLimit = parseFloat(miterLimit_orig);
+    miterLimit = miterLimit + 0.1;
+    if (miterLimit < 1.0) miterLimit = 1.0;
+    make_clip();
+  });
+  $("#AutoFix").change(function () {
+    AutoFix = $(this).prop('checked');
+    make_clip();
+  });
+
+  // Cleaning and simplifying
+  $("#clean").change(function () {
+    clean = $(this).prop('checked');
+    if (clean) {
+      if (!$("#cleandelta").val()+"".trim()) {
+        cleandelta = cleandelta_default;
+        $("#cleandelta").val(cleandelta);
+      }
+    }
+    make_clip();
+  });
+  $("#cleandelta").change(function () {
+    var cleandelta_orig = $(this).val();
+    var this_value = parseFloat(this.value);
+    if (!isNaN(this_value)) cleandelta = this_value;
+    //else cleandelta = cleandelta_orig;
+    make_clip();
+  });
+  $("#Simplify").change(function () {
+    Simplify = $(this).prop('checked');
+    make_clip();
+  });
+  $("#lighten").change(function () {
+    lighten = $(this).prop('checked');
+    if (lighten) {
+      if (!$("#lighten_distance").val()+"".trim()) {
+        lighten_distance = lighten_distance_default;
+        $("#lighten_distance").val(lighten_distance);
+      }
+    }
+    make_clip();
+  });
+  $("#lighten_distance").change(function () {
+    var lighten_distance_orig = $(this).val();
+    var this_value = parseFloat(this.value);
+    if (!isNaN(this_value)) lighten_distance = this_value;
+    //else lighten_distance = lighten_distance_orig;
+    make_clip();
+  });
+
+  // Scale
   $('#scale_minus').hold(function () {
     var scale_orig = $('#scale').val();
     if (scale_orig && !isNaN(scale_orig) && parseInt(scale_orig, 10).toString() !== "0") scale = parseFloat(scale_orig);
@@ -1712,90 +1806,7 @@ function main() {
     $('#scale').val(to_printable(scale));
     $('#scale').trigger('change');
   });
-  $('#delta_minus').hold(function () {
-    var delta_orig = $('#delta').val();
-    if (!isNaN(delta_orig)) delta = parseFloat(delta_orig);
-    delta = delta - 1;
-    make_clip();
-  });
-  $('#delta').change(function (e) {
-    var delta_orig = $('#delta').val();
-    if (!isNaN(delta_orig)) delta = parseFloat(delta_orig);
-    make_clip();
-  });
-  $('#delta_plus').hold(function () {
-    var delta_orig = $('#delta').val();
-    if (!isNaN(delta_orig)) delta = parseFloat(delta_orig);
-    delta = delta + 1;
-    make_clip();
-  });
-  $("input[name='joinType']").change(function () {
-    joinType = parseInt(this.value, 10);
-    //make_offset();
-    make_clip();
-  });
-  $('#miterLimit_minus').hold(function () {
-    var miterLimit_orig = $('#miterLimit').val();
-    if (!isNaN(miterLimit_orig)) miterLimit = parseFloat(miterLimit_orig);
-    miterLimit = miterLimit - 0.1;
-    if (miterLimit < 1.0) miterLimit = 1.0;
-    make_clip();
-  });
-  $("#miterLimit").change(function () {
-    miterLimit = parseFloat(this.value);
-    make_clip();
-  });
-  $("#cleandelta").change(function () {
-    var cleandelta_orig = $(this).val();
-    var this_value = parseFloat(this.value);
-    if (!isNaN(this_value)) cleandelta = this_value;
-    //else cleandelta = cleandelta_orig;
-    make_clip();
-  });
-  $('#miterLimit_plus').hold(function () {
-    var miterLimit_orig = $('#miterLimit').val();
-    if (!isNaN(miterLimit_orig)) miterLimit = parseFloat(miterLimit_orig);
-    miterLimit = miterLimit + 0.1;
-    if (miterLimit < 1.0) miterLimit = 1.0;
-    make_clip();
-  });
-  $("#AutoFix").change(function () {
-    AutoFix = $(this).prop('checked');
-    make_clip();
-  });
-  $("#Simplify").change(function () {
-    Simplify = $(this).prop('checked');
-    make_clip();
-  });
-  $("#clean").change(function () {
-    if ($(this).attr('checked')) {
-      if ($("#cleandelta").val()+"".trim() == "") {
-        cleandelta = cleandelta_default;
-        $("#cleandelta").val(cleandelta);
-      }
-      clean = true;
-    } else {
-      clean = false;
-    }
-    make_clip();
-  });
-  $("#lighten").change(function () {
-    lighten = $(this).prop('checked');
-    if (lighten) {
-      if (!$("#lighten_distance").val()+"".trim()) {
-        lighten_distance = lighten_distance_default;
-        $("#lighten_distance").val(lighten_distance);
-      }
-    }
-    make_clip();
-  });
-  $("#lighten_distance").change(function () {
-    var lighten_distance_orig = $(this).val();
-    var this_value = parseFloat(this.value);
-    if (!isNaN(this_value)) lighten_distance = this_value;
-    //else lighten_distance = lighten_distance_orig;
-    make_clip();
-  });
+
   $('#subj_polygon_count_minus').hold(function () {
     var subj_polygon_count_orig = $('#subj_polygon_count').val();
     if (!isNaN(subj_polygon_count_orig)) rnd_sett.subj_polygon_count = parseFloat(subj_polygon_count_orig);
