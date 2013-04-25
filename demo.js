@@ -148,7 +148,7 @@ function normalize_clipper_poly(polystr, quiet) {
   }
   // if only points without "X" and "Y"
   var temp_n = [], i;
-  if (isArray(poly) && poly.length && typeof(poly[0]) == "number") {
+  if (_.isArray(poly) && poly.length && typeof(poly[0]) == "number") {
     var len = poly.length;
     for (i = 0; i < len; i = i + 2) {
       temp_n.push({
@@ -160,7 +160,7 @@ function normalize_clipper_poly(polystr, quiet) {
   }
   // if an array of array of points without "X" and "Y"
   var temp_n2 = [], i, j, len, len2;
-  if (isArray(poly) && poly.length && isArray(poly[0]) && typeof(poly[0][0]) != "undefined" &&
+  if (_.isArray(poly) && poly.length && _.isArray(poly[0]) && typeof(poly[0][0]) != "undefined" &&
   typeof(poly[0][0].X) == "undefined" &&
   typeof(poly[0][0].x) == "undefined") {
     len2 = poly.length;
@@ -179,7 +179,7 @@ function normalize_clipper_poly(polystr, quiet) {
   }
 
   // if not array of arrays, convert to array of arrays
-  if (isArray(poly) && poly.length > 0 && !isArray(poly[0])) poly = [poly];
+  if (_.isArray(poly) && poly.length > 0 && !_.isArray(poly[0])) poly = [poly];
   var pp, n = [[]], m, pm, x, y;
   np = [[]];
   for (i = 0, m = poly.length; i < m; i++) {
@@ -802,7 +802,7 @@ function set_default_custom_polygon() {
     clip: default_custom_clip_polygon
   };
   var arr = $.totalStorage('custom_polygons');
-  if (typeof (arr) == "undefined" || arr === null || !isArray(arr) || arr.length === 0) arr = [];
+  if (typeof (arr) == "undefined" || arr === null || !_.isArray(arr) || arr.length === 0) arr = [];
   arr[0] = def_obj;
   $.totalStorage('custom_polygons', arr);
 }
@@ -813,7 +813,7 @@ function update_custom_polygons_select() {
   if (!selected_value && selected_value+"" !== "0") selected_value = 0;
   $("#custom_polygons_select option").remove();
   var arr_length = 0;
-  if (isArray(arr)) arr_length = arr.length;
+  if (_.isArray(arr)) arr_length = arr.length;
   var selected_txt, i;
   if (arr_length > 0)
   for (i = 0; i < arr_length; i++) {
@@ -1327,15 +1327,12 @@ function benchmark2(i) {
 // Programmer: Larry Battle
 // Date: Mar 06, 2011
 // Purpose: Calculate standard deviation, variance, and average among an array of numbers.
-function isArray (obj) {
-  return Object.prototype.toString.call(obj) === "[object Array]";
-}
 function getNumWithSetDec (num, numOfDec) {
   var pow10s = Math.pow(10, numOfDec || 0);
   return (numOfDec) ? Math.round(pow10s * num) / pow10s : num;
 }
 function getAverageFromNumArr (numArr, numOfDec) {
-  if (!isArray(numArr)) {
+  if (!_.isArray(numArr)) {
     return false;
   }
   var i = numArr.length,
@@ -1346,7 +1343,7 @@ function getAverageFromNumArr (numArr, numOfDec) {
   return getNumWithSetDec((sum / numArr.length), numOfDec);
 }
 function getVariance (numArr, numOfDec) {
-  if (!isArray(numArr)) {
+  if (!_.isArray(numArr)) {
     return false;
   }
   var avg = getAverageFromNumArr(numArr, numOfDec),
@@ -1359,7 +1356,7 @@ function getVariance (numArr, numOfDec) {
   return getNumWithSetDec(v, numOfDec);
 }
 function getStandardDeviation (numArr, numOfDec) {
-  if (!isArray(numArr)) {
+  if (!_.isArray(numArr)) {
     return false;
   }
   var stdDev = Math.sqrt(getVariance(numArr, numOfDec));
@@ -1639,7 +1636,7 @@ function main() {
     var selected_value = $("#custom_polygons_select").val();
     if (!selected_value && selected_value + "" !== "0") selected_value=0;
     var arr = $.totalStorage('custom_polygons');
-    if (isArray(arr) && arr.length && typeof (arr[selected_value]) != "undefined") {
+    if (_.isArray(arr) && arr.length && typeof (arr[selected_value]) != "undefined") {
       $("#custom_polygon_subj").val(format_output(arr[selected_value].subj));
       $("#custom_polygon_clip").val(format_output(arr[selected_value].clip));
       make_clip();
@@ -2225,7 +2222,7 @@ function make_offset() {
     off_poly = ClipperLib.Clean(off_poly, cleandelta * scale);
   }
 
-  //if (isArray(off_poly) && off_poly.length)
+  //if (_.isArray(off_poly) && off_poly.length)
   //console.log(JSON.stringify(off_poly[0]));
 
   // Simplify
