@@ -78,7 +78,6 @@ var solution_subpolygons = 0;
 var bench;
 var sub_poly_links_update = 1;
 var benchmark1_globals = {};
-var browserg;
 var repeat_times;
 var repeat = 0;
 var clicked_benchmark_button_id;
@@ -108,48 +107,12 @@ window.onload = function () {
   else if (typeof (ClipperLib) == "undefined") alert("Failed to load ClipperLib. Please check that ClipperLib is loaded correctly.");
   else {
     ClipperLib_MaxSteps_original = ClipperLib.MaxSteps;
-    browserg = get_browser();
     bench = new Benchmark("bench");
     p = SVG.create();
     main();
   }
 };
 
-function get_browser() {
-  var nav = navigator.userAgent.toString().toLowerCase();
-  var browser = {};
-  if (nav.indexOf("chrome") != -1 && nav.indexOf("chromium") == -1) browser.chrome = 1;
-  else browser.chrome = 0;
-  if (nav.indexOf("chromium") != -1) browser.chromium = 1;
-  else browser.chromium = 0;
-  if (nav.indexOf("safari") != -1 && nav.indexOf("chrome") == -1 && nav.indexOf("chromium") == -1) browser.safari = 1;
-  else browser.safari = 0;
-  if (nav.indexOf("firefox") != -1) browser.firefox = 1;
-  else browser.firefox = 0;
-  if (nav.indexOf("firefox/17") != -1) browser.firefox17 = 1;
-  else browser.firefox17 = 0;
-  if (nav.indexOf("firefox/15") != -1) browser.firefox15 = 1;
-  else browser.firefox15 = 0;
-  if (nav.indexOf("firefox/3") != -1) browser.firefox3 = 1;
-  else browser.firefox3 = 0;
-  if (nav.indexOf("opera") != -1) browser.opera = 1;
-  else browser.opera = 0;
-  if (nav.indexOf("msie 10") != -1) browser.msie10 = 1;
-  else browser.msie10 = 0;
-  if (nav.indexOf("msie 9") != -1) browser.msie9 = 1;
-  else browser.msie9 = 0;
-  if (nav.indexOf("msie 8") != -1) browser.msie8 = 1;
-  else browser.msie8 = 0;
-  if (nav.indexOf("msie 7") != -1) browser.msie7 = 1;
-  else browser.msie7 = 0;
-  if (nav.indexOf("msie ") != -1) browser.msie = 1;
-  else browser.msie = 0;
-  for (var i in browser) {
-    if (browser[i] === 1 && !i.match(/[0-9]/)) browser.browser = i;
-  }
-  browser.version = $.browser.version;
-  return browser;
-}
 // Helper tool to piece together Raphael's paths into strings again
 Array.prototype.flatten || (Array.prototype.flatten = function () {
   return this.reduce(function (a, b) {
@@ -1120,7 +1083,7 @@ function benchmark2(i) {
       benchmark_exports += "bench.min_point_x:" + bench.min_point_x + "\n";
       benchmark_exports += "bench.min_point_y:" + bench.min_point_y + "\n";
     }
-    benchmark_exports += bench.totals + ";" + browserg.browser + ";" + browserg.version + "\n";
+    benchmark_exports += bench.totals + ";" + JSON.stringify($.browser) + "\n";
     $("#benchmark_exports_textarea").val(benchmark_exports);
     bench.totals_arr_multiple.push(bench.totals_arr[0]);
     var multiple_runs_table = bench.print_multiple_runs();
