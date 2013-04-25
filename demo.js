@@ -139,9 +139,9 @@ function normalize_clipper_poly(polystr, quiet) {
     return false;
   }
   // if only points without "X" and "Y"
-  var temp_n = [], i;
+  var temp_n = [], i, len;
   if (_.isArray(poly) && poly.length && typeof(poly[0]) == "number") {
-    var len = poly.length;
+    len = poly.length;
     for (i = 0; i < len; i = i + 2) {
       temp_n.push({
         X: poly[i],
@@ -151,7 +151,7 @@ function normalize_clipper_poly(polystr, quiet) {
     poly = temp_n;
   }
   // if an array of array of points without "X" and "Y"
-  var temp_n2 = [], i, j, len, len2;
+  var temp_n2 = [], j, len2;
   if (_.isArray(poly) && poly.length && _.isArray(poly[0]) && typeof(poly[0][0]) != "undefined" &&
   typeof(poly[0][0].X) == "undefined" &&
   typeof(poly[0][0].x) == "undefined") {
@@ -940,12 +940,12 @@ function svg_source_enlarge() {
   // at the bottom
   if (svg_source_place == "svg_source_container") {
     $("#_p").attr("width", window_width);
-    $("#_p").attr("height", parseInt((window_width / original_width) * original_height));
+    $("#_p").attr("height", parseInt((window_width / original_width) * original_height, 10));
     $("#_p1,#_p2,#_p3").css("stroke-width", 0.8 * (original_width / window_width));
   // at the right
   } else {
     $("#_p").attr("height", window_height);
-    $("#_p").attr("width", parseInt((window_height / original_height) * original_width));
+    $("#_p").attr("width", parseInt((window_height / original_height) * original_width, 10));
     $("#_p1,#_p2,#_p3").css("stroke-width", 0.8 * (original_height / window_height));
   }
   $("#svg_source_textarea").css("display", "none");
@@ -1238,8 +1238,7 @@ Benchmark.prototype.print = function (all) {
   tbl2 += '</table>';
   this.totals_arr.push(totals_arr_item);
   tbl += tbl2;
-  if (benchmark_running) var disabled = "disabled";
-  else disabled = "";
+  var disabled = benchmark_running ? "disabled" : "";
   tbl += '<button ' + disabled + ' onClick="try { ' + this.varname + '.clear();$(\'#benchmark_div\').html(' + this.varname + '.print()); return true; } catch (e) {return false}">Clear Benchmarks</button>';
   tbl += '<button ' + disabled + ' onClick="try { $(\'#benchmark_div\').html(' + this.varname + '.print(1)); } catch (e) {return false}">Show all</button>';
   return tbl;
@@ -1253,10 +1252,9 @@ Benchmark.prototype.print_multiple_runs = function (str) {
   tbl2 += '<th>Avg</th>';
   tbl2 += '</tr></thead>';
   tbl2 += '<tbody>';
-  var item, counts_sum = 0,
-    time_sum = 0;
+  var i, item, counts_sum = 0, time_sum = 0;
   var times_array = [];
-  for (var i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
+  for (i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
     times_array.push(this.totals_arr_multiple[i][1]);
   }
   var max = _.max(times_array);
@@ -1266,7 +1264,7 @@ Benchmark.prototype.print_multiple_runs = function (str) {
   var stdev = getStandardDeviation(times_array, 4);
   var minus_range = min - average;
   var plus_range = max - average;
-  for (var i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
+  for (i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
     tbl2 += '<tr><td>';
     item = (i + 1);
     tbl2 += item;
@@ -1977,9 +1975,7 @@ function main() {
       // disable buttons that are not allowed to click when running
       $("button,input,select").attr('disabled', 'disabled');
       $("#benchmark1,#benchmark2,#benchmark1b,#benchmark2b").each(function () {
-        var $this = $(this);
-        if ($this.attr("id") != clicked_benchmark_button_id) $this.attr('disabled', 'disabled');
-        else $this.removeAttr('disabled');
+        $(this).attr('disabled', ($(this).attr("id") != clicked_benchmark_button_id));
       });
     }
     benchmark_automatic_click = 0;
@@ -2006,8 +2002,7 @@ function main() {
     var deltaLocals = [-5, 0, 10, 30];
     var deltaLocal_i, m;
     var this_id = $(this).attr("id");
-    if (this_id == "benchmark1b" || this_id == "benchmark2b") repeat_times = 5;
-    else repeat_times = 1;
+    repeat_times = (this_id == "benchmark1b" || this_id == "benchmark2b") ? 5 : 1;
     for (count = 0; count < 2; count++) {
       if (this_id == "benchmark1" || this_id == "benchmark1b") {
         scaleLocal = 100;
@@ -2017,14 +2012,9 @@ function main() {
         if (count === 1) continue;
       }
       for (polygon_id = 0; polygon_id < 10; polygon_id++) {
-        if (!(polygon_id == 0 || polygon_id == 1 || polygon_id == 7 || polygon_id == 8 || polygon_id == 9)) continue;
-        if (polygon_id == 4 || polygon_id == 5) {
-          fillTypeLocal_start = 0;
-          fillTypeLocal_end = 1;
-        } else {
-          fillTypeLocal_start = 1;
-          fillTypeLocal_end = 1;
-        }
+        if (!(polygon_id === 0 || polygon_id == 1 || polygon_id == 7 || polygon_id == 8 || polygon_id == 9)) continue;
+        fillTypeLocal_start = (polygon_id == 4 || polygon_id == 5) ? 0 : 1;
+        fillTypeLocal_end = 1;
         for (fillTypeLocal = fillTypeLocal_start; fillTypeLocal < fillTypeLocal_end + 1; fillTypeLocal++) {
           for (clipTypeLocal = 0; clipTypeLocal < 5; clipTypeLocal++) {
             if (clipTypeLocal === 0) {
@@ -2039,13 +2029,8 @@ function main() {
               for (joinTypeLocal = 0; joinTypeLocal < 3; joinTypeLocal++) {
                 for (deltaLocal_i = 0, m = deltaLocals.length; deltaLocal_i < m; deltaLocal_i++) {
                   deltaLocal = deltaLocals[deltaLocal_i];
-                  if (joinTypeLocal == 2 && deltaLocal !== 0) {
-                    miterLimitLocal_start = 1;
-                    miterLimitLocal_end = 6;
-                  } else {
-                    miterLimitLocal_start = 1;
-                    miterLimitLocal_end = 1;
-                  }
+                  miterLimitLocal_start = 1;
+                  miterLimitLocal_end = (joinTypeLocal == 2 && deltaLocal !== 0) ? 6 : 1;
                   for (miterLimitLocal = miterLimitLocal_start; miterLimitLocal < miterLimitLocal_end + 1; miterLimitLocal += 2) {
                     bench_glob[bench_glob.length] = {
                       polygon_id: polygon_id,
