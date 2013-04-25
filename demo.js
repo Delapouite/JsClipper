@@ -1,4 +1,3 @@
-//var scale = 10000000000000;
 var scale = 100;
 var global_do_not_round_and_scale = false;
 var scale_addition = 100;
@@ -1014,12 +1013,10 @@ function benchmark2(i) {
   miterLimit = obj.miterLimit;
   $('#miterLimit').val(miterLimit);
   AutoFix = obj.AutoFix;
-  if (AutoFix) $('#AutoFix').attr('checked', 'checked');
-  else $('#AutoFix').removeAttr('checked');
+  $('#AutoFix').prop('checked', AutoFix);
 
   Simplify = obj.Simplify;
-  if (Simplify) $('#Simplify').attr('checked', 'checked');
-  else $('#Simplify').removeAttr('Simplify');
+  $('#Simplify').prop('checked', Simplify);
 
   subject_fillType = obj.subject_fillType;
   $("input[name='subject_fillType'][value='" + subject_fillType + "']").attr("checked", "checked");
@@ -1820,13 +1817,11 @@ function main() {
     min: 150
   });
   $("#AutoFix").change(function () {
-    if ($(this).attr('checked')) AutoFix = true;
-    else AutoFix = false;
+    AutoFix = $(this).prop('checked');
     make_clip();
   });
   $("#Simplify").change(function () {
-    if ($(this).attr('checked')) Simplify = true;
-    else Simplify = false;
+    Simplify = $(this).prop('checked');
     make_clip();
   });
 
@@ -1843,8 +1838,7 @@ function main() {
     make_clip();
   });
   $("#lighten").change(function () {
-    if ($(this).attr('checked')) lighten = true;
-    else lighten = false;
+    lighten = $(this).prop('checked');
     make_clip();
   });
 
@@ -2013,12 +2007,12 @@ function main() {
     speed: 0,
     min: 150
   });
+  // Bevel checkbox
   $("#bevel").change(function () {
-    if ($(this).attr('checked')) {
-      bevel = true;
+    bevel = $(this).prop('checked');
+    if (bevel) {
       $("#p3").attr("filter", "url(#innerbewel)");
     } else {
-      bevel = false;
       $("#p3").removeAttr("filter");
     }
     update_enlarged_SVG_if_needed();
@@ -2164,16 +2158,11 @@ function main() {
   $('#scale').val(to_printable(scale));
   $('#delta').val(to_printable(delta));
   $('#miterLimit').val(to_printable(miterLimit));
-  if (AutoFix) $('#AutoFix').attr('checked', 'checked');
-  else $('#AutoFix').removeAttr('checked');
-  if (Simplify) $('#Simplify').attr('checked', 'checked');
-  else $('#Simplify').removeAttr('checked');
-  if (clean) $('#clean').attr('checked', 'checked');
-  else $('#clean').removeAttr('checked');
+  $('#AutoFix').prop('checked', AutoFix);
+  $('#Simplify').prop('checked', Simplify);
+  $('#clean').prop('checked', clean);
   $("#cleandelta").val(cleandelta_default);
-
-  if (lighten) $('#lighten').attr('checked', 'checked');
-  else $('#lighten').removeAttr('checked');
+  $('#lighten').prop('checked', lighten);
   $('#lighten_distance').val(lighten_distance_default);
   $('input[type="radio"][name="subject_fillType"][value="' + subject_fillType + '"]').attr('checked', 'checked');
   $('input[type="radio"][name="clip_fillType"][value="' + clip_fillType + '"]').attr('checked', 'checked');
@@ -2186,10 +2175,8 @@ function main() {
   $('#subj_point_count').val(rnd_sett.subj_point_count);
   $('#clip_polygon_count').val(rnd_sett.clip_polygon_count);
   $('#clip_point_count').val(rnd_sett.clip_point_count);
-  if (bevel) $('#bevel').attr('checked', 'checked');
-  else $('#bevel').removeAttr('checked');
-  if (sub_poly_links_update) $('#sub_poly_links_update').attr('checked', 'checked');
-  else $('#sub_poly_links_update').removeAttr('checked');
+  $('#bevel').prop('checked', bevel);
+  $('#sub_poly_links_update').prop('checked', sub_poly_links_update);
   make_clip();
   colorize_boxes_like_in_svg();
 } // main()
@@ -2206,7 +2193,7 @@ function make_offset() {
     off_poly = sss;
   }
 
-  if (typeof(off_poly)=="undefined" || !(sss instanceof Array)) off_poly = [[]];
+  if (typeof(off_poly) == "undefined" || !(sss instanceof Array)) off_poly = [[]];
 
   if (ClipperLib.biginteger_used === null) ClipperLib.biginteger_used = 0;
 
@@ -2214,9 +2201,6 @@ function make_offset() {
   if (clean) {
     off_poly = ClipperLib.Clean(off_poly, cleandelta * scale);
   }
-
-  //if (_.isArray(off_poly) && off_poly.length)
-  //console.log(JSON.stringify(off_poly[0]));
 
   // Simplify
   // Must simplify before offsetting, to get offsetting right in certain cases.
