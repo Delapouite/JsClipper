@@ -880,7 +880,7 @@ function update_fieldset_heights() {
     $("#td2").innerHeight(),
     $("#td3").innerHeight()
   ];
-  var max_td_height = Array_max(td_heights);
+  var max_td_height = _.max(td_heights);
   var max_index;
   var children_heights;
   var children_heights_arr = [];
@@ -1279,8 +1279,8 @@ function benchmark2(i) {
     for (var i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
       times_array.push(this.totals_arr_multiple[i][1]);
     }
-    var max = Array_max(times_array);
-    var min = Array_min(times_array);
+    var max = _.max(times_array);
+    var min = _.min(times_array);
     var range = max - min;
     var average = getAverageFromNumArr(times_array, 4);
     var stdev = getStandardDeviation(times_array, 4);
@@ -1365,12 +1365,7 @@ function getStandardDeviation (numArr, numOfDec) {
   var stdDev = Math.sqrt(getVariance(numArr, numOfDec));
   return getNumWithSetDec(stdDev, numOfDec);
 }
-function Array_max (array) {
-  return Math.max.apply(Math, array);
-}
-function Array_min (array) {
-  return Math.min.apply(Math, array);
-}
+
 // BENCHMARKING ENDS
 
 function colorize_boxes_like_in_svg() {
