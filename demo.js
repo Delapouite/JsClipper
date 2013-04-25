@@ -108,13 +108,6 @@ window.onload = function () {
   }
 };
 
-// Helper tool to piece together Raphael's paths into strings again
-Array.prototype.flatten || (Array.prototype.flatten = function () {
-  return this.reduce(function (a, b) {
-    return a.concat('function' === typeof b.flatten ? b.flatten() : b);
-  }, []);
-});
-
 /* Normalizes inputted polygon string
  Input can be JSON-stringified version of the following:
  - Array of arrays of points [[{"X":10,"Y":10},{"X":10,"Y":10},{"X":10,"Y":10}][{"X":10,"Y":10},{"X":10,"Y":10},{"X":10,"Y":10}]]
@@ -210,7 +203,7 @@ function svgpath_to_clipper_polygons(d) {
   d = d.trim();
   var arr = Raphael.parsePathString(d); // str to array
   arr = Raphael._pathToAbsolute(arr); // mahvstcsqz -> uppercase
-  var str = arr.flatten().join(" "),
+  var str = _.flatten(arr).join(" "),
     paths = str.replace(/M/g, '|M').split("|"),
     polygons_arr = [],
     polygon_arr = [];
