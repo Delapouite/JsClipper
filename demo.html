@@ -21,33 +21,33 @@
             <table class="polygons_fieldset">
               <tr>
                 <td>
-                  <input type="radio" name="polygons" value="0">Arrows
+                  <label><input type="radio" name="polygons" value="0">Arrows</label>
                   <br>
-                  <input type="radio" name="polygons" value="1">Texts
+                  <label><input type="radio" name="polygons" value="1">Texts</label>
                   <br>
-                  <input type="radio" name="polygons" value="2">Rects
-                  <br>
-                </td>
-                <td>
-                  <input type="radio" name="polygons" value="3">Same
-                  <br>
-                  <input type="radio" name="polygons" value="4" title="Random rectangles">RandRects
-                  <br>
-                  <input type="radio" name="polygons" value="5" title="Random polygons">Random
+                  <label><input type="radio" name="polygons" value="2">Rects</label>
                   <br>
                 </td>
                 <td>
-                  <input type="radio" name="polygons" value="6">Star & rect
+                  <label><input type="radio" name="polygons" value="3">Same</label>
                   <br>
-                  <input type="radio" name="polygons" value="7">Spiral
+                  <label><input type="radio" name="polygons" value="4" title="Random rectangles">RandRects</label>
                   <br>
-                  <input type="radio" name="polygons" value="8">Grid & star
+                  <label><input type="radio" name="polygons" value="5" title="Random polygons">Random</label>
+                  <br>
+                </td>
+                <td>
+                  <label><input type="radio" name="polygons" value="6">Star & rect</label>
+                  <br>
+                  <label><input type="radio" name="polygons" value="7">Spiral</label>
+                  <br>
+                  <label><input type="radio" name="polygons" value="8">Grid & star</label>
                   <br>
                 </td>
                 <td style="padding-right:0px">
-                  <input type="radio" name="polygons" value="9">Glyph
+                  <label><input type="radio" name="polygons" value="9">Glyph</label>
                   <br>
-                  <input type="radio" name="polygons" value="10" title="Your own custom polygon sets">Custom
+                  <label><input type="radio" name="polygons" value="10" title="Your own custom polygon sets">Custom</label>
                   <br>
                 </td>
               </tr>
@@ -55,8 +55,7 @@
           </fieldset>
           <fieldset id="custom_polygons_fieldset" style="position:relative">
             <legend>Your own custom polygons</legend>
-            <select name="custom_polygons_select"
-            id="custom_polygons_select" title="Saved custom polygon sets"></select>
+            <select name="custom_polygons_select" id="custom_polygons_select" title="Saved custom polygon sets"></select>
             <select name="sample_custom_polygon" id="sample_custom_polygon" title="Get Builtin polygon set">
               <option value="">- Builtin -</option>
               <option value="0">Arrows</option>
@@ -117,14 +116,12 @@
                   </td>
                   <td>
                     <button id="subj_polygon_count_minus">&nbsp;-&nbsp;</button>
-                    <input class="random_inputs" type="text" id="subj_polygon_count"
-                    value="1">
+                    <input class="random_inputs" type="text" id="subj_polygon_count" value="1">
                     <button id="subj_polygon_count_plus">&nbsp;+&nbsp;</button>
                   </td>
                   <td style="padding-right:0px">
                     <button id="subj_point_count_minus">&nbsp;-&nbsp;</button>
-                    <input class="random_inputs" type="text" id="subj_point_count"
-                    value="1">
+                    <input class="random_inputs" type="text" id="subj_point_count" value="1">
                     <button id="subj_point_count_plus">&nbsp;+&nbsp;</button>
                   </td>
                 </tr>
@@ -134,14 +131,12 @@
                   </td>
                   <td>
                     <button id="clip_polygon_count_minus">&nbsp;-&nbsp;</button>
-                    <input class="random_inputs" type="text" id="clip_polygon_count"
-                    value="1">
+                    <input class="random_inputs" type="text" id="clip_polygon_count" value="1">
                     <button id="clip_polygon_count_plus">&nbsp;+&nbsp;</button>
                   </td>
                   <td style="padding-right:0px">
                     <button id="clip_point_count_minus">&nbsp;-&nbsp;</button>
-                    <input class="random_inputs" type="text" id="clip_point_count"
-                    value="1">
+                    <input class="random_inputs" type="text" id="clip_point_count" value="1">
                     <button id="clip_point_count_plus">&nbsp;+&nbsp;</button>
                   </td>
                 </tr>
@@ -152,15 +147,15 @@
               <td>
                 <fieldset>
                   <legend>Subject FillType</legend>
-                  <input type="radio" name="subject_fillType" value="0">EvenOdd&nbsp;
-                  <input type="radio" name="subject_fillType" value="1">NonZero
+                  <label><input type="radio" name="subject_fillType" value="0">EvenOdd</label>&nbsp;
+                  <label><input type="radio" name="subject_fillType" value="1">NonZero</label>
                 </fieldset>
               </td>
               <td>
                 <fieldset>
                   <legend>Clip FillType</legend>
-                  <input type="radio" name="clip_fillType" value="0">EvenOdd&nbsp;
-                  <input type="radio" name="clip_fillType" value="1">NonZero
+                  <label><input type="radio" name="clip_fillType" value="0">EvenOdd</label>&nbsp;
+                  <label><input type="radio" name="clip_fillType" value="1">NonZero</label>
                 </fieldset>
               </td>
             </tr>
@@ -168,29 +163,30 @@
           <fieldset id="ClipTypeFieldset">
             <legend>Clip type (operation)</legend>
             <p>
-              <input type="radio" name="clipType" value="">No&nbsp;&nbsp;
-              <input type="radio" name="clipType" value="0">Intersect&nbsp;&nbsp;
-              <input type="radio" name="clipType" value="1">Union&nbsp;&nbsp;
-              <input type="radio" name="clipType" value="2">Difference&nbsp;&nbsp;
-              <input type="radio" name="clipType" value="3" checked>Xor
+              <label><input type="radio" name="clipType" value="">No</label>&nbsp;&nbsp;
+              <label><input type="radio" name="clipType" value="0">Intersect</label>&nbsp;&nbsp;
+              <label><input type="radio" name="clipType" value="1">Union</label>&nbsp;&nbsp;
+              <label><input type="radio" name="clipType" value="2">Difference</label>&nbsp;&nbsp;
+              <label><input type="radio" name="clipType" value="3" checked>Xor</label>
             </p>
           </fieldset>
           <fieldset id="CleaningFieldset">
             <legend>Cleaning and simplifying</legend>
             <p>
-              <b>Clean</b><input type="checkbox" id="clean" 
-              title="Clean. Joins sequential vertices if they are almost coincident. This is needed to prevent polygon breakage when offsetting. Not included in original Clipper, yet. This operation is done before offsetting."
-              value="1">
-              <input style="width:28px" type="text" value="" id="cleandelta"
-            title="Delta. The distance used for Clean. Sequential vertices are joined if they are at or below this distance of each other.">&nbsp;&nbsp;
-            <b>Simplify</b><input type="checkbox" id="Simplify" 
-                            title="Simplify. Convert complex (self-intersecting) polygon to simple ones. Produces multiple polygons, if there are self-intersections. Note! Not work in self-intersections that are too small, you have to remove too-near-vertices using Clean feature. This operation is done before offsetting."
-                            value="1">&nbsp;&nbsp;
-            <b>Lighten</b><input type="checkbox" id="lighten"
-              title="Lighten. Removes unnecessary vertices. Not included in original Clipper. This operation is done after offsetting."
-              value="1">
-              <input style="width:28px;" type="text" value="" id="lighten_distance"
-            title="Tolerance. The distance that is used when lightening polygon. Removes middle vertex of three sequential vertices, if the middle vertex is under (or at) this distance of the line between start and end vertex.">
+              <label>
+                <b>Clean</b>
+                <input type="checkbox" id="clean" title="Clean. Joins sequential vertices if they are almost coincident. This is needed to prevent polygon breakage when offsetting. Not included in original Clipper, yet. This operation is done before offsetting." value="1">
+              </label>
+              <input style="width:28px" type="text" value="" id="cleandelta" title="Delta. The distance used for Clean. Sequential vertices are joined if they are at or below this distance of each other.">&nbsp;&nbsp;
+              <label>
+                <b>Simplify</b>
+                <input type="checkbox" id="Simplify" title="Simplify. Convert complex (self-intersecting) polygon to simple ones. Produces multiple polygons, if there are self-intersections. Note! Not work in self-intersections that are too small, you have to remove too-near-vertices using Clean feature. This operation is done before offsetting." value="1">
+              </label>&nbsp;&nbsp;
+              <label>
+                <b>Lighten</b>
+                <input type="checkbox" id="lighten" title="Lighten. Removes unnecessary vertices. Not included in original Clipper. This operation is done after offsetting." value="1">
+              </label>
+              <input style="width:28px;" type="text" value="" id="lighten_distance" title="Tolerance. The distance that is used when lightening polygon. Removes middle vertex of three sequential vertices, if the middle vertex is under (or at) this distance of the line between start and end vertex.">
            </p>
           </fieldset>
           <fieldset id="OffsettingFieldset">
@@ -198,26 +194,27 @@
             <table class="offset_outer">
               <tr>
                 <td style="padding-right:6px;">
-                	<b><span style="display:block;padding-bottom:3px">Polygon</span></b>
-                  <input type="radio" name="offsettable_poly" value="1">Subject
+                  <b><span style="display:block;padding-bottom:3px">Polygon</span></b>
+                  <label><input type="radio" name="offsettable_poly" value="1">Subject</label>
                   <br>
-                  <input type="radio" name="offsettable_poly" value="2">Clip
+                  <label><input type="radio" name="offsettable_poly" value="2">Clip</label>
                   <br>
-                  <input type="radio" id="offsettable_poly3" name="offsettable_poly" value="3" checked>Solution</td>
+                  <label><input type="radio" id="offsettable_poly3" name="offsettable_poly" value="3" checked>Solution</label>
+                </td>
                 <td style="padding-right:6px;">
-                	<b><span style="display:block;padding-bottom:3px">JoinType</span></b>
-                  <input type="radio" name="joinType" value="0" checked>Square
+                  <b><span style="display:block;padding-bottom:3px">JoinType</span></b>
+                  <label><input type="radio" name="joinType" value="0" checked>Square</label>
                   <br>
-                  <input type="radio" name="joinType" value="1">Round
+                  <label><input type="radio" name="joinType" value="1">Round</label>
                   <br>
-                  <input type="radio" name="joinType" value="2">Miter
+                  <label><input type="radio" name="joinType" value="2">Miter</label>
                   <br>
                 </td>
                 <td style="padding-right:0px">
                   <table class="offset_inner">
                     <tr>
                       <td>
-                      	<b>Delta</b>
+                        <b>Delta</b>
                         <button id="delta_minus">&nbsp;-&nbsp;</button>
                         <input type="text" id="delta" value="" style="width:50px">
                         <button id="delta_plus">&nbsp;+&nbsp;</button>
@@ -232,10 +229,10 @@
                     </tr>
                     <tr>
                       <td style="padding-bottom: 0px; padding-top: 3px;">
-                        <b title="AutoFix">AutoFix</b>
-                        <input type="checkbox" id="AutoFix"
-                        title="AutoFix. Fixes polygon orientation if necessary and removes duplicate vertices. Can be set false when you are sure that polygon orientation is correct and that there are no duplicate vertices."
-                        value="1">
+                        <label>
+                          <b title="AutoFix">AutoFix</b>
+                          <input type="checkbox" id="AutoFix" title="AutoFix. Fixes polygon orientation if necessary and removes duplicate vertices. Can be set false when you are sure that polygon orientation is correct and that there are no duplicate vertices." value="1">
+                        </label>
                       </td>
                     </tr>
                   </table>
@@ -249,19 +246,20 @@
               <button id="scale_minus">&nbsp;-&nbsp;</button>
               <input type="text" id="scale" value="" style="width:80px">
               <button id="scale_plus">&nbsp;+&nbsp;</button> <span id="scaletest"></span>&nbsp; <b>Bigints used:</b>
-              <span
-              id="biginteger_used"></span>
+              <span id="biginteger_used"></span>
             </p>
           </fieldset>
           <fieldset id="misc_fieldset">
             <legend>Misc</legend>
-            <button id="show_svg_source" title="Show current SVG source in textarea at the bottom of the page">Show SVG source B</button>
-            &nbsp;<b>Bevel</b>
-            <input type="checkbox" id="bevel"
-            value="1" title="Uncheck this to speedup drawing">&nbsp;&nbsp;
-            <b>Explorer</b>
-            <input type="checkbox" id="sub_poly_links_update"
-            value="1" title="Enable/disable Polygon Explorer">
+            <button id="show_svg_source" title="Show current SVG source in textarea at the bottom of the page">Show SVG source B</button>&nbsp;
+            <label>
+              <b>Bevel</b>
+              <input type="checkbox" id="bevel" value="1" title="Uncheck this to speedup drawing">
+            </label>&nbsp;&nbsp;
+            <label>
+              <b>Explorer</b>
+              <input type="checkbox" id="sub_poly_links_update" value="1" title="Enable/disable Polygon Explorer">
+            </label>
             <br>
             <button id="benchmark1" title="Execute Normal benchmark">Run NB</button>
             <button id="benchmark1b" title="Execute Normal benchmark 5x">Run NB 5x</button>
@@ -274,105 +272,92 @@
           <fieldset id="polygon_explorer_fieldset">
             <legend>Polygon explorer</legend>
             <div id="polygon_explorer_div" style="overflow-y:auto;overflow-x:visible;padding-left:1px;max-height:300px">
-	            <table class="polygon_explorer">
-	              <tr>
-	                <td colspan="4" style="padding:0px;white-space:nowrap; border:0px">
-	                  <table style="padding:0px;border-collapse:collapse">
-	                    <tr>
-	                      <td style="padding:0px;vertical-align:middle">
-	                        <textarea id="polygon_explorer_string_inp" 
-	                        title="When you click the numbers below, here comes coordinates of the clicked polygon (or polygons) as string." value="">Click below to see coordinates here!</textarea>
-	                      </td>
-	                      <td style="padding:0px;vertical-align:middle">
-	                        <select id="output_format" title="Output format" style="width:73px;margin-left:5px">
-	                          <option value="0">Clipper</option>
-	                          <option value="1">Plain</option>
-	                          <option value="2">SVG</option>
-	                        </select>
-	                      </td>
-	                    </tr>
-	                  </table>
-	                </td>
-	              </tr>
-	              <tr>
-	                <th style="white-space:nowrap; width:31px;" title="Polygon type">Type</th>
-	                <th style="white-space:nowrap; width:35px;" title="Count of subpolygons">Polys</th>
-	                <th style="white-space:nowrap; width:40px;" title="Count of points in all sub polygons. Hover numbers below to see the whole multi-polygon highlighted. Click them to see coordinates as strings and the area of multi-polygon (sum of areas of sub polygons).">Points</th>
-	                <th style="white-space:nowrap;" 
-	                  title="Count of points in sub polygons. Hover numbers below to see sub polygons highlighted. Click to see coordinates as strings and the area of sub polygon."
-	                  >Points in subpolygons</th>
-	              </tr>
-	              <tr>
-	                <td id="subject_box" title="Subject">
-	                	<b>Subj</b>
-	                </td>
-	                <td>
-	                	<span id="subj_subpolygons"></span>
-	                </td>
-	                <td>
-	                	<span id="subj_points_total" class="subpolylinks"
-	                  onclick="popup_path(undefined,'1')"
-	                  onmouseover="show_path(undefined,'1')" onmouseout="hide_path()"
-	                  ></span>
-	                </td>
-	                <td>
-	                	<span id="subj_points_in_subpolygons"></span>
-	                </td>
-	              </tr>
-	              <tr>
-	                <td id="clip_box" title="Clip">
-	                	<b>Clip</b>
-	                </td>
-	                <td>
-	                	<span id="clip_subpolygons">
-	                </span>
-	                </td>
-	                <td><span id="clip_points_total" class="subpolylinks"
-	                  onclick="popup_path(undefined,'2')"
-	                  onmouseover="show_path(undefined,'2')" onmouseout="hide_path()"
-	                  ></span>
-	               </td>
-	                <td>
-	                	<span id="clip_points_in_subpolygons"></span>
-	                </td>
-	              </tr>
-	              <tr>
-	                <td id="solution_box" title="Solution">
-	                	<b>Solu</b>
-	                </td>
-	                <td>
-	                	<span id="solution_subpolygons"></span>
-	                </td>
-	                <td>
-	                  <span id="solution_points_total" class="subpolylinks"
-	                  onclick="popup_path(undefined,'3')"
-	                  onmouseover="show_path(undefined,'3')" onmouseout="hide_path()"
-	                  ></span>
-	                </td>
-	                <td>
-	                	<span id="solution_points_in_subpolygons">
-	                </span>
-	                </td>
-	              </tr>
-	              <tr>
-	                <td>
-	                	<b>Total</b>
-	                </td>
-	                <td>
-	                	<b><span id="all_subpolygons"></span></b>
-	                </td>
-	                <td>
-	                	<b><span id="points_total"></span></b>
-	                </td>
-	                <td style="padding-bottom:0px;padding-top:0px;text-align:right;white-space:nowrap">
-	                <div id="area" style="padding:0px;display:inline-block;width:90%;text-align:left" 
-	                  title="Click above numbers to see the area of sub polygons."
-	                  >Area: Click above to see polygon area!</div>
-	                <button id="help_output_format" title="Get help about output format">?</button>
-	                </td>
-	              </tr>
-	            </table>
-	          </div>
+              <table class="polygon_explorer">
+                <tr>
+                  <td colspan="4" style="padding:0px;white-space:nowrap; border:0px">
+                    <table style="padding:0px;border-collapse:collapse">
+                      <tr>
+                        <td style="padding:0px;vertical-align:middle">
+                          <textarea id="polygon_explorer_string_inp" title="When you click the numbers below, here comes coordinates of the clicked polygon (or polygons) as string." value="">Click below to see coordinates here!</textarea>
+                        </td>
+                        <td style="padding:0px;vertical-align:middle">
+                          <select id="output_format" title="Output format" style="width:73px;margin-left:5px">
+                            <option value="0">Clipper</option>
+                            <option value="1">Plain</option>
+                            <option value="2">SVG</option>
+                          </select>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <th style="white-space:nowrap; width:31px;" title="Polygon type">Type</th>
+                  <th style="white-space:nowrap; width:35px;" title="Count of subpolygons">Polys</th>
+                  <th style="white-space:nowrap; width:40px;" title="Count of points in all sub polygons. Hover numbers below to see the whole multi-polygon highlighted. Click them to see coordinates as strings and the area of multi-polygon (sum of areas of sub polygons).">Points</th>
+                  <th style="white-space:nowrap;" title="Count of points in sub polygons. Hover numbers below to see sub polygons highlighted. Click to see coordinates as strings and the area of sub polygon."
+                    >Points in subpolygons</th>
+                </tr>
+                <tr>
+                  <td id="subject_box" title="Subject">
+                    <b>Subj</b>
+                  </td>
+                  <td>
+                    <span id="subj_subpolygons"></span>
+                  </td>
+                  <td>
+                    <span id="subj_points_total" class="subpolylinks" onclick="popup_path(undefined,'1')" onmouseover="show_path(undefined,'1')" onmouseout="hide_path()"></span>
+                  </td>
+                  <td>
+                    <span id="subj_points_in_subpolygons"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td id="clip_box" title="Clip">
+                    <b>Clip</b>
+                  </td>
+                  <td>
+                    <span id="clip_subpolygons">
+                  </span>
+                  </td>
+                  <td><span id="clip_points_total" class="subpolylinks" onclick="popup_path(undefined,'2')" onmouseover="show_path(undefined,'2')" onmouseout="hide_path()"></span>
+                 </td>
+                  <td>
+                    <span id="clip_points_in_subpolygons"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td id="solution_box" title="Solution">
+                    <b>Solu</b>
+                  </td>
+                  <td>
+                    <span id="solution_subpolygons"></span>
+                  </td>
+                  <td>
+                    <span id="solution_points_total" class="subpolylinks" onclick="popup_path(undefined,'3')" onmouseover="show_path(undefined,'3')" onmouseout="hide_path()"></span>
+                  </td>
+                  <td>
+                    <span id="solution_points_in_subpolygons">
+                  </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Total</b>
+                  </td>
+                  <td>
+                    <b><span id="all_subpolygons"></span></b>
+                  </td>
+                  <td>
+                    <b><span id="points_total"></span></b>
+                  </td>
+                  <td style="padding-bottom:0px;padding-top:0px;text-align:right;white-space:nowrap">
+                  <div id="area" style="padding:0px;display:inline-block;width:90%;text-align:left" title="Click above numbers to see the area of sub polygons.">Area: Click above to see polygon area!</div>
+                  <button id="help_output_format" title="Get help about output format">?</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
           </fieldset>
         </td>
         <td id="td2" style="width:353px;vertical-align:top;">

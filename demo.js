@@ -1390,9 +1390,8 @@ function main() {
   // formats internal representation of polygons to
   // specified output format and prints them on input fields
   $("#output_format").change(function () {
-    var selected_val = parseInt($(this).val(),10);
-    output_format = selected_val;
-    if ($("#custom_polygons_fieldset").css("display") != "none") {
+    output_format = parseInt($(this).val(),10);
+    if ($("#custom_polygons_fieldset").css("display") !== "none") {
       var subj = $("#custom_polygon_subj").val();
       var clip = $("#custom_polygon_clip").val();
       subj = normalize_clipper_poly(subj, true); // quiet
