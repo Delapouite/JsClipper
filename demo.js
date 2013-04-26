@@ -524,172 +524,168 @@ function deserialize_clipper_poly(polystr) {
   }
   return np;
 }
-(function () {
-  "use strict";
-  SVG.create = function () {
-    p = Raphael("svgcontainer", 500, 350);
-    p.canvas.id = "p";
-    var str = "<filter id='innerbewel' x0='-50%' y0='-50%' width='200%' height='200%' >";
-    str += "<feGaussianBlur in='SourceAlpha' stdDeviation='2' result='blur'/>";
-    str += "<feOffset dy='3' dx='3'/>";
-    str += "<feComposite in2='SourceAlpha' operator='arithmetic'";
-    str += " k2='-1' k3='1' result='hlDiff'/>";
-    str += "<feFlood flood-color='white' flood-opacity='0.8'/>"; // changed to 1.0 for speed
-    str += "<feComposite in2='hlDiff' operator='in'/>";
-    str += "<feComposite in2='SourceGraphic' operator='over' result='withGlow'/>";
-    str += "<feOffset in='blur' dy='-3' dx='-3'/>";
-    str += "<feComposite in2='SourceAlpha' operator='arithmetic'";
-    str += " k2='-1' k3='1' result='shadowDiff'/>";
-    str += "<feFlood flood-color='black' flood-opacity='0.5'/>"; // changed to 1.0 for speed
-    str += "<feComposite in2='shadowDiff' operator='in'/>";
-    str += "<feComposite in2='withGlow' operator='over'/>";
-    str += "</filter>";
-    var markers = '';
-    // Markers to show start, mid and end points of path
-    markers += '<marker id="StartMarker" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="10" markerHeight="10" stroke="red" stroke-width="1" fill="none" orient="auto">';
-    markers += '<path d="M0,5L10,5M5,0L10,5M5,10L10,5">';
-    markers += '</marker>';
 
-    markers += '<marker id="MidMarker" stroke-opacity="1.0" viewBox="-1 -1 12 12" refX="5" refY="5" markerWidth="4" markerHeight="4" stroke="red" stroke-width="1" fill="yellow" stroke-opacity="0.5" fill-opacity="0.5" orient="0" markerUnits="strokeWidth">';
-    markers += '<circle cx="5" cy="5" r="5"></circle>';
-    markers += '</marker>';
+SVG.create = function () {
+  p = Raphael("svgcontainer", 500, 350);
+  p.canvas.id = "p";
+  var str = "<filter id='innerbewel' x0='-50%' y0='-50%' width='200%' height='200%' >";
+  str += "<feGaussianBlur in='SourceAlpha' stdDeviation='2' result='blur'/>";
+  str += "<feOffset dy='3' dx='3'/>";
+  str += "<feComposite in2='SourceAlpha' operator='arithmetic'";
+  str += " k2='-1' k3='1' result='hlDiff'/>";
+  str += "<feFlood flood-color='white' flood-opacity='0.8'/>"; // changed to 1.0 for speed
+  str += "<feComposite in2='hlDiff' operator='in'/>";
+  str += "<feComposite in2='SourceGraphic' operator='over' result='withGlow'/>";
+  str += "<feOffset in='blur' dy='-3' dx='-3'/>";
+  str += "<feComposite in2='SourceAlpha' operator='arithmetic'";
+  str += " k2='-1' k3='1' result='shadowDiff'/>";
+  str += "<feFlood flood-color='black' flood-opacity='0.5'/>"; // changed to 1.0 for speed
+  str += "<feComposite in2='shadowDiff' operator='in'/>";
+  str += "<feComposite in2='withGlow' operator='over'/>";
+  str += "</filter>";
+  var markers = '';
+  // Markers to show start, mid and end points of path
+  markers += '<marker id="StartMarker" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="10" markerHeight="10" stroke="red" stroke-width="1" fill="none" orient="auto">';
+  markers += '<path d="M0,5L10,5M5,0L10,5M5,10L10,5">';
+  markers += '</marker>';
 
-    markers += '<marker id="EndMarker" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="8" stroke="blue" stroke-width="1" fill="none" orient="auto">';
-    markers += '<rect x="0" y="0" width="10" height="10"></rect>';
-    markers += '</marker>';
+  markers += '<marker id="MidMarker" stroke-opacity="1.0" viewBox="-1 -1 12 12" refX="5" refY="5" markerWidth="4" markerHeight="4" stroke="red" stroke-width="1" fill="yellow" stroke-opacity="0.5" fill-opacity="0.5" orient="0" markerUnits="strokeWidth">';
+  markers += '<circle cx="5" cy="5" r="5"></circle>';
+  markers += '</marker>';
 
-    // This second invisible marker is needed to avoid noisy after images in Chrome:
-    markers += '<marker id="StartMarker2" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="10" markerHeight="10" stroke="none" fill="none" orient="auto">';
-    markers += '<path d="M0,5L10,5M5,0L10,5M5,10L10,5">';
-    markers += '</marker>';
-    markers += '<marker id="MidMarker2" stroke-opacity="1.0" viewBox="-1 -1 12 12" refX="5" refY="5" markerWidth="4" markerHeight="4" stroke="none" fill="none" orient="0" markerUnits="strokeWidth">';
-    markers += '<circle cx="5" cy="5" r="5"></circle>';
-    markers += '</marker>';
-    markers += '<marker id="EndMarker2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="8" stroke="none" fill="none" orient="auto">';
-    markers += '<rect x="0" y="0" width="10" height="10"></rect>';
-    markers += '</marker>';
-    $("body").append("<svg id='dummy' style='display:none'><defs>" + str + markers + "</defs></svg>");
-    $("#p defs").append($("#innerbewel"));
-    $("#p defs").append($("#dummy marker"));
-    $("#dummy").remove();
-    return p;
-  };
-  SVG.addpaths = function (a, b, c, a1, b1) {
-    if (a) {
-      subj_subpolygons = a.length;
-      a = this.polys2path(a, "1");
-      if (sub_poly_links_update) {
-        if (typeof(subj_subpolygons) == "undefined") subj_subpolygons = 0;
-        $("#subj_subpolygons").html(subj_subpolygons);
-        $("#subj_points_in_subpolygons").html(this.sub_poly_links);
-        $("#subj_points_total").html(this.total.toString());
-        subj_points_total = this.total;
-      }
-    }
-    if (b) {
-      clip_subpolygons = b.length;
-      b = this.polys2path(b, "2");
-      if (sub_poly_links_update) {
-        if (typeof(clip_subpolygons) === "undefined") clip_subpolygons = 0;
-        $("#clip_subpolygons").html(clip_subpolygons);
-        $("#clip_points_in_subpolygons").html(this.sub_poly_links);
-        $("#clip_points_total").html(this.total.toString());
-        clip_points_total = this.total;
-      }
-    }
-    if (typeof(c) !== "undefined" && typeof(c.length) !== "undefined") solution_subpolygons = c.length;
-    else solution_subpolygons = 0;
-    if (c) {
-      c = this.polys2path(c, "3");
-      if (sub_poly_links_update) {
-        $("#solution_subpolygons").html(solution_subpolygons);
-        $("#solution_points_in_subpolygons").html(this.sub_poly_links);
-        $("#solution_points_total").html(this.total.toString());
-        solution_points_total = this.total;
-      }
-    }
+  markers += '<marker id="EndMarker" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="8" stroke="blue" stroke-width="1" fill="none" orient="auto">';
+  markers += '<rect x="0" y="0" width="10" height="10"></rect>';
+  markers += '</marker>';
 
+  // This second invisible marker is needed to avoid noisy after images in Chrome:
+  markers += '<marker id="StartMarker2" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="10" markerHeight="10" stroke="none" fill="none" orient="auto">';
+  markers += '<path d="M0,5L10,5M5,0L10,5M5,10L10,5">';
+  markers += '</marker>';
+  markers += '<marker id="MidMarker2" stroke-opacity="1.0" viewBox="-1 -1 12 12" refX="5" refY="5" markerWidth="4" markerHeight="4" stroke="none" fill="none" orient="0" markerUnits="strokeWidth">';
+  markers += '<circle cx="5" cy="5" r="5"></circle>';
+  markers += '</marker>';
+  markers += '<marker id="EndMarker2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="8" stroke="none" fill="none" orient="auto">';
+  markers += '<rect x="0" y="0" width="10" height="10"></rect>';
+  markers += '</marker>';
+  $("body").append("<svg id='dummy' style='display:none'><defs>" + str + markers + "</defs></svg>");
+  $("#p defs").append($("#innerbewel"));
+  $("#p defs").append($("#dummy marker"));
+  $("#dummy").remove();
+  return p;
+};
+SVG.addpaths = function (a, b, c, a1, b1) {
+  if (a) {
+    subj_subpolygons = a.length;
+    a = this.polys2path(a, "1");
     if (sub_poly_links_update) {
-      $("#points_total").html((subj_points_total + clip_points_total + solution_points_total).toString());
-      if (isNaN(subj_subpolygons)) subj_subpolygons = 0;
-      else if (isNaN(clip_subpolygons)) clip_subpolygons = 0;
-      else if (isNaN(solution_subpolygons)) solution_subpolygons = 0;
-      $("#all_subpolygons").html(subj_subpolygons + clip_subpolygons + solution_subpolygons);
+      if (typeof(subj_subpolygons) == "undefined") subj_subpolygons = 0;
+      $("#subj_subpolygons").html(subj_subpolygons);
+      $("#subj_points_in_subpolygons").html(this.sub_poly_links);
+      $("#subj_points_total").html(this.total.toString());
+      subj_points_total = this.total;
     }
-    if (a) p1 = p.path(a);
-    if (b) p2 = p.path(b);
-    if (c) p3 = p.path(c);
-    if (a) p1.node.setAttribute("id", "p1");
-    if (b) p2.node.setAttribute("id", "p2");
-    if (c) p3.node.setAttribute("id", "p3");
-    if (c && bevel) $("#p3").attr("filter", "url(#innerbewel)");
-    else if (c && !bevel) $("#p3").removeAttr("filter");
-    if (a) $("#p1").removeAttr("fill stroke");
-    if (b) $("#p2").removeAttr("fill stroke");
-    if (c) $("#p3").removeAttr("fill stroke");
-    var PolyFillType = {
-      pftEvenOdd: 0,
-      pftNonZero: 1,
-      pftPositive: 2,
-      pftNegative: 3
-    };
-    if (a) {
-      if (a1 == PolyFillType.pftEvenOdd) $("#p1").attr("fill-rule", "evenodd");
-      else $("#p1").attr("fill-rule", "nonzero");
+  }
+  if (b) {
+    clip_subpolygons = b.length;
+    b = this.polys2path(b, "2");
+    if (sub_poly_links_update) {
+      if (typeof(clip_subpolygons) === "undefined") clip_subpolygons = 0;
+      $("#clip_subpolygons").html(clip_subpolygons);
+      $("#clip_points_in_subpolygons").html(this.sub_poly_links);
+      $("#clip_points_total").html(this.total.toString());
+      clip_points_total = this.total;
     }
-    if (b) {
-      if (b1 == PolyFillType.pftEvenOdd) $("#p2").attr("fill-rule", "evenodd");
-      else $("#p2").attr("fill-rule", "nonzero");
+  }
+  if (typeof(c) !== "undefined" && typeof(c.length) !== "undefined") solution_subpolygons = c.length;
+  else solution_subpolygons = 0;
+  if (c) {
+    c = this.polys2path(c, "3");
+    if (sub_poly_links_update) {
+      $("#solution_subpolygons").html(solution_subpolygons);
+      $("#solution_points_in_subpolygons").html(this.sub_poly_links);
+      $("#solution_points_total").html(this.total.toString());
+      solution_points_total = this.total;
     }
-    //  p.setViewBox(bbox.x, bbox.y, bbox.width, bbox.height, true);
-    //  p.setSize(bbox.width, bbox.height);
+  }
+  if (sub_poly_links_update) {
+    $("#points_total").html((subj_points_total + clip_points_total + solution_points_total).toString());
+    if (isNaN(subj_subpolygons)) subj_subpolygons = 0;
+    else if (isNaN(clip_subpolygons)) clip_subpolygons = 0;
+    else if (isNaN(solution_subpolygons)) solution_subpolygons = 0;
+    $("#all_subpolygons").html(subj_subpolygons + clip_subpolygons + solution_subpolygons);
+  }
+  if (a) p1 = p.path(a);
+  if (b) p2 = p.path(b);
+  if (c) p3 = p.path(c);
+  if (a) p1.node.setAttribute("id", "p1");
+  if (b) p2.node.setAttribute("id", "p2");
+  if (c) p3.node.setAttribute("id", "p3");
+  if (c && bevel) $("#p3").attr("filter", "url(#innerbewel)");
+  else if (c && !bevel) $("#p3").removeAttr("filter");
+  if (a) $("#p1").removeAttr("fill stroke");
+  if (b) $("#p2").removeAttr("fill stroke");
+  if (c) $("#p3").removeAttr("fill stroke");
+  var PolyFillType = {
+    pftEvenOdd: 0,
+    pftNonZero: 1,
+    pftPositive: 2,
+    pftNegative: 3
   };
-  SVG.sub_poly_counts = null;
-  SVG.sub_poly_links = null;
-  SVG.total = null;
-  SVG.polys2path = function (a, fr) {
-    scaled_paths[fr] = [];
-    var path = "", i, j, link, d;
-    this.sub_poly_counts = [];
-    this.sub_poly_links = "";
-    this.total = 0;
-    if (!scale) scale = 1;
-    var a_length = a.length;
-    var a_i_length;
-    var classi = "subpolylinks";
-    for (i = 0; i < a_length; i++) {
-      this.sub_poly_counts.push(a[i].length);
-      d = "";
-      a_i_length = a[i].length;
-      for (j = 0; j < a_i_length; j++) {
-        this.total++;
-        if (j === 0) {
-          d += "M";
-        } else {
-          d += "L";
-        }
-        d += (a[i][j].X / scale) + ", " + (a[i][j].Y / scale);
+  if (a) {
+    if (a1 == PolyFillType.pftEvenOdd) $("#p1").attr("fill-rule", "evenodd");
+    else $("#p1").attr("fill-rule", "nonzero");
+  }
+  if (b) {
+    if (b1 == PolyFillType.pftEvenOdd) $("#p2").attr("fill-rule", "evenodd");
+    else $("#p2").attr("fill-rule", "nonzero");
+  }
+  //  p.setViewBox(bbox.x, bbox.y, bbox.width, bbox.height, true);
+  //  p.setSize(bbox.width, bbox.height);
+};
+SVG.sub_poly_counts = null;
+SVG.sub_poly_links = null;
+SVG.total = null;
+SVG.polys2path = function (a, fr) {
+  scaled_paths[fr] = [];
+  var path = "", i, j, link, d;
+  this.sub_poly_counts = [];
+  this.sub_poly_links = "";
+  this.total = 0;
+  if (!scale) scale = 1;
+  var a_length = a.length;
+  var a_i_length;
+  var classi = "subpolylinks";
+  for (i = 0; i < a_length; i++) {
+    this.sub_poly_counts.push(a[i].length);
+    d = "";
+    a_i_length = a[i].length;
+    for (j = 0; j < a_i_length; j++) {
+      this.total++;
+      if (j === 0) {
+        d += "M";
+      } else {
+        d += "L";
       }
-      d += "Z";
-      path += d;
-      if (sub_poly_links_update) {
-        if (d.trim() === "Z") d = "";
-        scaled_paths[fr].push(d);
-        if (benchmark_running) classi = "subpolylinks_disabled";
-        link = '<span class="' + classi + '" onclick="popup_path(' + i + ',' + fr + ')" onmouseover="show_path(' + i + ',' + fr + ')" onmouseout="hide_path()" >' + a_i_length + '</span>, ';
-        this.sub_poly_links += link;
-      }
+      d += (a[i][j].X / scale) + ", " + (a[i][j].Y / scale);
     }
-    if (sub_poly_links_update) this.sub_poly_links = this.sub_poly_links.substring(0, this.sub_poly_links.length - 2);
-    if (path.trim() === "Z") path = "";
+    d += "Z";
+    path += d;
+    if (sub_poly_links_update) {
+      if (d.trim() === "Z") d = "";
+      scaled_paths[fr].push(d);
+      if (benchmark_running) classi = "subpolylinks_disabled";
+      link = '<span class="' + classi + '" onclick="popup_path(' + i + ',' + fr + ')" onmouseover="show_path(' + i + ',' + fr + ')" onmouseout="hide_path()" >' + a_i_length + '</span>, ';
+      this.sub_poly_links += link;
+    }
+  }
+  if (sub_poly_links_update) this.sub_poly_links = this.sub_poly_links.substring(0, this.sub_poly_links.length - 2);
+  if (path.trim() === "Z") path = "";
 
-    if (benchmark_running) $(".subpolylinks").removeClass("subpolylinks subpolylinks_disabled").addClass("subpolylinks_disabled");
-    else $(".subpolylinks_disabled").removeClass("subpolylinks subpolylinks_disabled").addClass("subpolylinks");
+  if (benchmark_running) $(".subpolylinks").removeClass("subpolylinks subpolylinks_disabled").addClass("subpolylinks_disabled");
+  else $(".subpolylinks_disabled").removeClass("subpolylinks subpolylinks_disabled").addClass("subpolylinks");
 
-    return path;
-  };
-  window.SVG = SVG;
-})();
+  return path;
+};
 
 // Englarges mypath ( = black partially transparent path) when clicked
 function popup_path(i, fr) {
@@ -1648,6 +1644,46 @@ function main() {
     make_clip();
   });
 
+  // Cleaning and simplifying
+  $("#clean").change(function () {
+    clean = $(this).prop('checked');
+    if (clean) {
+      if (!$("#cleandelta").val()+"".trim()) {
+        cleandelta = cleandelta_default;
+        $("#cleandelta").val(cleandelta);
+      }
+    }
+    make_clip();
+  });
+  $("#cleandelta").change(function () {
+    var cleandelta_orig = $(this).val();
+    var this_value = parseFloat(this.value);
+    if (!isNaN(this_value)) cleandelta = this_value;
+    //else cleandelta = cleandelta_orig;
+    make_clip();
+  });
+  $("#simplify").change(function () {
+    simplify = $(this).prop('checked');
+    make_clip();
+  });
+  $("#lighten").change(function () {
+    lighten = $(this).prop('checked');
+    if (lighten) {
+      if (!$("#lighten_distance").val()+"".trim()) {
+        lighten_distance = lighten_distance_default;
+        $("#lighten_distance").val(lighten_distance);
+      }
+    }
+    make_clip();
+  });
+  $("#lighten_distance").change(function () {
+    var lighten_distance_orig = $(this).val();
+    var this_value = parseFloat(this.value);
+    if (!isNaN(this_value)) lighten_distance = this_value;
+    //else lighten_distance = lighten_distance_orig;
+    make_clip();
+  });
+
   // Offsetting
   $("input[name='offsettable_poly']").change(function () {
     offsettable_poly = parseInt(this.value, 10);
@@ -1701,46 +1737,6 @@ function main() {
   });
   $("#autoFix").change(function () {
     autoFix = $(this).prop('checked');
-    make_clip();
-  });
-
-  // Cleaning and simplifying
-  $("#clean").change(function () {
-    clean = $(this).prop('checked');
-    if (clean) {
-      if (!$("#cleandelta").val()+"".trim()) {
-        cleandelta = cleandelta_default;
-        $("#cleandelta").val(cleandelta);
-      }
-    }
-    make_clip();
-  });
-  $("#cleandelta").change(function () {
-    var cleandelta_orig = $(this).val();
-    var this_value = parseFloat(this.value);
-    if (!isNaN(this_value)) cleandelta = this_value;
-    //else cleandelta = cleandelta_orig;
-    make_clip();
-  });
-  $("#simplify").change(function () {
-    simplify = $(this).prop('checked');
-    make_clip();
-  });
-  $("#lighten").change(function () {
-    lighten = $(this).prop('checked');
-    if (lighten) {
-      if (!$("#lighten_distance").val()+"".trim()) {
-        lighten_distance = lighten_distance_default;
-        $("#lighten_distance").val(lighten_distance);
-      }
-    }
-    make_clip();
-  });
-  $("#lighten_distance").change(function () {
-    var lighten_distance_orig = $(this).val();
-    var this_value = parseFloat(this.value);
-    if (!isNaN(this_value)) lighten_distance = this_value;
-    //else lighten_distance = lighten_distance_orig;
     make_clip();
   });
 
