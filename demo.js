@@ -99,9 +99,9 @@ var rnd_sett_defaults = {
 
 window.onload = function () {
   "use strict";
-  if (typeof (jQuery) === "undefined") alert("Failed to load jQuery. Please reload the page. If this fails repeatedly, please check the path of the jQuery library or use an own copy of jQuery.");
-  else if (typeof (Raphael) === "undefined") alert("Failed to load Raphael. Please reload the page. If this fails repeatedly, please check the path of the Raphael library or use an own copy of Raphael.");
-  else if (typeof (ClipperLib) === "undefined") alert("Failed to load ClipperLib. Please check that ClipperLib is loaded correctly.");
+  if (typeof jQuery === "undefined") alert("Failed to load jQuery. Please reload the page. If this fails repeatedly, please check the path of the jQuery library or use an own copy of jQuery.");
+  else if (typeof Raphael === "undefined") alert("Failed to load Raphael. Please reload the page. If this fails repeatedly, please check the path of the Raphael library or use an own copy of Raphael.");
+  else if (typeof ClipperLib === "undefined") alert("Failed to load ClipperLib. Please check that ClipperLib is loaded correctly.");
   else {
     ClipperLib_MaxSteps_original = ClipperLib.MaxSteps;
     bench = new Benchmark("bench");
@@ -121,7 +121,7 @@ window.onload = function () {
  Returns normalized Clipper Polygons object stringified or false in failure
 */
 function normalize_clipper_poly(polystr, quiet) {
-  if (typeof (polystr) !== "string") return false;
+  if (typeof polystr !== "string") return false;
   polystr = polystr.trim();
   var np, poly;
   if (polystr.substr(0, 1).toUpperCase() === "M") {
@@ -143,7 +143,7 @@ function normalize_clipper_poly(polystr, quiet) {
   }
   // if only points without "X" and "Y"
   var temp_n = [], i, len;
-  if (_.isArray(poly) && poly.length && typeof(poly[0]) === "number") {
+  if (_.isArray(poly) && poly.length && typeof poly[0] === "number") {
     len = poly.length;
     for (i = 0; i < len; i = i + 2) {
       temp_n.push({
@@ -155,9 +155,9 @@ function normalize_clipper_poly(polystr, quiet) {
   }
   // if an array of array of points without "X" and "Y"
   var temp_n2 = [], j, len2;
-  if (_.isArray(poly) && poly.length && _.isArray(poly[0]) && typeof(poly[0][0]) !== "undefined" &&
-  typeof(poly[0][0].X) === "undefined" &&
-  typeof(poly[0][0].x) === "undefined") {
+  if (_.isArray(poly) && poly.length && _.isArray(poly[0]) && typeof poly[0][0] !== "undefined" &&
+  typeof poly[0][0].X === "undefined" &&
+  typeof poly[0][0].x === "undefined") {
     len2 = poly.length;
     for (j = 0; j < len2; j++) {
       temp_n = [];
@@ -183,10 +183,10 @@ function normalize_clipper_poly(polystr, quiet) {
       pp = {};
       y = null;
       x = null;
-      if (typeof (poly[i][j].X) !== "undefined" && !isNaN(Number(poly[i][j].X))) x = Number(poly[i][j].X);
-      else if (typeof (poly[i][j].x) !== "undefined" && !isNaN(Number(poly[i][j].x))) x = Number(poly[i][j].x);
-      if (typeof (poly[i][j].Y) !== "undefined" && !isNaN(Number(poly[i][j].Y))) y = Number(poly[i][j].Y);
-      else if (typeof (poly[i][j].y) !== "undefined" && !isNaN(Number(poly[i][j].y))) y = Number(poly[i][j].y);
+      if (typeof poly[i][j].X !== "undefined" && !isNaN(Number(poly[i][j].X))) x = Number(poly[i][j].X);
+      else if (typeof poly[i][j].x !== "undefined" && !isNaN(Number(poly[i][j].x))) x = Number(poly[i][j].x);
+      if (typeof poly[i][j].Y !== "undefined" && !isNaN(Number(poly[i][j].Y))) y = Number(poly[i][j].Y);
+      else if (typeof poly[i][j].y !== "undefined" && !isNaN(Number(poly[i][j].y))) y = Number(poly[i][j].y);
       if (y !== null && x !== null) {
         pp.X = x;
         pp.Y = y;
@@ -236,8 +236,8 @@ function svgpath_to_clipper_polygons(d) {
           pt = {};
           pt.X = null;
           pt.Y = null;
-          if (typeof (x) !== "undefined" && !isNaN(Number(x))) pt.X = Number(x);
-          if (typeof (y) !== "undefined" && !isNaN(Number(y))) pt.Y = Number(y);
+          if (typeof x !== "undefined" && !isNaN(Number(x))) pt.X = Number(x);
+          if (typeof y !== "undefined" && !isNaN(Number(y))) pt.Y = Number(y);
           if (pt.X !== null && pt.Y !== null) {
             polygon_arr.push(pt);
           } else {
@@ -260,8 +260,8 @@ function svgpath_to_clipper_polygons(d) {
 }
 
 function format_output(polystr) {
+  if (typeof polystr !== "string" || polystr === "") return "";
   var poly;
-  if (typeof(polystr) !== "string" || polystr === "") return "";
   try {
     poly = JSON.parse(polystr);
   } catch (err) {
@@ -514,8 +514,8 @@ function deserialize_clipper_poly(polystr) {
           if (pp.Y > bench.max_point_y) bench.max_point_y = pp.Y;
           if (pp.X < bench.min_point_x) bench.min_point_x = pp.X;
           if (pp.Y < bench.min_point_y) bench.min_point_y = pp.Y;
-          if (typeof (bench.points["L" + pp.X]) === "undefined") bench.points["L" + pp.X] = scale + ":" + pp.X + ":" + poly[i][j].X;
-          if (typeof (bench.points["L" + pp.Y]) === "undefined") bench.points["L" + pp.Y] = scale + ":" + pp.Y + ":" + poly[i][j].Y;
+          if (typeof bench.points["L" + pp.X] === "undefined") bench.points["L" + pp.X] = scale + ":" + pp.X + ":" + poly[i][j].X;
+          if (typeof bench.points["L" + pp.Y] === "undefined") bench.points["L" + pp.Y] = scale + ":" + pp.Y + ":" + poly[i][j].Y;
         }
         np[i].push(pp);
       }
@@ -578,7 +578,7 @@ SVG.addpaths = function (a, b, c, a1, b1) {
     subj_subpolygons = a.length;
     a = this.polys2path(a, "1");
     if (sub_poly_links_update) {
-      if (typeof(subj_subpolygons) == "undefined") subj_subpolygons = 0;
+      if (typeof subj_subpolygons === "undefined") subj_subpolygons = 0;
       $("#subj_subpolygons").html(subj_subpolygons);
       $("#subj_points_in_subpolygons").html(this.sub_poly_links);
       $("#subj_points_total").html(this.total.toString());
@@ -589,14 +589,14 @@ SVG.addpaths = function (a, b, c, a1, b1) {
     clip_subpolygons = b.length;
     b = this.polys2path(b, "2");
     if (sub_poly_links_update) {
-      if (typeof(clip_subpolygons) === "undefined") clip_subpolygons = 0;
+      if (typeof clip_subpolygons === "undefined") clip_subpolygons = 0;
       $("#clip_subpolygons").html(clip_subpolygons);
       $("#clip_points_in_subpolygons").html(this.sub_poly_links);
       $("#clip_points_total").html(this.total.toString());
       clip_points_total = this.total;
     }
   }
-  if (typeof(c) !== "undefined" && typeof(c.length) !== "undefined") solution_subpolygons = c.length;
+  if (typeof c !== "undefined" && typeof c.length !== "undefined") solution_subpolygons = c.length;
   else solution_subpolygons = 0;
   if (c) {
     c = this.polys2path(c, "3");
@@ -691,11 +691,11 @@ SVG.polys2path = function (a, fr) {
 function popup_path(i, fr) {
   if (benchmark_running) return false;
 
-  var d = (typeof(i) === "undefined") ? scaled_paths[fr].join(" ") : scaled_paths[fr][i];
+  var d = typeof i === "undefined" ? scaled_paths[fr].join(" ") : scaled_paths[fr][i];
   var points_string = normalize_clipper_poly(d, true); // quiet
   var area;
   if (points_string !== false) {
-    if (typeof(i) === "undefined") {
+    if (typeof i === "undefined") {
       $("#polygon_explorer_string_inp").val(format_output(points_string));
       var scaled_paths_length = scaled_paths.length;
       var points_str;
@@ -746,7 +746,7 @@ function popup_path(i, fr) {
 // Shows mypath ( = black partially transparent path) when hovered
 function show_path(i, fr) {
   if (benchmark_running) return false;
-  var d = (typeof(i) === "undefined") ? scaled_paths[fr].join(" ") : scaled_paths[fr][i];
+  var d = typeof i === "undefined" ? scaled_paths[fr].join(" ") : scaled_paths[fr][i];
   mypath = p.path(d);
   $(mypath.node).removeAttr('fill stroke').attr('class', 'svg_mypath');
   $(mypath.node).attr('fill-rule', $('#p' + fr).attr('fill-rule'));
@@ -785,7 +785,7 @@ function set_default_custom_polygon() {
     clip: default_custom_clip_polygon
   };
   var arr = $.totalStorage('custom_polygons');
-  if (typeof (arr) === "undefined" || arr === null || !_.isArray(arr) || arr.length === 0) arr = [];
+  if (typeof arr === "undefined" || arr === null || !_.isArray(arr) || arr.length === 0) arr = [];
   arr[0] = def_obj;
   $.totalStorage('custom_polygons', arr);
 }
@@ -1073,7 +1073,7 @@ function benchmark2(i) {
 }
 
 var Benchmark = function (varname) {
-  this.varname = (typeof (varname) == "string") ? varname : "";
+  this.varname = typeof varname === "string" ? varname : "";
   this.list = [];
   this.cats = [];
   this.cats.arr = [];
@@ -1106,12 +1106,12 @@ Benchmark.prototype.end = function (index) {
   var this_list_cat = this.list[index].cat;
   var this_list_cat_counts = this_list_cat + "_counts";
   var this_list_cat_time_sum = this_list_cat + "_time_sum";
-  if (typeof (this.cats[this_list_cat_counts]) === "undefined") this.cats.arr.push(this_list_cat);
-  if (typeof (this.cats[this_list_cat_time_sum]) === "undefined") this.cats[this_list_cat_time_sum] = 0;
-  if (typeof (this.cats[this_list_cat_counts]) === "undefined") this.cats[this_list_cat_counts] = 0;
+  if (typeof this.cats[this_list_cat_counts] === "undefined") this.cats.arr.push(this_list_cat);
+  if (typeof this.cats[this_list_cat_time_sum] === "undefined") this.cats[this_list_cat_time_sum] = 0;
+  if (typeof this.cats[this_list_cat_counts] === "undefined") this.cats[this_list_cat_counts] = 0;
   this.cats[this_list_cat_time_sum] += this.list[index].time;
   this.cats[this_list_cat_counts]++;
-  if (typeof (bench_glob) !== "undefined" && bench_glob.length > 0) {
+  if (typeof bench_glob !== "undefined" && bench_glob.length > 0) {
     this.list[index].bench_glob_index = window.last_completed_bench;
   }
 };
@@ -1328,7 +1328,7 @@ function colorize_boxes_like_in_svg() {
 }
 
 function round_to(num, dec) {
-  if (typeof (num) === "undefined" || typeof (dec) === "undefined" || isNaN(dec)) {
+  if (typeof num === "undefined" || typeof dec === "undefined" || isNaN(dec)) {
     console.warn("Cannot round other than number");
     return false;
   }
@@ -1383,10 +1383,9 @@ function get_polys(scale_again) {
 
 // setups defaults, attach events and finally draw the default svg image
 function main() {
-  // formats internal representation of polygons to
-  // specified output format and prints them on input fields
+  // formats internal representation of polygons to specified output format and prints them on input fields
   $("#output_format").change(function () {
-    output_format = parseInt($(this).val(),10);
+    output_format = parseInt($(this).val(), 10);
     if ($("#custom_polygons_fieldset").css("display") !== "none") {
       var subj = $("#custom_polygon_subj").val();
       var clip = $("#custom_polygon_clip").val();
@@ -1525,7 +1524,7 @@ function main() {
     subj = normalize_clipper_poly(subj);
     clip = normalize_clipper_poly(clip);
     if (subj === false || clip === false) return false;
-    if (typeof ($.totalStorage('custom_polygons')) === "undefined" || $.totalStorage('custom_polygons') === null) {
+    if (typeof $.totalStorage('custom_polygons') === "undefined" || $.totalStorage('custom_polygons') === null) {
       set_default_custom_polygon();
     }
     var polygon_set = {
@@ -1551,7 +1550,7 @@ function main() {
     subj = normalize_clipper_poly(subj);
     clip = normalize_clipper_poly(clip);
     if (subj === false || clip === false) return false;
-    if (typeof ($.totalStorage('custom_polygons')) == "undefined" || $.totalStorage('custom_polygons') === null) {
+    if (typeof $.totalStorage('custom_polygons') === "undefined" || $.totalStorage('custom_polygons') === null) {
       set_default_custom_polygon();
     }
     var polygon_set = {};
@@ -1568,7 +1567,7 @@ function main() {
     var selected_value = $("#custom_polygons_select").val();
     if (!selected_value && selected_value + "" !== "0") selected_value=0;
     var arr = $.totalStorage('custom_polygons');
-    if (_.isArray(arr) && arr.length && typeof (arr[selected_value]) != "undefined") {
+    if (_.isArray(arr) && arr.length && typeof arr[selected_value] !== "undefined") {
       $("#custom_polygon_subj").val(format_output(arr[selected_value].subj));
       $("#custom_polygon_clip").val(format_output(arr[selected_value].clip));
       make_clip();
@@ -2055,7 +2054,7 @@ function make_offset() {
     off_poly = sss;
   }
 
-  if (typeof(off_poly) === "undefined" || !_.isArray(sss)) off_poly = [[]];
+  if (typeof off_poly === "undefined" || !_.isArray(sss)) off_poly = [[]];
 
   if (ClipperLib.biginteger_used === null) ClipperLib.biginteger_used = 0;
 
