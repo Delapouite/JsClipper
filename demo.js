@@ -852,12 +852,6 @@ function show_alert(e, obj, txt) {
     });
 }
 
-function resize() {
-  var polygon_explorer_div_max_height = $(window).height() - 360;
-  if (polygon_explorer_div_max_height < 170) polygon_explorer_div_max_height = 170;
-  $("#polygon_explorer_div").css("max-height", polygon_explorer_div_max_height + "px");
-}
-
 function svg_source_enlarge() {
   var source = $("#svg_source_textarea").val().replace(/ id=\"/g, ' id="_');
   $("#enlarged_svg").html(source);
@@ -1859,8 +1853,6 @@ function main() {
     }
   });
   $("#output_format").val(output_format);
-
-  resize();
 
   $("#benchmark1,#benchmark2,#benchmark1b,#benchmark2b").click(function () {
     clicked_benchmark_button_id = $(this).attr("id");
