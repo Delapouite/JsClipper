@@ -120,14 +120,14 @@ window.onload = function () {
  - SVG path string with commands MLVHZ and mlvhz
  Returns normalized Clipper Polygons object stringified or false in failure
 */
-function normalize_clipper_poly(polystr, quiet) {
+function normalize_clipper_poly(polystr) {
   if (typeof polystr !== "string") return false;
   polystr = polystr.trim();
   var np, poly;
   if (polystr.substr(0, 1).toUpperCase() === "M") {
     np = svgpath_to_clipper_polygons(polystr);
     if (np === false) {
-      if (!quiet) console.warn("Unable to parse SVG path string");
+      console.warn("Unable to parse SVG path string");
       return false;
     }
     return JSON.stringify(np);
@@ -138,7 +138,7 @@ function normalize_clipper_poly(polystr, quiet) {
   try {
     poly = JSON.parse(polystr);
   } catch (err) {
-    if (!quiet) console.warn("Unable to parse polygon string");
+    console.warn("Unable to parse polygon string");
     return false;
   }
   // if only points without "X" and "Y"
@@ -192,7 +192,7 @@ function normalize_clipper_poly(polystr, quiet) {
         pp.Y = y;
         np[i].push(pp);
       } else {
-        if (!quiet) console.warn("Unable to parse polygon string Error: Coordinates are not in a right form.");
+        console.warn("Unable to parse polygon string Error: Coordinates are not in a right form.");
         return false;
       }
     }
@@ -692,7 +692,7 @@ function popup_path(i, fr) {
   if (benchmark_running) return false;
 
   var d = typeof i === "undefined" ? scaled_paths[fr].join(" ") : scaled_paths[fr][i];
-  var points_string = normalize_clipper_poly(d, true); // quiet
+  var points_string = normalize_clipper_poly(d);
   var area;
   if (points_string !== false) {
     if (typeof i === "undefined") {
@@ -807,13 +807,11 @@ function update_custom_polygons_select() {
   else set_default_custom_polygon();
   if ($("#custom_polygons_select option").length === 0) set_default_custom_polygon();
   // If previously selected value is removed, select the next one
-  if (arr_length > 0)
-    if (arr[selected_value] === null) {
-      for (i = parseInt(selected_value, 10); i < arr_length; i++) {
-        if (arr[i] !== null) {
-          $('#custom_polygons_select').val(i);
-          break;
-        }
+  if (arr_length > 0 && arr[selected_value] === null)
+    for (i = parseInt(selected_value, 10); i < arr_length; i++) {
+      if (arr[i] !== null) {
+        $('#custom_polygons_select').val(i);
+        break;
       }
     }
   $('#custom_polygons_select').change();
@@ -1083,8 +1081,7 @@ Benchmark.prototype.print = function (all) {
     // print all
     var start_index = 0;
     if (!all) {
-      if (bench_glob.length) start_index = m - 3;
-      else start_index = m - 16;
+      start_index = bench_glob.length ? m - 3 : m - 16;
       if (start_index < 0) start_index = 0;
     }
     for (i = start_index; i < m; i++) {
@@ -1329,15 +1326,15 @@ function main() {
     if ($("#custom_polygons_fieldset").css("display") !== "none") {
       var subj = $("#custom_polygon_subj").val();
       var clip = $("#custom_polygon_clip").val();
-      subj = normalize_clipper_poly(subj, true); // quiet
-      clip = normalize_clipper_poly(clip, true); // quiet
+      subj = normalize_clipper_poly(subj);
+      clip = normalize_clipper_poly(clip);
       if (subj !== false && clip !== false) {
         $("#custom_polygon_subj").val(format_output(subj));
         $("#custom_polygon_clip").val(format_output(clip));
       }
     }
     var polygon_explorer_string = $("#polygon_explorer_string_inp").val();
-    polygon_explorer_string = normalize_clipper_poly(polygon_explorer_string, true); // quiet
+    polygon_explorer_string = normalize_clipper_poly(polygon_explorer_string);
     if (polygon_explorer_string !== false) {
       $("#polygon_explorer_string_inp").val(format_output(polygon_explorer_string));
     }
