@@ -495,10 +495,10 @@ function round(a) {
   return Math.floor(a * scale);
 }
 
-window.lsk = 0;
+lsk = 0;
 
 function deserialize_clipper_poly(polystr) {
-  window.lsk++;
+  lsk++;
   var poly = JSON.parse(polystr);
   var i, j, pp, n = [[]], m, pm;
   var np = new ClipperLib.Polygons();
@@ -852,46 +852,6 @@ function show_alert(e, obj, txt) {
     });
 }
 
-function update_fieldset_heights() {
-  $("#misc_fieldset").css("min-height","").css("height","");
-  $("#polygon_explorer_fieldset").css("min-height","").css("height","");
-  $("#benchmark_fieldset_f").css("min-height","").css("height","");
-
-  var td_heights = [
-    $("#td0").innerHeight(),
-    $("#td1").innerHeight(),
-    $("#td2").innerHeight(),
-    $("#td3").innerHeight()
-  ];
-  var max_td_height = _.max(td_heights);
-  var children_heights;
-  var children_heights_arr = [];
-
-  for (var i = 0; i < td_heights.length; i++) {
-    children_heights = 0;
-    if (td_heights!=max_td_height || 1==1) {
-      $("#td"+i).children().each(function() {
-        if ($(this).css("display") != "none") {
-          children_heights += $(this).outerHeight(true);
-          //console.log(this.type + ":" + $(this).attr("id") + ":" + $(this).outerHeight(true) + ":" + $(this).outerWidth(true));
-        } else {
-          //console.log("----- NOT COUNTED:"+this.type + ":" + $(this).attr("id") + ":" + $(this).outerHeight(true) + ":" + $(this).outerWidth(true));
-        }
-      });
-    }
-    children_heights_arr.push(children_heights);
-  }
-  var misc_fieldset_height = $("#misc_fieldset").height();
-  var polygon_explorer_fieldset_height = $("#polygon_explorer_fieldset").height();
-  var benchmark_fieldset_f_height = $("#benchmark_fieldset_f").height();
-  misc_fieldset_height += (max_td_height - children_heights_arr[0]);
-  polygon_explorer_fieldset_height += (max_td_height - children_heights_arr[1]);
-  benchmark_fieldset_f_height += (max_td_height - children_heights_arr[2]);
-  $("#misc_fieldset").css("min-height", misc_fieldset_height + "px");
-  $("#polygon_explorer_fieldset").css("min-height", polygon_explorer_fieldset_height + "px");
-  $("#benchmark_fieldset_f").css("min-height", benchmark_fieldset_f_height + "px");
-}
-
 function resize() {
   var polygon_explorer_div_max_height = $(window).height() - 360;
   if (polygon_explorer_div_max_height < 170) polygon_explorer_div_max_height = 170;
@@ -1009,7 +969,7 @@ function benchmark2(i) {
   if (obj.polygon_id === 4 || obj.polygon_id === 5) rnd_sett = obj.rnd_sett;
   $('input[type="radio"][name="polygons"][value="' + obj.polygon_id + '"]').attr('checked', 'checked').trigger("change");
   obj = null;
-  window.last_completed_bench = i;
+  last_completed_bench = i;
   var end_time = new Date().getTime();
   var time = end_time - start_time;
   bench_glob[i].measured_time = time;
@@ -1112,7 +1072,7 @@ Benchmark.prototype.end = function (index) {
   this.cats[this_list_cat_time_sum] += this.list[index].time;
   this.cats[this_list_cat_counts]++;
   if (typeof bench_glob !== "undefined" && bench_glob.length > 0) {
-    this.list[index].bench_glob_index = window.last_completed_bench;
+    this.list[index].bench_glob_index = last_completed_bench;
   }
 };
 Benchmark.prototype.clear = function () {
@@ -1346,7 +1306,6 @@ function update_enlarged_SVG_if_needed() {
 
 function get_polys(scale_again) {
   var polygon = parseInt($('input[type="radio"][name="polygons"]:checked').val(), 10);
-  var polys;
   if(polygon != 4 && polygon != 5) {
     var polygons = [
       get_gb_and_arrow(),
@@ -1361,22 +1320,18 @@ function get_polys(scale_again) {
       get_glyph_and_grid(),
       get_custom_poly()
     ];
-    polys = polygons[polygon];
-    ss = polys.ss;
-    cc = polys.cc;
+    ss = polygons[polygon].ss;
+    cc = polygons[polygon].cc;
   } else {
     if (!random_subj) random_subj = get_random_polys("subj");
     if (!random_clip) random_clip = get_random_polys("clip");
     if (scale_again) {
       random_subj = scale_again_random_poly(random_subj);
       random_clip = scale_again_random_poly(random_clip);
-      ss = random_subj;
-      cc = random_clip;
       rnd_sett.scale = scale;
-    } else {
-      ss = random_subj;
-      cc = random_clip;
     }
+    ss = random_subj;
+    cc = random_clip;
   }
   sss = [[]];
 }
@@ -1463,29 +1418,24 @@ function main() {
     $("#custom_polygon_clip").val(format_output(clip));
   });
   $("#help_custom_polygon").click(function () {
-    var txt = "";
-    txt += 'A) You can add your own custom polygons in several formats:\n\n';
+    var txt = 'A) You can add your own custom polygons in several formats:\n\n';
     txt += '1) The program uses as an inner default the following format: JSON-stringified array of arrays of point objects eg. [[{"X":100,"Y":100},{"X":200,"Y":100},{"X":200,"Y":200},{"X":100,"Y":200}],[{"X":110,"Y":110},{"X":210,"Y":110},{"X":210,"Y":210},{"X":110,"Y":210}]]. This format allows to input sub polygons. Each sub polygon is an array of point objects. This format makes it easy to transfer polygons to other programs that use Clipper library and is suitable for storing polygons in database.\n\n';
     txt += '2) JSON-stringified array of point objects eg. [{"X":100,"Y":100},{"X":200,"Y":100},{"X":200,"Y":200},{"X":100,"Y":200}]. This format doesn\'t allow to input sub polygons.\n\n';
     txt += '3) JSON-stringified array of arrays of coordinates without "X" and "Y" eg. [[100,100,200,100,200,200,100,200],[110,110,210,110,210,210,110,210]]. This format allows to input sub polygons. Each sub polygon is an array of coordinates so that each x coordinate is followed by an y coordinate. This format makes it easy to transfer polygons to other programs that use Clipper library and is suitable for storing polygons in database.\n\n';
     txt += '4) JSON-stringified array of x and y coordinates eg. [100,100,200,100,200,200,100,200] or [100 100 200 100 200 200 100 200] or [100 100,200 100,200 200,100 200] or the same without []:s. This format doesn\'t allow to input sub polygons.\n\n';
     txt += '5) SVG path strings with commands MLVHZ or mlvhz eg. M100,100 L200,100 L200,200 L100,200Z M110,110 L210,110 L210,210 L110,210Z. This format allows to input sub polygons. Each subpolygon starts with M (moveto) command.\n\n';
-    txt += '\n';
-    txt += 'B) Custom polygons are saved in browser\'s Local Storage, so they should be tolerant for page reload and browser crashes.\n';
-    txt += '\n';
+    txt += 'B) Custom polygons are saved in browser\'s Local Storage, so they should be tolerant for page reload and browser crashes.';
     alert(txt);
   });
   $("#help_builtin_polygon_sets").click(function() {
-    var txt = '';
-    txt += 'Builtin polygon sets\n\n';
+    var txt = 'Builtin polygon sets\n\n';
     txt += 'You can add builtin polygon sets into Subj and Clip input fields to edit copies of them.\n\n';
     txt += 'Note! Before saving, nothing happens. After saving, the SVG window is also updated.';
     alert(txt);
   });
 
   $("#help_output_format").click(function() {
-    var txt = '';
-    txt += 'Output format\n\n';
+    var txt = 'Output format\n\n';
     txt += 'To change the polygon coordinate output format please use the above dropdown. The available formats are:\n\n';
     txt += '- Clipper: [[{"X":100,"Y":100},{"X":200,"Y":200}]]\n\n';
     txt += '- Plain: [[100,100,200,200]]\n\n';
@@ -1553,11 +1503,11 @@ function main() {
     if (typeof $.totalStorage('custom_polygons') === "undefined" || $.totalStorage('custom_polygons') === null) {
       set_default_custom_polygon();
     }
-    var polygon_set = {};
-    polygon_set.subj = subj;
-    polygon_set.clip = clip;
     var arr2 = $.totalStorage('custom_polygons');
-    arr2.push(polygon_set);
+    arr2.push({
+      subj: subj,
+      clip: clip
+    });
     $.totalStorage('custom_polygons', arr2);
     update_custom_polygons_select();
     $('#custom_polygons_select').val(arr2.length - 1).change();
@@ -1565,7 +1515,7 @@ function main() {
   });
   $("#custom_polygons_select").change(function () {
     var selected_value = $("#custom_polygons_select").val();
-    if (!selected_value && selected_value + "" !== "0") selected_value=0;
+    if (!selected_value && selected_value + "" !== "0") selected_value = 0;
     var arr = $.totalStorage('custom_polygons');
     if (_.isArray(arr) && arr.length && typeof arr[selected_value] !== "undefined") {
       $("#custom_polygon_subj").val(format_output(arr[selected_value].subj));
@@ -1581,7 +1531,6 @@ function main() {
       $("#custom_polygons_fieldset").css("display", "block");
       set_default_custom_polygon();
       update_custom_polygons_select();
-      update_fieldset_heights();
       $("#custom_polygons_select").change();
       make_clip();
       return;
@@ -1589,8 +1538,7 @@ function main() {
     else $("#custom_polygons_fieldset").css("display", "none");
     if (val === 4 || val === 5) {
       $("#random_polygons_fieldset").css("display", "block");
-      if (val === 4) rnd_sett_defaults.current = "rect";
-      else rnd_sett_defaults.current = "norm";
+      rnd_sett_defaults.current = (val === 4) ? "rect" : "norm";
       // Test for ranges
       if (rnd_sett.clip_point_count < rnd_sett_defaults[rnd_sett_defaults.current].min.clip_point_count) rnd_sett.clip_point_count = rnd_sett_defaults[rnd_sett_defaults.current].min.clip_point_count;
       if (rnd_sett.clip_point_count > rnd_sett_defaults[rnd_sett_defaults.current].max.clip_point_count) rnd_sett.clip_point_count = rnd_sett_defaults[rnd_sett_defaults.current].max.clip_point_count;
@@ -1609,7 +1557,6 @@ function main() {
     }
     else $("#random_polygons_fieldset").css("display", "none");
     make_clip();
-    update_fieldset_heights();
   });
   $('#generate_random_polygons').hold(function () {
     random_subj = get_random_polys("subj");
@@ -1950,7 +1897,7 @@ function main() {
     var fillTypeLocal, fillTypeLocal_start, fillTypeLocal_end;
     var timeout_time = 0;
     var timeout_time_addition = 0;
-    window.last_completed_bench = "";
+    last_completed_bench = "";
     bench_glob.length = 0;
     var count;
     var deltaLocals = [-5, 0, 10, 30];
@@ -2135,7 +2082,6 @@ function make_offset() {
   // Print benchmark
   $("#benchmark_div").html(bench.print());
   update_enlarged_SVG_if_needed();
-  update_fieldset_heights();
 }
 
 function make_clip() {
