@@ -920,8 +920,7 @@ function show_svg_source_click(non_click) {
     }
     var textarea_str = '<div id="svg_source_textarea_div">';
     textarea_str += '<button class="textarea_hide_buttons" onClick="$(\'#svg_source_textarea_div\').remove();update_enlarged_SVG_source=false;update_enlarged_SVG=false" title="Hide SVG source">Hide</button>';
-    var disabled = benchmark_running ? "disabled" : "";
-    textarea_str += '<span id="svg_source_enlarge_button"><button ' + disabled + ' class="textarea_hide_buttons" onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button></span><br>';
+    textarea_str += '<span id="svg_source_enlarge_button"><button ' + (benchmark_running ? "disabled" : "") + ' class="textarea_hide_buttons" onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button></span><br>';
     textarea_str += '<div style="display:none" id="enlarged_svg"></div>';
     textarea_str += '<textarea id="svg_source_textarea"></textarea>';
     textarea_str += '</div>';
@@ -1119,25 +1118,20 @@ Benchmark.prototype.print = function (all) {
   if (m > 0)
     for (i = 0; i < m; i++) {
       tbl2 += '<tr><td>';
-      item = (i + 1);
-      tbl2 += item;
+      tbl2 += (i + 1);
       tbl2 += '</td><td>';
       this_list_i_cat = this.cats.arr[i];
-      item = this_list_i_cat;
-      tbl2 += item;
+      tbl2 += this_list_i_cat;
       tbl2 += '</td><td>';
       this_list_i_cat_counts = this.cats[this_list_i_cat + "_counts"];
-      item = this_list_i_cat_counts;
-      tbl2 += item;
+      tbl2 += this_list_i_cat_counts;
       counts_sum += this_list_i_cat_counts;
       tbl2 += '</td><td>';
       this_list_i_cat_time_sum = this.cats[this_list_i_cat + "_time_sum"];
-      item = this_list_i_cat_time_sum;
-      tbl2 += item;
+      tbl2 += this_list_i_cat_time_sum;
       cat_time_sum += this_list_i_cat_time_sum;
       tbl2 += '</td><td>';
-      item = (this_list_i_cat_time_sum / this_list_i_cat_counts).toFixed(4);
-      tbl2 += item;
+      tbl2 += (this_list_i_cat_time_sum / this_list_i_cat_counts).toFixed(4);
       tbl2 += '</td></tr>';
     }
   tbl2 += '</tbody>';
@@ -1189,18 +1183,15 @@ Benchmark.prototype.print_multiple_runs = function () {
   var plus_range = max - average;
   for (i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
     tbl2 += '<tr><td>';
-    item = (i + 1);
-    tbl2 += item;
+    tbl2 += (i + 1);
     tbl2 += '</td><td>';
-    item = this.totals_arr_multiple[i][0];
-    tbl2 += item;
+    tbl2 += this.totals_arr_multiple[i][0];
     tbl2 += '</td><td>';
     item = this.totals_arr_multiple[i][1];
     tbl2 += item;
     time_sum += item;
     tbl2 += '</td><td>';
-    item = this.totals_arr_multiple[i][2];
-    tbl2 += item;
+    tbl2 += this.totals_arr_multiple[i][2];
     tbl2 += '</td></tr>';
   }
   tbl2 += '<tr><td colspan="4" id="benchmark_multiple_status" style="display:none"></td></tr>';
@@ -1518,18 +1509,17 @@ function main() {
     }
   });
 
+  // reveal custom fieldsets
   $("input[type='radio'][name='polygons']").change(function () {
     var val = parseInt($(this).val(), 10);
+    $("#custom_polygons_fieldset").css("display", "none");
+    $("#random_polygons_fieldset").css("display", "none");
     if (val === 10) {
-      $("#random_polygons_fieldset").css("display", "none");
       $("#custom_polygons_fieldset").css("display", "block");
       set_default_custom_polygon();
       update_custom_polygons_select();
       $("#custom_polygons_select").change();
-      make_clip();
-      return;
     }
-    else $("#custom_polygons_fieldset").css("display", "none");
     if (val === 4 || val === 5) {
       $("#random_polygons_fieldset").css("display", "block");
       rnd_sett_defaults.current = (val === 4) ? "rect" : "norm";
@@ -1549,7 +1539,6 @@ function main() {
       random_subj = get_random_polys("subj", val);
       random_clip = get_random_polys("clip", val);
     }
-    else $("#random_polygons_fieldset").css("display", "none");
     make_clip();
   });
   $('#generate_random_polygons').hold(function () {
