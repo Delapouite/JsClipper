@@ -52,7 +52,6 @@ var window_height = $(document).height() * 0.9;
 var window_width = $(document).width() * 0.9;
 var update_enlarged_SVG = false;
 var update_enlarged_SVG_source = false;
-var svg_source_place = "svg_source_container";
 var rnd_sett_defaults = {
   current: 'norm',
   rect: {
@@ -98,10 +97,9 @@ var rnd_sett_defaults = {
 };
 
 window.onload = function () {
-  "use strict";
-  if (typeof jQuery === "undefined") alert("Failed to load jQuery. Please reload the page. If this fails repeatedly, please check the path of the jQuery library or use an own copy of jQuery.");
-  else if (typeof Raphael === "undefined") alert("Failed to load Raphael. Please reload the page. If this fails repeatedly, please check the path of the Raphael library or use an own copy of Raphael.");
-  else if (typeof ClipperLib === "undefined") alert("Failed to load ClipperLib. Please check that ClipperLib is loaded correctly.");
+  if (typeof jQuery === "undefined") alert("Failed to load jQuery.");
+  else if (typeof Raphael === "undefined") alert("Failed to load Raphael.");
+  else if (typeof ClipperLib === "undefined") alert("Failed to load ClipperLib.");
   else {
     ClipperLib_MaxSteps_original = ClipperLib.MaxSteps;
     bench = new Benchmark("bench");
@@ -110,8 +108,7 @@ window.onload = function () {
   }
 };
 
-/* Normalizes inputted polygon string
- Input can be JSON-stringified version of the following:
+/* Input can be JSON-stringified version of the following:
  - Array of arrays of points [[{"X":10,"Y":10},{"X":10,"Y":10},{"X":10,"Y":10}][{"X":10,"Y":10},{"X":10,"Y":10},{"X":10,"Y":10}]]
  - Array of points [{"X":10,"Y":10},{"X":10,"Y":10},{"X":10,"Y":10}]
  - The aboves in lowercase
@@ -142,10 +139,9 @@ function normalize_clipper_poly(polystr) {
     return false;
   }
   // if only points without "X" and "Y"
-  var temp_n = [], i, len;
+  var temp_n = [], i;
   if (_.isArray(poly) && poly.length && typeof poly[0] === "number") {
-    len = poly.length;
-    for (i = 0; i < len; i = i + 2) {
+    for (i = 0; i < poly.length; i = i + 2) {
       temp_n.push({
         X: poly[i],
         Y: poly[i + 1]
@@ -154,15 +150,13 @@ function normalize_clipper_poly(polystr) {
     poly = temp_n;
   }
   // if an array of array of points without "X" and "Y"
-  var temp_n2 = [], j, len2;
+  var temp_n2 = [], j;
   if (_.isArray(poly) && poly.length && _.isArray(poly[0]) && typeof poly[0][0] !== "undefined" &&
   typeof poly[0][0].X === "undefined" &&
   typeof poly[0][0].x === "undefined") {
-    len2 = poly.length;
-    for (j = 0; j < len2; j++) {
+    for (j = 0; j < poly.length; j++) {
       temp_n = [];
-      len = poly[j].length;
-      for (i = 0; i < len; i = i + 2) {
+      for (i = 0; i < poly[j].length; i = i + 2) {
         temp_n.push({
           X: poly[j][i],
           Y: poly[j][i + 1]
@@ -213,29 +207,28 @@ function svgpath_to_clipper_polygons(d) {
     if (paths[k].trim() === "") continue;
     arr = Raphael.parsePathString(paths[k].trim());
     polygon_arr = [];
-    var i = 0,
-      j, m = arr.length,
-      letter = "",
+    var letter = "",
       x = 0,
       y = 0,
       pt = {},
       subpath_start = {};
     subpath_start.x = "";
     subpath_start.y = "";
-    for (; i < m; i++) {
+    for (var i = 0; i < arr.length; i++) {
       letter = arr[i][0].toUpperCase();
       if (letter !== "M" && letter !== "L" && letter !== "Z") continue;
       if (letter !== "Z") {
-        for (j = 1; j < arr[i].length; j = j + 2) {
+        for (var j = 1; j < arr[i].length; j = j + 2) {
           if (letter === "V") y = arr[i][j];
           else if (letter === "H") x = arr[i][j];
           else {
             x = arr[i][j];
             y = arr[i][j + 1];
           }
-          pt = {};
-          pt.X = null;
-          pt.Y = null;
+          pt = {
+            X: null,
+            Y: null
+          };
           if (typeof x !== "undefined" && !isNaN(Number(x))) pt.X = Number(x);
           if (typeof y !== "undefined" && !isNaN(Number(y))) pt.Y = Number(y);
           if (pt.X !== null && pt.Y !== null) {
@@ -382,7 +375,6 @@ function get_custom_poly() {
   var selected_value = $("#custom_polygons_select").val();
   var arr = $.totalStorage('custom_polygons');
   if (selected_value) {
-    //selected_value = parseInt(selected_value,10);
     return {
       "ss": deserialize_clipper_poly(arr[selected_value].subj),
       "cc": deserialize_clipper_poly(arr[selected_value].clip)
@@ -417,7 +409,6 @@ function get_random_polys(which, polygon) {
     prev_y = null,
     horiz_or_vertic = null,
     prev_horiz_or_vertic = null;
-
   for (i = 0; i < polygon_count; i++) {
     np[i] = new ClipperLib.Polygon();
     for (j = 0; j < point_count; j++) {
@@ -500,11 +491,11 @@ lsk = 0;
 function deserialize_clipper_poly(polystr) {
   lsk++;
   var poly = JSON.parse(polystr);
-  var i, j, pp, n = [[]], m, pm;
+  var i, j, pp, n = [[]];
   var np = new ClipperLib.Polygons();
-  for (i = 0, m = poly.length; i < m; i++) {
+  for (i = 0; i < poly.length; i++) {
     np[i] = new ClipperLib.Polygon();
-    for (j = 0, pm = poly[i].length; j < pm; j++) {
+    for (j = 0; j < poly[i].length; j++) {
       pp = new ClipperLib.IntPoint();
       if (!isNaN(Number(poly[i][j].X)) && !isNaN(Number(poly[i][j].Y))) {
         pp.X = round(Number(poly[i][j].X));
@@ -531,14 +522,12 @@ SVG.create = function () {
   var str = "<filter id='innerbewel' x0='-50%' y0='-50%' width='200%' height='200%' >";
   str += "<feGaussianBlur in='SourceAlpha' stdDeviation='2' result='blur'/>";
   str += "<feOffset dy='3' dx='3'/>";
-  str += "<feComposite in2='SourceAlpha' operator='arithmetic'";
-  str += " k2='-1' k3='1' result='hlDiff'/>";
+  str += "<feComposite in2='SourceAlpha' operator='arithmetic' k2='-1' k3='1' result='hlDiff'/>";
   str += "<feFlood flood-color='white' flood-opacity='0.8'/>"; // changed to 1.0 for speed
   str += "<feComposite in2='hlDiff' operator='in'/>";
   str += "<feComposite in2='SourceGraphic' operator='over' result='withGlow'/>";
   str += "<feOffset in='blur' dy='-3' dx='-3'/>";
-  str += "<feComposite in2='SourceAlpha' operator='arithmetic'";
-  str += " k2='-1' k3='1' result='shadowDiff'/>";
+  str += "<feComposite in2='SourceAlpha' operator='arithmetic' k2='-1' k3='1' result='shadowDiff'/>";
   str += "<feFlood flood-color='black' flood-opacity='0.5'/>"; // changed to 1.0 for speed
   str += "<feComposite in2='shadowDiff' operator='in'/>";
   str += "<feComposite in2='withGlow' operator='over'/>";
@@ -568,8 +557,7 @@ SVG.create = function () {
   markers += '<rect x="0" y="0" width="10" height="10"></rect>';
   markers += '</marker>';
   $("body").append("<svg id='dummy' style='display:none'><defs>" + str + markers + "</defs></svg>");
-  $("#p defs").append($("#innerbewel"));
-  $("#p defs").append($("#dummy marker"));
+  $("#p defs").append($("#innerbewel"), $("#dummy marker"));
   $("#dummy").remove();
   return p;
 };
@@ -647,19 +635,16 @@ SVG.sub_poly_links = null;
 SVG.total = null;
 SVG.polys2path = function (a, fr) {
   scaled_paths[fr] = [];
-  var path = "", i, j, link, d;
+  var path = "", i, j, d;
   this.sub_poly_counts = [];
   this.sub_poly_links = "";
   this.total = 0;
   if (!scale) scale = 1;
-  var a_length = a.length;
-  var a_i_length;
   var classi = "subpolylinks";
-  for (i = 0; i < a_length; i++) {
+  for (i = 0; i < a.length; i++) {
     this.sub_poly_counts.push(a[i].length);
     d = "";
-    a_i_length = a[i].length;
-    for (j = 0; j < a_i_length; j++) {
+    for (j = 0; j < a[i].length; j++) {
       this.total++;
       if (j === 0) {
         d += "M";
@@ -674,8 +659,7 @@ SVG.polys2path = function (a, fr) {
       if (d.trim() === "Z") d = "";
       scaled_paths[fr].push(d);
       if (benchmark_running) classi = "subpolylinks_disabled";
-      link = '<span class="' + classi + '" onclick="popup_path(' + i + ',' + fr + ')" onmouseover="show_path(' + i + ',' + fr + ')" onmouseout="hide_path()" >' + a_i_length + '</span>, ';
-      this.sub_poly_links += link;
+      this.sub_poly_links += '<span class="' + classi + '" onclick="popup_path(' + i + ',' + fr + ')" onmouseover="show_path(' + i + ',' + fr + ')" onmouseout="hide_path()" >' + a[i].length + '</span>, ';
     }
   }
   if (sub_poly_links_update) this.sub_poly_links = this.sub_poly_links.substring(0, this.sub_poly_links.length - 2);
@@ -693,15 +677,12 @@ function popup_path(i, fr) {
 
   var d = typeof i === "undefined" ? scaled_paths[fr].join(" ") : scaled_paths[fr][i];
   var points_string = normalize_clipper_poly(d);
-  var area;
+  var area = 0;
   if (points_string !== false) {
     if (typeof i === "undefined") {
       $("#polygon_explorer_string_inp").val(format_output(points_string));
-      var scaled_paths_length = scaled_paths.length;
-      var points_str;
-      area = 0;
-      for (var j = 0; j < scaled_paths_length; j++) {
-        points_str = normalize_clipper_poly(scaled_paths[fr][j], true);
+      for (var j = 0; j < scaled_paths.length; j++) {
+        var points_str = normalize_clipper_poly(scaled_paths[fr][j], true);
         if (points_str !== false) {
           var polygon = JSON.parse(points_str.replace(/^\[\[/,"[").replace(/\]\]$/,"]"));
           area += ClipperLib.Clipper.Area(polygon);
@@ -795,8 +776,7 @@ function update_custom_polygons_select() {
   var selected_value = $("#custom_polygons_select").val();
   if (!selected_value && selected_value+"" !== "0") selected_value = 0;
   $("#custom_polygons_select option").remove();
-  var arr_length = 0;
-  if (_.isArray(arr)) arr_length = arr.length;
+  var arr_length = (_.isArray(arr)) ? arr.length : 0;
   var selected_txt, i;
   if (arr_length > 0)
     for (i = 0; i < arr_length; i++) {
@@ -865,28 +845,19 @@ function svg_source_enlarge() {
   var g_x = bb.x - 5;
   var g_y = bb.y - 5;
   $("#dummy").remove();
-  /*
-  $("body").append('<img id="width_img" width="100%" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">');
-  var window_width = parseInt(window.getComputedStyle($("#width_img")[0],null).getPropertyValue("width"));
-  $("#width_img").remove();
-  */
+  // $("body").append('<img id="width_img" width="100%" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">');
+  // var window_width = parseInt(window.getComputedStyle($("#width_img")[0],null).getPropertyValue("width"));
+  // $("#width_img").remove();
   $("#_p").attr("viewBox", g_x + " " + g_y + " " + g_width + " " + g_height);
   $("#enlarged_svg").html($("#enlarged_svg").html());
   $("#enlarged_svg").css("display", "block");
-  // at the bottom
-  if (svg_source_place === "svg_source_container") {
-    $("#_p").attr("width", window_width);
-    $("#_p").attr("height", parseInt((window_width / original_width) * original_height, 10));
-    $("#_p1,#_p2,#_p3").css("stroke-width", 0.8 * (original_width / window_width));
-  // at the right
-  } else {
-    $("#_p").attr("height", window_height);
-    $("#_p").attr("width", parseInt((window_height / original_height) * original_width, 10));
-    $("#_p1,#_p2,#_p3").css("stroke-width", 0.8 * (original_height / window_height));
-  }
+
+  $("#_p").attr("width", window_width);
+  $("#_p").attr("height", parseInt((window_width / original_width) * original_height, 10));
+  $("#_p1,#_p2,#_p3").css("stroke-width", 0.8 * (original_width / window_width));
+
   $("#svg_source_textarea").css("display", "none");
-  var disabled = (benchmark_running) ? "disabled" : "";
-  $("#svg_source_enlarge_button").html('<button ' + disabled + ' class="textarea_hide_buttons" onClick="show_svg_source_f()" title="Show SVG source">Show SVG source</button>');
+  $("#svg_source_enlarge_button").html('<button ' + (benchmark_running ? "disabled" : "") + ' class="textarea_hide_buttons" onClick="show_svg_source_f()" title="Show SVG source">Show SVG source</button>');
   update_enlarged_SVG_source = true;
   update_enlarged_SVG = true;
 }
@@ -895,8 +866,7 @@ function show_svg_source_f() {
   $("#svg_source_textarea").css("display", "block");
   show_svg_source_click("non_click");
   $("#enlarged_svg").html("");
-  var disabled = (benchmark_running) ? "disabled" : "";
-  $("#svg_source_enlarge_button").html('<button ' + disabled + ' class="textarea_hide_buttons" onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button>');
+  $("#svg_source_enlarge_button").html('<button ' + (benchmark_running ? "disabled" : "") + ' class="textarea_hide_buttons" onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button>');
   update_enlarged_SVG_source = true;
   update_enlarged_SVG = false;
 }
@@ -905,24 +875,13 @@ function show_svg_source_click(non_click) {
   update_enlarged_SVG_source = true;
   if (!update_enlarged_SVG) update_enlarged_SVG = false;
   if (non_click !== "non_click") {
-    if ($("#show_svg_source").html() == "Show SVG source B") {
-      $("#show_svg_source").html("Show SVG source R");
-      $("#show_svg_source").attr("title", "Show current SVG source in textarea at the right side of the page");
-      svg_source_place = "svg_source_container";
-      $("#svg_source_container2").html("");
-    } else {
-      $("#show_svg_source").html("Show SVG source B");
-      $("#show_svg_source").attr("title", "Show current SVG source in textarea at the bottom of the page");
-      svg_source_place = "svg_source_container2";
-      $("#svg_source_container").html("");
-    }
     var textarea_str = '<div id="svg_source_textarea_div">';
     textarea_str += '<button class="textarea_hide_buttons" onClick="$(\'#svg_source_textarea_div\').remove();update_enlarged_SVG_source=false;update_enlarged_SVG=false" title="Hide SVG source">Hide</button>';
     textarea_str += '<span id="svg_source_enlarge_button"><button ' + (benchmark_running ? "disabled" : "") + ' class="textarea_hide_buttons" onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button></span><br>';
     textarea_str += '<div style="display:none" id="enlarged_svg"></div>';
     textarea_str += '<textarea id="svg_source_textarea"></textarea>';
     textarea_str += '</div>';
-    $("#" + svg_source_place).append(textarea_str);
+    $("#svg_source_container").append(textarea_str);
   }
   var svg_source = $("#svgcontainer").html().replace(/\>/g, ">\n");
   $("#svg_source_textarea").val(svg_source);
@@ -972,14 +931,12 @@ function benchmark2(i) {
     bench_glob[lsk].setTimeout = setTimeout("benchmark2(" + lsk + ")",
     bench_glob[lsk].elapsed_time + lsk * bench_glob[lsk].time);
   }
-  var results = '';
   var multiple_runs_table;
   var elapsed_time = end_time - bench.list[0].start;
-  results += Math.floor((i + 1) / bench_glob.length * 100) + " % (";
+  var results = Math.floor((i + 1) / bench_glob.length * 100) + " % (";
   results += (elapsed_time / 1000).toFixed(1) + " s) of ";
   results += "benchmark " + (repeat + 1) + " / " + repeat_times + ". ";
-  results += "Remaining: ";
-  results += Math.floor((((elapsed_time / (i + 1)) * (bench_glob.length - i + 1)) / 1000)) + " s.";
+  results += "Remaining: " + Math.floor((((elapsed_time / (i + 1)) * (bench_glob.length - i + 1)) / 1000)) + " s.";
   $("#benchmark_multiple_status").html(results);
   $("#benchmark_multiple_status").css("display", "table-cell");
   if (i === 0) {
@@ -1211,8 +1168,7 @@ Benchmark.prototype.print_multiple_runs = function () {
   return tbl2;
 };
 
-// Programmer: Larry Battle
-// Date: Mar 06, 2011
+// Programmer: Larry Battle - Date: Mar 06, 2011
 // Purpose: Calculate standard deviation, variance, and average among an array of numbers.
 function getNumWithSetDec (num, numOfDec) {
   var pow10s = Math.pow(10, numOfDec || 0);
@@ -1249,7 +1205,6 @@ function getStandardDeviation (numArr, numOfDec) {
   var stdDev = Math.sqrt(getVariance(numArr, numOfDec));
   return getNumWithSetDec(stdDev, numOfDec);
 }
-
 // BENCHMARKING ENDS
 
 function colorize_boxes_like_in_svg() {
@@ -1344,58 +1299,29 @@ function main() {
     var polygon = parseInt($(this).val(), 10);
     var polys, subj = "", clip = "";
     global_do_not_round_and_scale = true;
-    if (polygon === 0) {
-      polys = get_gb_and_arrow();
-      subj = polys.ss;
-      clip = polys.cc;
-    }
-    else if (polygon == 1) {
-      polys = get_text_polys();
-      subj = polys.ss;
-      clip = polys.cc;
-    }
-    else if (polygon == 2) {
-      polys = get_rectangle_polys();
-      subj = polys.ss;
-      clip = polys.cc;
-    }
-    else if (polygon == 3) {
-      polys = get_same_self_intersecting_polys();
-      subj = polys.ss;
-      clip = polys.cc;
-    }
-    else if (polygon == 4 || polygon == 5) {
+    if(polygon != 4 && polygon != 5) {
+      var polygons = [
+        get_gb_and_arrow(),
+        get_text_polys(),
+        get_rectangle_polys(),
+        get_same_self_intersecting_polys(),
+        // TODO reorder 4 & 5
+        null, null,
+        get_star_and_rect(),
+        get_spiral_and_rects(),
+        get_rounded_grid_and_star(),
+        get_glyph_and_grid(),
+        get_custom_poly()
+      ];
+      subj = polygons[polygon].ss;
+      clip = polygons[polygon].cc;
+    } else {
       subj = get_random_polys("subj", polygon);
       clip = get_random_polys("clip", polygon);
     }
-    else if (polygon == 6) {
-      polys = get_star_and_rect();
-      subj = polys.ss;
-      clip = polys.cc;
-    }
-    else if (polygon == 7) {
-      polys = get_spiral_and_rects();
-      subj = polys.ss;
-      clip = polys.cc;
-    }
-    else if (polygon == 8) {
-      polys = get_rounded_grid_and_star();
-      subj = polys.ss;
-      clip = polys.cc;
-    }
-    else if (polygon == 9) {
-      polys = get_glyph_and_grid();
-      subj = polys.ss;
-      clip = polys.cc;
-    }
-    else if (polygon == 10) {
-      polys = get_custom_poly();
-      subj = polys.ss;
-      clip = polys.cc;
-    }
     global_do_not_round_and_scale = false;
-    if (subj != "") subj = JSON.stringify(subj);
-    if (clip != "") clip = JSON.stringify(clip);
+    if (subj !== "") subj = JSON.stringify(subj);
+    if (clip !== "") clip = JSON.stringify(clip);
     $("#custom_polygon_subj").val(format_output(subj));
     $("#custom_polygon_clip").val(format_output(clip));
   });
@@ -1415,7 +1341,6 @@ function main() {
     txt += 'Note! Before saving, nothing happens. After saving, the SVG window is also updated.';
     alert(txt);
   });
-
   $("#help_output_format").click(function() {
     var txt = 'Output format\n\n';
     txt += 'To change the polygon coordinate output format please use the above dropdown. The available formats are:\n\n';
@@ -1573,11 +1498,9 @@ function main() {
   // Cleaning and simplifying
   $("#clean").change(function () {
     clean = $(this).prop('checked');
-    if (clean) {
-      if (!$("#cleandelta").val()+"".trim()) {
-        cleandelta = cleandelta_default;
-        $("#cleandelta").val(cleandelta);
-      }
+    if (clean && !$("#cleandelta").val()+"".trim()) {
+      cleandelta = cleandelta_default;
+      $("#cleandelta").val(cleandelta);
     }
     make_clip();
   });
@@ -1594,11 +1517,9 @@ function main() {
   });
   $("#lighten").change(function () {
     lighten = $(this).prop('checked');
-    if (lighten) {
-      if (!$("#lighten_distance").val()+"".trim()) {
-        lighten_distance = lighten_distance_default;
-        $("#lighten_distance").val(lighten_distance);
-      }
+    if (lighten && !$("#lighten_distance").val()+"".trim()) {
+      lighten_distance = lighten_distance_default;
+      $("#lighten_distance").val(lighten_distance);
     }
     make_clip();
   });
@@ -1683,7 +1604,6 @@ function main() {
       sss = cc;
       make_clip();
     }
-    else alert("Scale has to be a number");
   });
   $('#scale_plus').hold(function () {
     var scale_orig = $('#scale').val();
@@ -1954,8 +1874,7 @@ function main() {
   $('input[type="radio"][name="subject_fillType"][value="' + subject_fillType + '"]').attr('checked', 'checked');
   $('input[type="radio"][name="clip_fillType"][value="' + clip_fillType + '"]').attr('checked', 'checked');
   $('input[type="radio"][name="polygons"][value="' + polygons_default + '"]').attr('checked', 'checked').change();
-  var polygon = parseInt(polygons_default, 10);
-  rnd_sett = (polygon === 4) ? rnd_sett_defaults.rects['default'] : rnd_sett_defaults.norm['default'];
+  rnd_sett = (parseInt(polygons_default, 10) === 4) ? rnd_sett_defaults.rects['default'] : rnd_sett_defaults.norm['default'];
   $('input[type="radio"][name="offsettable_poly"][value="' + offsettable_poly + '"]').attr('checked', 'checked');
   $('#subj_polygon_count').val(rnd_sett.subj_polygon_count);
   $('#subj_point_count').val(rnd_sett.subj_point_count);
@@ -1993,10 +1912,8 @@ function make_offset() {
   // Other operations (boolean ones) doesn't need this.
   // This is needed when offsetting polygons that has selfintersecting parts ( eg. 5-point star needs this )
   if (simplify) {
-    // Simplifying is only needed when offsetting original polys, because
-    // results of boolean operations are already simplified.
-    // Note! if clip polygon is the same as subject polygon
-    // then it seems that simplifying is needed also for result of boolean operation (ie. solution).
+    // Simplifying is only needed when offsetting original polys, because results of boolean operations are already simplified.
+    // Note! if clip polygon is the same as subject polygon then it seems that simplifying is needed also for result of boolean operation (ie. solution).
     // subj
     if (offsettable_poly === 1) {
       off_poly = cpr.SimplifyPolygons(off_poly, subject_fillType);
