@@ -17,7 +17,7 @@ var offsettable_poly = 3;
 var clipType = 3;
 var subject_fillType = 1;
 var clip_fillType = 1;
-var ss, cc, sss, cpr, p, ok = 1;
+var ss, cc, sss, cpr, p;
 var off_result;
 var SVG = {}, p, p1, p2, p3;
 var random_subj;
@@ -33,7 +33,6 @@ var clip_subpolygons = 0;
 var solution_subpolygons = 0;
 var bench;
 var sub_poly_links_update = 1;
-var benchmark1_globals = {};
 var repeat_times;
 var repeat = 0;
 var clicked_benchmark_button_id;
@@ -119,7 +118,7 @@ window.onload = function () {
 function normalize_clipper_poly(polystr, quiet) {
   if (typeof (polystr) != "string") return false;
   polystr = polystr.trim();
-  var np, txt, poly;
+  var np, poly;
   if (polystr.substr(0, 1).toUpperCase() === "M") {
     np = svgpath_to_clipper_polygons(polystr);
     if (np === false) {
@@ -256,7 +255,7 @@ function svgpath_to_clipper_polygons(d) {
 }
 
 function format_output(polystr) {
-  var txt, poly;
+  var poly;
   if (typeof(polystr) != "string" || polystr === "") return "";
   try {
     poly = JSON.parse(polystr);
@@ -484,12 +483,6 @@ function rnd(intfloat, Amin, Amax) {
   if (intfloat == "float") num = (Amin + (Amax - Amin) * Math.random()).toFixed(2);
   else if (intfloat == "int") num = Math.floor(Amin + (1 + Amax - Amin) * Math.random());
   return num;
-}
-
-function get_rect_poly() {
-  var rect_poly = '[[{"X":100,"Y":100},{"X":200,"Y":100},{"X":200,"Y":200},{"X":100,"Y":200},{"X":100,"Y":100}]]';
-  rect_poly = '[[{"X":100,"Y":100},{"X":100,"Y":100},{"X":200,"Y":100},{"X":200,"Y":200},{"X":100,"Y":200},{"X":100,"Y":100}]]';
-  return deserialize_clipper_poly(rect_poly);
 }
 
 function round(a) {
@@ -869,7 +862,6 @@ function update_fieldset_heights() {
     $("#td3").innerHeight()
   ];
   var max_td_height = _.max(td_heights);
-  var max_index;
   var children_heights;
   var children_heights_arr = [];
 
@@ -1138,7 +1130,7 @@ Benchmark.prototype.clear = function () {
 Benchmark.prototype.print = function (all) {
   tbl = '<table class="bench"><thead><tr><th>Num</th><th>Name</th><th>Category</th><th>Time</th></tr></thead>';
   tbl += '<tbody>';
-  var time, totaltime = 0, i, m;
+  var time, i, m;
   if (this.list && this.list.length) {
     m = this.list.length;
     // print all
@@ -1174,7 +1166,6 @@ Benchmark.prototype.print = function (all) {
     item,
     counts_sum = 0,
     cat_time_sum = 0,
-    cat_time_avg = 0,
     this_list_i_cat,
     this_list_i_cat_time_sum, this_list_i_cat_counts;
   if (m > 0) for (i = 0; i < m; i++) {
@@ -1226,7 +1217,7 @@ Benchmark.prototype.print = function (all) {
   tbl += '<button ' + disabled + ' onClick="try { $(\'#benchmark_div\').html(' + this.varname + '.print(1)); } catch (e) {return false}">Show all</button>';
   return tbl;
 };
-Benchmark.prototype.print_multiple_runs = function (str) {
+Benchmark.prototype.print_multiple_runs = function () {
   var tbl2 = "";
   tbl2 += '<table id="benchmark_multiple_table" style="margin-top:10px;margin-bottom:10px" class="bench"><thead><tr>';
   tbl2 += '<th>Num</th>';
@@ -1235,7 +1226,7 @@ Benchmark.prototype.print_multiple_runs = function (str) {
   tbl2 += '<th>Avg</th>';
   tbl2 += '</tr></thead>';
   tbl2 += '<tbody>';
-  var i, item, counts_sum = 0, time_sum = 0;
+  var i, item, time_sum = 0;
   var times_array = [];
   for (i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
     times_array.push(this.totals_arr_multiple[i][1]);
@@ -1590,7 +1581,7 @@ function main() {
     }
   });
 
-  $("input[type='radio'][name='polygons']").change(function (e) {
+  $("input[type='radio'][name='polygons']").change(function () {
     var val = parseInt($(this).val(), 10);
     if (val == 10) {
       $("#random_polygons_fieldset").css("display", "none");
@@ -1627,7 +1618,7 @@ function main() {
     make_clip();
     update_fieldset_heights();
   });
-  $('#generate_random_polygons').hold(function (e) {
+  $('#generate_random_polygons').hold(function () {
     random_subj = get_random_polys("subj");
     random_clip = get_random_polys("clip");
     make_clip();
@@ -1681,7 +1672,7 @@ function main() {
     delta = delta - 1;
     make_clip();
   });
-  $('#delta').change(function (e) {
+  $('#delta').change(function () {
     var delta_orig = $('#delta').val();
     if (!isNaN(delta_orig)) delta = parseFloat(delta_orig);
     make_clip();
@@ -1793,7 +1784,7 @@ function main() {
     random_clip = get_random_polys("clip");
     make_clip();
   });
-  $('#subj_polygon_count').change(function (e) {
+  $('#subj_polygon_count').change(function () {
     var subj_polygon_count_orig = $('#subj_polygon_count').val();
     if (!isNaN(subj_polygon_count_orig)) rnd_sett.subj_polygon_count = parseFloat(subj_polygon_count_orig);
     if (rnd_sett.subj_polygon_count < rnd_sett_defaults[rnd_sett_defaults.current].min.subj_polygon_count) rnd_sett.subj_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].min.subj_polygon_count;
@@ -1823,7 +1814,7 @@ function main() {
     random_clip = get_random_polys("clip");
     make_clip();
   });
-  $('#subj_point_count').change(function (e) {
+  $('#subj_point_count').change(function () {
     var subj_point_count_orig = $('#subj_point_count').val();
     if (!isNaN(subj_point_count_orig)) rnd_sett.subj_point_count = parseFloat(subj_point_count_orig);
     if (rnd_sett.subj_point_count < rnd_sett_defaults[rnd_sett_defaults.current].min.subj_point_count) rnd_sett.subj_point_count = rnd_sett_defaults[rnd_sett_defaults.current].min.subj_point_count;
@@ -1853,7 +1844,7 @@ function main() {
     random_clip = get_random_polys("clip");
     make_clip();
   });
-  $('#clip_polygon_count').change(function (e) {
+  $('#clip_polygon_count').change(function () {
     var clip_polygon_count_orig = $('#clip_polygon_count').val();
     if (!isNaN(clip_polygon_count_orig)) rnd_sett.clip_polygon_count = parseFloat(clip_polygon_count_orig);
     if (rnd_sett.clip_polygon_count < rnd_sett_defaults[rnd_sett_defaults.current].min.clip_polygon_count) rnd_sett.clip_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].min.clip_polygon_count;
@@ -1883,7 +1874,7 @@ function main() {
     random_clip = get_random_polys("clip");
     make_clip();
   });
-  $('#clip_point_count').change(function (e) {
+  $('#clip_point_count').change(function () {
     var clip_point_count_orig = $('#clip_point_count').val();
     if (!isNaN(clip_point_count_orig)) rnd_sett.clip_point_count = parseFloat(clip_point_count_orig);
     if (rnd_sett.clip_point_count < rnd_sett_defaults[rnd_sett_defaults.current].min.clip_point_count) rnd_sett.clip_point_count = rnd_sett_defaults[rnd_sett_defaults.current].min.clip_point_count;
@@ -2048,7 +2039,7 @@ function main() {
   $('input[type="radio"][name="clip_fillType"][value="' + clip_fillType + '"]').attr('checked', 'checked');
   $('input[type="radio"][name="polygons"][value="' + polygons_default + '"]').attr('checked', 'checked').change();
   var polygon = parseInt(polygons_default, 10);
-  rnd_sett = (polygon == 4) ? rnd_sett_defaults.rects['default'] : rnd_sett_defaults.norm['default']
+  rnd_sett = (polygon == 4) ? rnd_sett_defaults.rects['default'] : rnd_sett_defaults.norm['default'];
   $('input[type="radio"][name="offsettable_poly"][value="' + offsettable_poly + '"]').attr('checked', 'checked');
   $('#subj_polygon_count').val(rnd_sett.subj_polygon_count);
   $('#subj_point_count').val(rnd_sett.subj_point_count);
