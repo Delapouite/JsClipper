@@ -89,10 +89,10 @@ div#benchmark_div {
   font-family:Helvetica, Arial, sans-serif;
   white-space:nowrap;
 }
-LEGEND {
+legend {
   font-weight:bold;
 }
-FIELDSET {
+fieldset {
   background-color:#EEEEEE;
   /*
   border-radius: 4px 4px 7px 7px;
@@ -103,7 +103,7 @@ FIELDSET {
   white-space:nowrap;
 }
 table {
-  border:0px;
+  border:0;
 }
 .subpolylinks {
   cursor:pointer;
@@ -112,10 +112,6 @@ table {
 }
 .subpolylinks:hover {
   background-color:#BBBBBB;
-}
-.subpolylinks_disabled {
-  font-size:13px;
-  padding:2px;
 }
 /* To prevent odd text resizing in mobile Safari */
 @media only screen and (max-device-width: 480px) {
@@ -165,7 +161,6 @@ table {
 }
 .random th {
   padding: 0px;
-  padding-right:
 }
 .random th {
   background-color:transparent;
@@ -197,7 +192,7 @@ table {
 .offset_outer td {
   vertical-align:top;
   white-space:nowrap;
-  padding:0px;
+  padding:0;
 }
 .offset_outer input[type=radio] {
   margin-left:0px;
@@ -273,4 +268,4 @@ border:1px solid red;
 .bench td, .bench th{font-size:12px;text-align:left;border:1px solid #444444; padding:2px}
 .bench th{background-color:#DDDDDD;}
 .bench tfoot td{background-color:#DDDDDD;}
-.bench_foot{font-weight:bold;}';
+.bench_foot{font-weight:bold;};

@@ -23,7 +23,6 @@ var SVG = {}, p, p1, p2, p3;
 var random_subj;
 var random_clip;
 var bevel = 0;
-var mypath = null;
 var scaled_paths = [];
 var subj_points_total = 0;
 var clip_points_total = 0;
@@ -52,6 +51,7 @@ var window_height = $(document).height() * 0.9;
 var window_width = $(document).width() * 0.9;
 var update_enlarged_SVG = false;
 var update_enlarged_SVG_source = false;
+var lsk = 0;
 var rnd_sett_defaults = {
   current: 'norm',
   rect: {
@@ -486,8 +486,6 @@ function round(a) {
   return Math.floor(a * scale);
 }
 
-lsk = 0;
-
 function deserialize_clipper_poly(polystr) {
   lsk++;
   var poly = JSON.parse(polystr);
@@ -561,7 +559,7 @@ SVG.create = function () {
   $("#dummy").remove();
   return p;
 };
-SVG.addpaths = function (a, b, c, a1, b1) {
+SVG.addPaths = function (a, b, c, a1, b1) {
   if (a) {
     subj_subpolygons = a.length;
     a = this.polys2path(a, "1");
@@ -640,7 +638,6 @@ SVG.polys2path = function (a, fr) {
   this.sub_poly_links = "";
   this.total = 0;
   if (!scale) scale = 1;
-  var classi = "subpolylinks";
   for (i = 0; i < a.length; i++) {
     this.sub_poly_counts.push(a[i].length);
     d = "";
@@ -658,107 +655,110 @@ SVG.polys2path = function (a, fr) {
     if (sub_poly_links_update) {
       if (d.trim() === "Z") d = "";
       scaled_paths[fr].push(d);
-      if (benchmark_running) classi = "subpolylinks_disabled";
-      this.sub_poly_links += '<span class="' + classi + '" onclick="popup_path(' + i + ',' + fr + ')" onmouseover="show_path(' + i + ',' + fr + ')" onmouseout="hide_path()" >' + a[i].length + '</span>, ';
+      this.sub_poly_links += '<span class="subpolylinks" data-id="' + i + '" data-role="' + fr + '">' + a[i].length + '</span>, ';
     }
   }
   if (sub_poly_links_update) this.sub_poly_links = this.sub_poly_links.substring(0, this.sub_poly_links.length - 2);
   if (path.trim() === "Z") path = "";
 
-  if (benchmark_running) $(".subpolylinks").removeClass("subpolylinks subpolylinks_disabled").addClass("subpolylinks_disabled");
-  else $(".subpolylinks_disabled").removeClass("subpolylinks subpolylinks_disabled").addClass("subpolylinks");
-
   return path;
 };
 
-// Englarges mypath ( = black partially transparent path) when clicked
-function popup_path(i, fr) {
-  if (benchmark_running) return false;
-
-  var d = typeof i === "undefined" ? scaled_paths[fr].join(" ") : scaled_paths[fr][i];
-  var points_string = normalize_clipper_poly(d);
-  var area = 0;
-  if (points_string !== false) {
-    if (typeof i === "undefined") {
-      $("#polygon_explorer_string_inp").val(format_output(points_string));
-      for (var j = 0; j < scaled_paths.length; j++) {
-        var points_str = normalize_clipper_poly(scaled_paths[fr][j], true);
-        if (points_str !== false) {
-          var polygon = JSON.parse(points_str.replace(/^\[\[/,"[").replace(/\]\]$/,"]"));
-          area += ClipperLib.Clipper.Area(polygon);
-        }
-      }
-    } else {
-      $("#polygon_explorer_string_inp").val(format_output(points_string).replace(/^\[\[/,"[").replace(/\]\]$/,"]"));
-      area = ClipperLib.Clipper.Area(JSON.parse(points_string.replace(/^\[\[/,"[").replace(/\]\]$/,"]")));
-    }
-    $("#area").html("Area: " + area);
-  } else {
-    $("#polygon_explorer_string_inp").val("Some error occurred when parsing polygon points!");
-  }
-  $(mypath.node).removeAttr('fill stroke').attr('class', 'svg_mypath');
-  $(mypath.node).attr('fill-rule', $('#p' + fr).attr('fill-rule'));
-  $(mypath.node).attr('vector-effect', 'non-scaling-stroke'); // This is not supported in IE 9 and IE10 pre!
-  var bb = mypath.node.getBBox();
-  var svg_w = parseInt($('#p').attr('width'), 10);
-  var svg_h = parseInt($('#p').attr('height'), 10);
-  var x_scale = (svg_w - 20) / bb.width;
-  var y_scale = (svg_h - 20) / bb.height;
-  var scal = Math.min(x_scale, y_scale);
-  var x_trans = -(bb.x + bb.width / 2) + svg_w / 2;
-  var y_trans = -(bb.y + bb.height / 2) + svg_h / 2;
-  $('#StartMarker')[0].setAttribute('markerWidth', 10 / scal * 2);
-  $('#StartMarker')[0].setAttribute('markerHeight', 10 / scal * 2);
-  $('#MidMarker')[0].setAttribute('markerWidth', 4 / scal * 2);
-  $('#MidMarker')[0].setAttribute('markerHeight', 4 / scal * 2);
-  $('#EndMarker')[0].setAttribute('markerWidth', 4 / scal * 2);
-  $('#EndMarker')[0].setAttribute('markerHeight', 4 / scal * 2);
-  mypath.animate({
-    'transform': 't' + x_trans + ' ' + y_trans + 's' + scal + ' ' + scal
-  }, 500, function () {
-    $(mypath.node).attr({
-      'marker-start': 'url(#StartMarker)',
-      'marker-mid': 'url(#MidMarker)',
-      'marker-end': 'url(#EndMarker)'
+$('.polygon_explorer').on({
+  // set and show hightlighted path
+  mouseover: function() {
+    if (benchmark_running) return false;
+    var id = this.dataset.id,
+      role = this.dataset.role,
+      d = typeof id === "undefined" ? scaled_paths[role].join(" ") : scaled_paths[role][id];
+    SVG.highlightedPath = p.path(d);
+    $(SVG.highlightedPath.node).removeAttr('fill stroke').attr({
+      'class': 'svg_mypath',
+      'fill-rule': $('#p' + role).attr('fill-rule'),
+      'vector-effect': 'non-scaling-stroke'
     });
-  });
-}
-
-// Shows mypath ( = black partially transparent path) when hovered
-function show_path(i, fr) {
-  if (benchmark_running) return false;
-  var d = typeof i === "undefined" ? scaled_paths[fr].join(" ") : scaled_paths[fr][i];
-  mypath = p.path(d);
-  $(mypath.node).removeAttr('fill stroke').attr('class', 'svg_mypath');
-  $(mypath.node).attr('fill-rule', $('#p' + fr).attr('fill-rule'));
-  $(mypath.node).attr('vector-effect', 'non-scaling-stroke');
-}
-
-// Hides mypath ( = black partially transparent path)
-function hide_path() {
-  if (mypath === null) return;
-  $(mypath.node).attr({
-    'marker-start': 'url(#StartMarker2)',
-    'marker-mid': 'url(#MidMarker2)',
-    'marker-end': 'url(#EndMarker2)'
-  });
-  if ($(mypath.node).attr('transform'))
-    mypath.animate({
-      'transform': 's1 1'
+  },
+  // enlarge highligthed path
+  click: function() {
+    if (benchmark_running) return false;
+    var id = this.dataset.id,
+      role = this.dataset.role,
+      d = typeof id === "undefined" ? scaled_paths[role].join(" ") : scaled_paths[role][id],
+      points_string = normalize_clipper_poly(d),
+      area = 0;
+    if (points_string !== false) {
+      if (typeof id === "undefined") {
+        $("#polygon_explorer_string_inp").val(format_output(points_string));
+        for (var j = 0; j < scaled_paths.length; j++) {
+          var points_str = normalize_clipper_poly(scaled_paths[role][j], true);
+          if (points_str !== false) {
+            var polygon = JSON.parse(points_str.replace(/^\[\[/,"[").replace(/\]\]$/,"]"));
+            area += ClipperLib.Clipper.Area(polygon);
+          }
+        }
+      } else {
+        $("#polygon_explorer_string_inp").val(format_output(points_string).replace(/^\[\[/,"[").replace(/\]\]$/,"]"));
+        area = ClipperLib.Clipper.Area(JSON.parse(points_string.replace(/^\[\[/,"[").replace(/\]\]$/,"]")));
+      }
+      $("#area").html("Area: " + area);
+    } else {
+      $("#polygon_explorer_string_inp").val("Some error occurred when parsing polygon points!");
+    }
+    $(SVG.highlightedPath.node).removeAttr('fill stroke').attr({
+      'class': 'svg_mypath',
+      'fill-rule': $('#p' + role).attr('fill-rule'),
+      'vector-effect': 'non-scaling-stroke'
+    });
+    var bb = SVG.highlightedPath.node.getBBox();
+    var svg_w = parseInt($('#p').attr('width'), 10);
+    var svg_h = parseInt($('#p').attr('height'), 10);
+    var x_scale = (svg_w - 20) / bb.width;
+    var y_scale = (svg_h - 20) / bb.height;
+    var scal = Math.min(x_scale, y_scale);
+    var x_trans = -(bb.x + bb.width / 2) + svg_w / 2;
+    var y_trans = -(bb.y + bb.height / 2) + svg_h / 2;
+    $('#StartMarker')[0].setAttribute('markerWidth', 10 / scal * 2);
+    $('#StartMarker')[0].setAttribute('markerHeight', 10 / scal * 2);
+    $('#MidMarker')[0].setAttribute('markerWidth', 4 / scal * 2);
+    $('#MidMarker')[0].setAttribute('markerHeight', 4 / scal * 2);
+    $('#EndMarker')[0].setAttribute('markerWidth', 4 / scal * 2);
+    $('#EndMarker')[0].setAttribute('markerHeight', 4 / scal * 2);
+    SVG.highlightedPath.animate({
+      'transform': 't' + x_trans + ' ' + y_trans + 's' + scal + ' ' + scal
     }, 500, function () {
-      this.animate({
-        'opacity': '0'
-      }, 500, function () {
-        this.remove();
+      $(SVG.highlightedPath.node).attr({
+        'marker-start': 'url(#StartMarker)',
+        'marker-mid': 'url(#MidMarker)',
+        'marker-end': 'url(#EndMarker)'
       });
     });
-  else
-    mypath.animate({
-      'opacity': '0'
-    }, 300, function () {
-      this.remove();
+  },
+  // hide highlighted path
+  mouseout: function() {
+    if (!SVG.highlightedPath) return;
+    $(SVG.highlightedPath.node).attr({
+      'marker-start': 'url(#StartMarker2)',
+      'marker-mid': 'url(#MidMarker2)',
+      'marker-end': 'url(#EndMarker2)'
     });
-}
+    if ($(SVG.highlightedPath.node).attr('transform'))
+      SVG.highlightedPath.animate({
+        'transform': 's1 1'
+      }, 500, function () {
+        this.animate({
+          'opacity': '0'
+        }, 500, function () {
+          this.remove();
+        });
+      });
+    else
+      SVG.highlightedPath.animate({
+        'opacity': '0'
+      }, 300, function () {
+        this.remove();
+      });
+  }
+}, '.subpolylinks');
 
 function set_default_custom_polygon() {
   var def_obj = {
@@ -1752,7 +1752,7 @@ function main() {
       if (p1) p1.remove();
       if (p2) p2.remove();
       if (p3) p3.remove();
-      SVG.addpaths(ss, cc, off_result, subject_fillType, clip_fillType);
+      SVG.addPaths(ss, cc, off_result, subject_fillType, clip_fillType);
     } else {
       sub_poly_links_update = 0;
       $("#subj_subpolygons, #subj_points_in_subpolygons, #subj_points_total, #clip_subpolygons, #clip_points_in_subpolygons, #clip_points_total, #solution_subpolygons, #solution_points_in_subpolygons, #solution_points_total, #points_total, #all_subpolygons").html("");
@@ -1958,8 +1958,8 @@ function make_offset() {
   if (p1) p1.remove();
   if (p2) p2.remove();
   if (p3) p3.remove();
-  if (bench.includeSVG) var B3 = bench.start("SVG", "addpaths(ss, cc, off_result,  " + subject_fillType + ", " + clip_fillType + ")");
-  SVG.addpaths(ss, cc, off_result, subject_fillType, clip_fillType);
+  if (bench.includeSVG) var B3 = bench.start("SVG", "addPaths(ss, cc, off_result,  " + subject_fillType + ", " + clip_fillType + ")");
+  SVG.addPaths(ss, cc, off_result, subject_fillType, clip_fillType);
   if (bench.includeSVG) bench.end(B3);
 
   // Update BigIntegers Toggle
