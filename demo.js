@@ -65,50 +65,50 @@ var windowWidth = $(document).width() * 0.9;
 var updateEnlargedSVG = false;
 var updateEnlargedSVGSource = false;
 var lsk = 0;
-var rnd_sett_defaults = {
+var randomSettings = {
   current: 'norm',
   rect: {
     'default': {
-      clip_polygon_count: 1,
-      clip_point_count: 4,
-      subj_polygon_count: 2,
-      subj_point_count: 8
+      clipPolygonCount: 1,
+      clipPointCount: 4,
+      subjPolygonCount: 2,
+      subjPointCount: 8
     },
     min: {
-      clip_polygon_count: 1,
-      clip_point_count: 4,
-      subj_polygon_count: 1,
-      subj_point_count: 4
+      clipPolygonCount: 1,
+      clipPointCount: 4,
+      subjPolygonCount: 1,
+      subjPointCount: 4
     },
     max: {
-      clip_polygon_count: 100,
-      clip_point_count: 100,
-      subj_polygon_count: 100,
-      subj_point_count: 100
+      clipPolygonCount: 100,
+      clipPointCount: 100,
+      subjPolygonCount: 100,
+      subjPointCount: 100
     }
   },
   norm: {
     'default': {
-      clip_polygon_count: 1,
-      clip_point_count: 3,
-      subj_polygon_count: 2,
-      subj_point_count: 8
+      clipPolygonCount: 1,
+      clipPointCount: 3,
+      subjPolygonCount: 2,
+      subjPointCount: 8
     },
     min: {
-      clip_polygon_count: 1,
-      clip_point_count: 3,
-      subj_polygon_count: 1,
-      subj_point_count: 3
+      clipPolygonCount: 1,
+      clipPointCount: 3,
+      subjPolygonCount: 1,
+      subjPointCount: 3
     },
     max: {
-      clip_polygon_count: 100,
-      clip_point_count: 100,
-      subj_polygon_count: 100,
-      subj_point_count: 100
+      clipPolygonCount: 100,
+      clipPointCount: 100,
+      subjPolygonCount: 100,
+      subjPointCount: 100
     }
   }
 };
-var rnd_sett = defaultPolygons === 4 ? rnd_sett_defaults.rects['default'] : rnd_sett_defaults.norm['default'];
+var randomSetting = defaultPolygons === 4 ? randomSettings.rect['default'] : randomSettings.norm['default'];
 
 window.onload = function () {
   if (typeof jQuery === "undefined") alert("Failed to load jQuery.");
@@ -397,20 +397,20 @@ function get_custom_poly() {
 function get_random_polys(which, polygon) {
   var point_count, polygon_count;
   if (which === "subj") {
-    point_count = rnd_sett.subj_point_count;
-    polygon_count = rnd_sett.subj_polygon_count;
+    point_count = randomSetting.subjPointCount;
+    polygon_count = randomSetting.subjPolygonCount;
   } else if (which === "clip") {
-    point_count = rnd_sett.clip_point_count;
-    polygon_count = rnd_sett.clip_polygon_count;
+    point_count = randomSetting.clipPointCount;
+    polygon_count = randomSetting.clipPolygonCount;
   }
   if (arguments.length === 1) polygon = parseInt($('input[name="polygons"]:checked').val(), 10);
   if (polygon !== 4 && polygon !== 5) return new ClipperLib.Polygons();
   var svg = $("#p");
   var margin = 10;
-  rnd_sett.rand_min_x = 0 + margin;
-  rnd_sett.rand_max_x = parseFloat(svg.attr("width"), 10) - margin;
-  rnd_sett.rand_min_y = 0 + margin;
-  rnd_sett.rand_max_y = parseFloat(svg.attr("height"), 10) - margin;
+  randomSetting.rand_min_x = 0 + margin;
+  randomSetting.rand_max_x = parseFloat(svg.attr("width"), 10) - margin;
+  randomSetting.rand_min_y = 0 + margin;
+  randomSetting.rand_max_y = parseFloat(svg.attr("height"), 10) - margin;
   var i, j, pp, np = new ClipperLib.Polygons(),
     prev_x = null,
     prev_y = null,
@@ -429,16 +429,16 @@ function get_random_polys(which, polygon) {
         }
         // horiz => y remains same
         if (horiz_or_vertic === 0) {
-          pp.X = round(rnd("float", rnd_sett.rand_min_x, rnd_sett.rand_max_x));
-          if (prev_y == null) pp.Y = round(rnd("float", rnd_sett.rand_min_y, rnd_sett.rand_max_y));
+          pp.X = round(rnd("float", randomSetting.rand_min_x, randomSetting.rand_max_x));
+          if (prev_y == null) pp.Y = round(rnd("float", randomSetting.rand_min_y, randomSetting.rand_max_y));
           else pp.Y = prev_y;
           prev_x = pp.X;
           prev_y = pp.Y;
           prev_horiz_or_vertic = horiz_or_vertic;
         // vertic => x remains same
         } else {
-          pp.Y = round(rnd("float", rnd_sett.rand_min_y, rnd_sett.rand_max_y));
-          if (prev_x == null) pp.X = round(rnd("float", rnd_sett.rand_min_x, rnd_sett.rand_max_x));
+          pp.Y = round(rnd("float", randomSetting.rand_min_y, randomSetting.rand_max_y));
+          if (prev_x == null) pp.X = round(rnd("float", randomSetting.rand_min_x, randomSetting.rand_max_x));
           else pp.X = prev_x;
           prev_x = pp.X;
           prev_y = pp.Y;
@@ -457,8 +457,8 @@ function get_random_polys(which, polygon) {
         }
         else np[i].push(pp);
       } else if (polygon === 5) {
-        pp.X = round(rnd("float", rnd_sett.rand_min_x, rnd_sett.rand_max_x));
-        pp.Y = round(rnd("float", rnd_sett.rand_min_y, rnd_sett.rand_max_y));
+        pp.X = round(rnd("float", randomSetting.rand_min_x, randomSetting.rand_max_x));
+        pp.Y = round(rnd("float", randomSetting.rand_min_y, randomSetting.rand_max_y));
         np[i].push(pp);
       }
     }
@@ -467,15 +467,15 @@ function get_random_polys(which, polygon) {
     horiz_or_vertic = null;
     prev_horiz_or_vertic = null;
   }
-  rnd_sett.scale = scale;
+  randomSetting.scale = scale;
   return np;
 }
 
 function scale_again_random_poly(poly) {
   for (var i = 0; i < poly.length; i++) {
     for (var j = 0; j < poly[i].length; j++) {
-      poly[i][j].X = round(poly[i][j].X / rnd_sett.scale);
-      poly[i][j].Y = round(poly[i][j].Y / rnd_sett.scale);
+      poly[i][j].X = round(poly[i][j].X / randomSetting.scale);
+      poly[i][j].Y = round(poly[i][j].Y / randomSetting.scale);
     }
   }
   return poly;
@@ -909,7 +909,7 @@ function benchmark2(i) {
   $("input[name='clipType'][value='" + clipType + "']").prop('checked', true);
   scale = obj.scale;
   $('#scale').val(scale);
-  if (obj.polygon_id === 4 || obj.polygon_id === 5) rnd_sett = obj.rnd_sett;
+  if (obj.polygon_id === 4 || obj.polygon_id === 5) randomSetting = obj.randomSetting;
   $('input[name="polygons"][value="' + obj.polygon_id + '"]').prop('checked', true).trigger("change");
   obj = null;
   lastCompletedBenchmark = i;
@@ -1262,7 +1262,7 @@ function get_polys(scale_again) {
     if (scale_again) {
       subj.random = scale_again_random_poly(subj.random);
       clip.random = scale_again_random_poly(clip.random);
-      rnd_sett.scale = scale;
+      randomSetting.scale = scale;
     }
     ss = subj.random;
     cc = clip.random;
@@ -1436,20 +1436,20 @@ function main() {
     }
     if (val === 4 || val === 5) {
       $("#random_polygons_fieldset").show();
-      rnd_sett_defaults.current = (val === 4) ? "rect" : "norm";
+      randomSettings.current = (val === 4) ? "rect" : "norm";
       // Test for ranges
-      if (rnd_sett.clip_point_count < rnd_sett_defaults[rnd_sett_defaults.current].min.clip_point_count) rnd_sett.clip_point_count = rnd_sett_defaults[rnd_sett_defaults.current].min.clip_point_count;
-      if (rnd_sett.clip_point_count > rnd_sett_defaults[rnd_sett_defaults.current].max.clip_point_count) rnd_sett.clip_point_count = rnd_sett_defaults[rnd_sett_defaults.current].max.clip_point_count;
-      $('#clip_point_count').val(rnd_sett.clip_point_count);
-      if (rnd_sett.clip_polygon_count < rnd_sett_defaults[rnd_sett_defaults.current].min.clip_polygon_count) rnd_sett.clip_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].min.clip_polygon_count;
-      if (rnd_sett.clip_polygon_count > rnd_sett_defaults[rnd_sett_defaults.current].max.clip_polygon_count) rnd_sett.clip_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].max.clip_polygon_count;
-      $('#clip_polygon_count').val(rnd_sett.clip_polygon_count);
-      if (rnd_sett.subj_point_count < rnd_sett_defaults[rnd_sett_defaults.current].min.subj_point_count) rnd_sett.subj_point_count = rnd_sett_defaults[rnd_sett_defaults.current].min.subj_point_count;
-      if (rnd_sett.subj_point_count > rnd_sett_defaults[rnd_sett_defaults.current].max.subj_point_count) rnd_sett.subj_point_count = rnd_sett_defaults[rnd_sett_defaults.current].max.subj_point_count;
-      $('#subj_point_count').val(rnd_sett.subj_point_count);
-      if (rnd_sett.subj_polygon_count < rnd_sett_defaults[rnd_sett_defaults.current].min.subj_polygon_count) rnd_sett.subj_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].min.subj_polygon_count;
-      if (rnd_sett.subj_polygon_count > rnd_sett_defaults[rnd_sett_defaults.current].max.subj_polygon_count) rnd_sett.subj_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].max.subj_polygon_count;
-      $('#subj_polygon_count').val(rnd_sett.subj_polygon_count);
+      if (randomSetting.clipPointCount < randomSettings[randomSettings.current].min.clipPointCount) randomSetting.clipPointCount = randomSettings[randomSettings.current].min.clipPointCount;
+      if (randomSetting.clipPointCount > randomSettings[randomSettings.current].max.clipPointCount) randomSetting.clipPointCount = randomSettings[randomSettings.current].max.clipPointCount;
+      $('#clip_point_count').val(randomSetting.clipPointCount);
+      if (randomSetting.clipPolygonCount < randomSettings[randomSettings.current].min.clipPolygonCount) randomSetting.clipPolygonCount = randomSettings[randomSettings.current].min.clipPolygonCount;
+      if (randomSetting.clipPolygonCount > randomSettings[randomSettings.current].max.clipPolygonCount) randomSetting.clipPolygonCount = randomSettings[randomSettings.current].max.clipPolygonCount;
+      $('#clip_polygon_count').val(randomSetting.clipPolygonCount);
+      if (randomSetting.subjPointCount < randomSettings[randomSettings.current].min.subjPointCount) randomSetting.subjPointCount = randomSettings[randomSettings.current].min.subjPointCount;
+      if (randomSetting.subjPointCount > randomSettings[randomSettings.current].max.subjPointCount) randomSetting.subjPointCount = randomSettings[randomSettings.current].max.subjPointCount;
+      $('#subj_point_count').val(randomSetting.subjPointCount);
+      if (randomSetting.subjPolygonCount < randomSettings[randomSettings.current].min.subjPolygonCount) randomSetting.subjPolygonCount = randomSettings[randomSettings.current].min.subjPolygonCount;
+      if (randomSetting.subjPolygonCount > randomSettings[randomSettings.current].max.subjPolygonCount) randomSetting.subjPolygonCount = randomSettings[randomSettings.current].max.subjPolygonCount;
+      $('#subj_polygon_count').val(randomSetting.subjPolygonCount);
       subj.random = get_random_polys("subj", val);
       clip.random = get_random_polys("clip", val);
     }
@@ -1603,121 +1603,121 @@ function main() {
   });
 
   $('#subj_polygon_count_minus').hold(function () {
-    var subj_polygon_count_orig = $('#subj_polygon_count').val();
-    if (!isNaN(subj_polygon_count_orig)) rnd_sett.subj_polygon_count = parseFloat(subj_polygon_count_orig);
-    rnd_sett.subj_polygon_count = rnd_sett.subj_polygon_count - 1;
-    if (rnd_sett.subj_polygon_count < rnd_sett_defaults[rnd_sett_defaults.current].min.subj_polygon_count) rnd_sett.subj_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].min.subj_polygon_count;
-    $('#subj_polygon_count').val(rnd_sett.subj_polygon_count);
+    var subjPolygonCount_orig = $('#subj_polygon_count').val();
+    if (!isNaN(subjPolygonCount_orig)) randomSetting.subjPolygonCount = parseFloat(subjPolygonCount_orig);
+    randomSetting.subjPolygonCount = randomSetting.subjPolygonCount - 1;
+    if (randomSetting.subjPolygonCount < randomSettings[randomSettings.current].min.subjPolygonCount) randomSetting.subjPolygonCount = randomSettings[randomSettings.current].min.subjPolygonCount;
+    $('#subj_polygon_count').val(randomSetting.subjPolygonCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
   });
   $('#subj_polygon_count').change(function () {
-    var subj_polygon_count_orig = $('#subj_polygon_count').val();
-    if (!isNaN(subj_polygon_count_orig)) rnd_sett.subj_polygon_count = parseFloat(subj_polygon_count_orig);
-    if (rnd_sett.subj_polygon_count < rnd_sett_defaults[rnd_sett_defaults.current].min.subj_polygon_count) rnd_sett.subj_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].min.subj_polygon_count;
-    if (rnd_sett.subj_polygon_count > rnd_sett_defaults[rnd_sett_defaults.current].max.subj_polygon_count) rnd_sett.subj_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].max.subj_polygon_count;
-    $('#subj_polygon_count').val(rnd_sett.subj_polygon_count);
+    var subjPolygonCount_orig = $('#subj_polygon_count').val();
+    if (!isNaN(subjPolygonCount_orig)) randomSetting.subjPolygonCount = parseFloat(subjPolygonCount_orig);
+    if (randomSetting.subjPolygonCount < randomSettings[randomSettings.current].min.subjPolygonCount) randomSetting.subjPolygonCount = randomSettings[randomSettings.current].min.subjPolygonCount;
+    if (randomSetting.subjPolygonCount > randomSettings[randomSettings.current].max.subjPolygonCount) randomSetting.subjPolygonCount = randomSettings[randomSettings.current].max.subjPolygonCount;
+    $('#subj_polygon_count').val(randomSetting.subjPolygonCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
   });
   $('#subj_polygon_count_plus').hold(function () {
-    var subj_polygon_count_orig = $('#subj_polygon_count').val();
-    if (!isNaN(subj_polygon_count_orig)) rnd_sett.subj_polygon_count = parseFloat(subj_polygon_count_orig);
-    rnd_sett.subj_polygon_count = rnd_sett.subj_polygon_count + 1;
-    if (rnd_sett.subj_polygon_count > rnd_sett_defaults[rnd_sett_defaults.current].max.subj_polygon_count) rnd_sett.subj_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].max.subj_polygon_count;
-    $('#subj_polygon_count').val(rnd_sett.subj_polygon_count);
+    var subjPolygonCount_orig = $('#subj_polygon_count').val();
+    if (!isNaN(subjPolygonCount_orig)) randomSetting.subjPolygonCount = parseFloat(subjPolygonCount_orig);
+    randomSetting.subjPolygonCount = randomSetting.subjPolygonCount + 1;
+    if (randomSetting.subjPolygonCount > randomSettings[randomSettings.current].max.subjPolygonCount) randomSetting.subjPolygonCount = randomSettings[randomSettings.current].max.subjPolygonCount;
+    $('#subj_polygon_count').val(randomSetting.subjPolygonCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
   });
   $('#subj_point_count_minus').hold(function () {
-    var subj_point_count_orig = $('#subj_point_count').val();
-    if (!isNaN(subj_point_count_orig)) rnd_sett.subj_point_count = parseFloat(subj_point_count_orig);
-    rnd_sett.subj_point_count = rnd_sett.subj_point_count - 1;
-    if (rnd_sett.subj_point_count < rnd_sett_defaults[rnd_sett_defaults.current].min.subj_point_count) rnd_sett.subj_point_count = rnd_sett_defaults[rnd_sett_defaults.current].min.subj_point_count;
-    $('#subj_point_count').val(rnd_sett.subj_point_count);
+    var subjPointCount_orig = $('#subj_point_count').val();
+    if (!isNaN(subjPointCount_orig)) randomSetting.subjPointCount = parseFloat(subjPointCount_orig);
+    randomSetting.subjPointCount = randomSetting.subjPointCount - 1;
+    if (randomSetting.subjPointCount < randomSettings[randomSettings.current].min.subjPointCount) randomSetting.subjPointCount = randomSettings[randomSettings.current].min.subjPointCount;
+    $('#subj_point_count').val(randomSetting.subjPointCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
   });
   $('#subj_point_count').change(function () {
-    var subj_point_count_orig = $('#subj_point_count').val();
-    if (!isNaN(subj_point_count_orig)) rnd_sett.subj_point_count = parseFloat(subj_point_count_orig);
-    if (rnd_sett.subj_point_count < rnd_sett_defaults[rnd_sett_defaults.current].min.subj_point_count) rnd_sett.subj_point_count = rnd_sett_defaults[rnd_sett_defaults.current].min.subj_point_count;
-    if (rnd_sett.subj_point_count > rnd_sett_defaults[rnd_sett_defaults.current].max.subj_point_count) rnd_sett.subj_point_count = rnd_sett_defaults[rnd_sett_defaults.current].max.subj_point_count;
-    $('#subj_point_count').val(rnd_sett.subj_point_count);
+    var subjPointCount_orig = $('#subj_point_count').val();
+    if (!isNaN(subjPointCount_orig)) randomSetting.subjPointCount = parseFloat(subjPointCount_orig);
+    if (randomSetting.subjPointCount < randomSettings[randomSettings.current].min.subjPointCount) randomSetting.subjPointCount = randomSettings[randomSettings.current].min.subjPointCount;
+    if (randomSetting.subjPointCount > randomSettings[randomSettings.current].max.subjPointCount) randomSetting.subjPointCount = randomSettings[randomSettings.current].max.subjPointCount;
+    $('#subj_point_count').val(randomSetting.subjPointCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
   });
   $('#subj_point_count_plus').hold(function () {
-    var subj_point_count_orig = $('#subj_point_count').val();
-    if (!isNaN(subj_point_count_orig)) rnd_sett.subj_point_count = parseFloat(subj_point_count_orig);
-    rnd_sett.subj_point_count = rnd_sett.subj_point_count + 1;
-    if (rnd_sett.subj_point_count > rnd_sett_defaults[rnd_sett_defaults.current].max.subj_point_count) rnd_sett.subj_point_count = rnd_sett_defaults[rnd_sett_defaults.current].max.subj_point_count;
-    $('#subj_point_count').val(rnd_sett.subj_point_count);
+    var subjPointCount_orig = $('#subj_point_count').val();
+    if (!isNaN(subjPointCount_orig)) randomSetting.subjPointCount = parseFloat(subjPointCount_orig);
+    randomSetting.subjPointCount = randomSetting.subjPointCount + 1;
+    if (randomSetting.subjPointCount > randomSettings[randomSettings.current].max.subjPointCount) randomSetting.subjPointCount = randomSettings[randomSettings.current].max.subjPointCount;
+    $('#subj_point_count').val(randomSetting.subjPointCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
   });
   $('#clip_polygon_count_minus').hold(function () {
-    var clip_polygon_count_orig = $('#clip_polygon_count').val();
-    if (!isNaN(clip_polygon_count_orig)) rnd_sett.clip_polygon_count = parseFloat(clip_polygon_count_orig);
-    rnd_sett.clip_polygon_count = rnd_sett.clip_polygon_count - 1;
-    if (rnd_sett.clip_polygon_count < rnd_sett_defaults[rnd_sett_defaults.current].min.clip_polygon_count) rnd_sett.clip_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].min.clip_polygon_count;
-    $('#clip_polygon_count').val(rnd_sett.clip_polygon_count);
+    var clipPolygonCount_orig = $('#clip_polygon_count').val();
+    if (!isNaN(clipPolygonCount_orig)) randomSetting.clipPolygonCount = parseFloat(clipPolygonCount_orig);
+    randomSetting.clipPolygonCount = randomSetting.clipPolygonCount - 1;
+    if (randomSetting.clipPolygonCount < randomSettings[randomSettings.current].min.clipPolygonCount) randomSetting.clipPolygonCount = randomSettings[randomSettings.current].min.clipPolygonCount;
+    $('#clip_polygon_count').val(randomSetting.clipPolygonCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
   });
   $('#clip_polygon_count').change(function () {
-    var clip_polygon_count_orig = $('#clip_polygon_count').val();
-    if (!isNaN(clip_polygon_count_orig)) rnd_sett.clip_polygon_count = parseFloat(clip_polygon_count_orig);
-    if (rnd_sett.clip_polygon_count < rnd_sett_defaults[rnd_sett_defaults.current].min.clip_polygon_count) rnd_sett.clip_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].min.clip_polygon_count;
-    if (rnd_sett.clip_polygon_count > rnd_sett_defaults[rnd_sett_defaults.current].max.clip_polygon_count) rnd_sett.clip_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].max.clip_polygon_count;
-    $('#clip_polygon_count').val(rnd_sett.clip_polygon_count);
+    var clipPolygonCount_orig = $('#clip_polygon_count').val();
+    if (!isNaN(clipPolygonCount_orig)) randomSetting.clipPolygonCount = parseFloat(clipPolygonCount_orig);
+    if (randomSetting.clipPolygonCount < randomSettings[randomSettings.current].min.clipPolygonCount) randomSetting.clipPolygonCount = randomSettings[randomSettings.current].min.clipPolygonCount;
+    if (randomSetting.clipPolygonCount > randomSettings[randomSettings.current].max.clipPolygonCount) randomSetting.clipPolygonCount = randomSettings[randomSettings.current].max.clipPolygonCount;
+    $('#clip_polygon_count').val(randomSetting.clipPolygonCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
   });
   $('#clip_polygon_count_plus').hold(function () {
-    var clip_polygon_count_orig = $('#clip_polygon_count').val();
-    if (!isNaN(clip_polygon_count_orig)) rnd_sett.clip_polygon_count = parseFloat(clip_polygon_count_orig);
-    rnd_sett.clip_polygon_count = rnd_sett.clip_polygon_count + 1;
-    if (rnd_sett.clip_polygon_count > rnd_sett_defaults[rnd_sett_defaults.current].max.clip_polygon_count) rnd_sett.clip_polygon_count = rnd_sett_defaults[rnd_sett_defaults.current].max.clip_polygon_count;
-    $('#clip_polygon_count').val(rnd_sett.clip_polygon_count);
+    var clipPolygonCount_orig = $('#clip_polygon_count').val();
+    if (!isNaN(clipPolygonCount_orig)) randomSetting.clipPolygonCount = parseFloat(clipPolygonCount_orig);
+    randomSetting.clipPolygonCount = randomSetting.clipPolygonCount + 1;
+    if (randomSetting.clipPolygonCount > randomSettings[randomSettings.current].max.clipPolygonCount) randomSetting.clipPolygonCount = randomSettings[randomSettings.current].max.clipPolygonCount;
+    $('#clip_polygon_count').val(randomSetting.clipPolygonCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
   });
   $('#clip_point_count_minus').hold(function () {
-    var clip_point_count_orig = $('#clip_point_count').val();
-    if (!isNaN(clip_point_count_orig)) rnd_sett.clip_point_count = parseFloat(clip_point_count_orig);
-    rnd_sett.clip_point_count = rnd_sett.clip_point_count - 1;
-    if (rnd_sett.clip_point_count < rnd_sett_defaults[rnd_sett_defaults.current].min.clip_point_count) rnd_sett.clip_point_count = rnd_sett_defaults[rnd_sett_defaults.current].min.clip_point_count;
-    $('#clip_point_count').val(rnd_sett.clip_point_count);
+    var clipPointCount_orig = $('#clip_point_count').val();
+    if (!isNaN(clipPointCount_orig)) randomSetting.clipPointCount = parseFloat(clipPointCount_orig);
+    randomSetting.clipPointCount = randomSetting.clipPointCount - 1;
+    if (randomSetting.clipPointCount < randomSettings[randomSettings.current].min.clipPointCount) randomSetting.clipPointCount = randomSettings[randomSettings.current].min.clipPointCount;
+    $('#clip_point_count').val(randomSetting.clipPointCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
   });
   $('#clip_point_count').change(function () {
-    var clip_point_count_orig = $('#clip_point_count').val();
-    if (!isNaN(clip_point_count_orig)) rnd_sett.clip_point_count = parseFloat(clip_point_count_orig);
-    if (rnd_sett.clip_point_count < rnd_sett_defaults[rnd_sett_defaults.current].min.clip_point_count) rnd_sett.clip_point_count = rnd_sett_defaults[rnd_sett_defaults.current].min.clip_point_count;
-    if (rnd_sett.clip_point_count > rnd_sett_defaults[rnd_sett_defaults.current].max.clip_point_count) rnd_sett.clip_point_count = rnd_sett_defaults[rnd_sett_defaults.current].max.clip_point_count;
-    $('#clip_point_count').val(rnd_sett.clip_point_count);
+    var clipPointCount_orig = $('#clip_point_count').val();
+    if (!isNaN(clipPointCount_orig)) randomSetting.clipPointCount = parseFloat(clipPointCount_orig);
+    if (randomSetting.clipPointCount < randomSettings[randomSettings.current].min.clipPointCount) randomSetting.clipPointCount = randomSettings[randomSettings.current].min.clipPointCount;
+    if (randomSetting.clipPointCount > randomSettings[randomSettings.current].max.clipPointCount) randomSetting.clipPointCount = randomSettings[randomSettings.current].max.clipPointCount;
+    $('#clip_point_count').val(randomSetting.clipPointCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
   });
   $('#clip_point_count_plus').hold(function () {
-    var clip_point_count_orig = $('#clip_point_count').val();
-    if (!isNaN(clip_point_count_orig)) rnd_sett.clip_point_count = parseFloat(clip_point_count_orig);
-    rnd_sett.clip_point_count = rnd_sett.clip_point_count + 1;
-    if (rnd_sett.clip_point_count > rnd_sett_defaults[rnd_sett_defaults.current].max.clip_point_count) rnd_sett.clip_point_count = rnd_sett_defaults[rnd_sett_defaults.current].max.clip_point_count;
-    $('#clip_point_count').val(rnd_sett.clip_point_count);
+    var clipPointCount_orig = $('#clip_point_count').val();
+    if (!isNaN(clipPointCount_orig)) randomSetting.clipPointCount = parseFloat(clipPointCount_orig);
+    randomSetting.clipPointCount = randomSetting.clipPointCount + 1;
+    if (randomSetting.clipPointCount > randomSettings[randomSettings.current].max.clipPointCount) randomSetting.clipPointCount = randomSettings[randomSettings.current].max.clipPointCount;
+    $('#clip_point_count').val(randomSetting.clipPointCount);
     subj.random = get_random_polys("subj");
     clip.random = get_random_polys("clip");
     make_clip();
@@ -1825,11 +1825,11 @@ function main() {
                       clip_fillType: fillTypeLocal, //0, 1
                       clipType: (clipTypeLocal === 0) ? "" : clipTypeLocal - 1, // "",0,1,2,3
                       scale: scaleLocal, // 100, 100 000, 1000 000 000
-                      rnd_sett: {
-                        clip_polygon_count: 4,
-                        clip_point_count: 4,
-                        subj_polygon_count: 4,
-                        subj_point_count: 4
+                      randomSetting: {
+                        clipPolygonCount: 4,
+                        clipPointCount: 4,
+                        subjPolygonCount: 4,
+                        subjPointCount: 4
                       }
                     };
                     timeout_time += timeout_time_addition;
@@ -1857,10 +1857,10 @@ function main() {
   $('input[name="clip_fillType"][value="' + clip.fillType + '"]').prop('checked', true);
   $('input[name="polygons"][value="' + defaultPolygons + '"]').prop('checked', true).change();
   $('input[name="offsettable_poly"][value="' + offsettablePoly + '"]').prop('checked', true);
-  $('#subj_polygon_count').val(rnd_sett.subj_polygon_count);
-  $('#subj_point_count').val(rnd_sett.subj_point_count);
-  $('#clip_polygon_count').val(rnd_sett.clip_polygon_count);
-  $('#clip_point_count').val(rnd_sett.clip_point_count);
+  $('#subj_polygon_count').val(randomSetting.subjPolygonCount);
+  $('#subj_point_count').val(randomSetting.subjPointCount);
+  $('#clip_polygon_count').val(randomSetting.clipPolygonCount);
+  $('#clip_point_count').val(randomSetting.clipPointCount);
   $('#bevel').prop('checked', bevel);
   $('#explorer_enabled').prop('checked', explorerEnabled);
   make_clip();
