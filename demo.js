@@ -892,14 +892,14 @@ function show_svg_source_click(non_click) {
 function benchmark2(i) {
   var start_time = new Date().getTime();
   var obj = bench_glob[i];
-  $("#clean").removeAttr('checked');
   clean = false;
-  $("#lighten").removeAttr('checked');
+  $("#clean").prop('checked', clean);
   lighten = false;
+  $("#lighten").prop('checked', lighten);
   joinType = obj.joinType;
-  $('input[type="radio"][name="joinType"][value="' + joinType + '"]').attr('checked', 'checked');
+  $('input[type="radio"][name="joinType"][value="' + joinType + '"]').prop('checked', true);
   offsettable_poly = obj.offsettable_poly;
-  $('input[type="radio"][name="offsettable_poly"][value="' + offsettable_poly + '"]').attr('checked', 'checked');
+  $('input[type="radio"][name="offsettable_poly"][value="' + offsettable_poly + '"]').prop('checked', true);
   delta = obj.delta;
   $('#delta').val(delta);
   miterLimit = obj.miterLimit;
@@ -909,15 +909,15 @@ function benchmark2(i) {
   simplify = obj.simplify;
   $('#simplify').prop('checked', simplify);
   subject_fillType = obj.subject_fillType;
-  $("input[name='subject_fillType'][value='" + subject_fillType + "']").attr("checked", "checked");
+  $("input[name='subject_fillType'][value='" + subject_fillType + "']").prop('checked', true);
   clip_fillType = obj.clip_fillType;
-  $("input[name='clip_fillType'][value='" + clip_fillType + "']").attr("checked", "checked");
+  $("input[name='clip_fillType'][value='" + clip_fillType + "']").prop('checked', true);
   clipType = obj.clipType;
-  $("input[name='clipType'][value='" + clipType + "']").attr("checked", "checked");
+  $("input[name='clipType'][value='" + clipType + "']").prop('checked', true);
   scale = obj.scale;
   $('#scale').val(scale);
   if (obj.polygon_id === 4 || obj.polygon_id === 5) rnd_sett = obj.rnd_sett;
-  $('input[type="radio"][name="polygons"][value="' + obj.polygon_id + '"]').attr('checked', 'checked').trigger("change");
+  $('input[type="radio"][name="polygons"][value="' + obj.polygon_id + '"]').prop('checked', true).trigger("change");
   obj = null;
   last_completed_bench = i;
   var end_time = new Date().getTime();
@@ -974,7 +974,7 @@ function benchmark2(i) {
       ClipperLib.MaxSteps = ClipperLib_MaxSteps_original;
       $("#" + clicked_benchmark_button_id).html($("#" + clicked_benchmark_button_id).html().replace("Stop", "Run"));
       $("#" + clicked_benchmark_button_id).attr("title", $("#" + clicked_benchmark_button_id).attr("title").replace("Stop", "Execute"));
-      $("button,input,select").removeAttr('disabled');
+      $("button,input,select").prop('disabled', false);
       $('#sub_poly_links_update').trigger("change");
     }
   }
@@ -1484,10 +1484,10 @@ function main() {
   // Clip type (operation)
   $("input[name='clipType']").change(function () {
     if ($('input[type="radio"][name="clipType"][value=""]').is(":checked")) {
-      $('input[type="radio"][name="offsettable_poly"][value="1"]').attr('checked', 'checked');
+      $('input[type="radio"][name="offsettable_poly"][value="1"]').prop('checked', true);
       offsettable_poly = 1;
     } else {
-      $("#offsettable_poly3").attr('checked', 'checked');
+      $("#offsettable_poly3").prop('checked', true);
       offsettable_poly = 3;
     }
     clipType = $('input[type="radio"][name="clipType"]:checked').val();
@@ -1537,7 +1537,7 @@ function main() {
     // When offsettable poly is set to Subject or Clip, then boolean operations are not done.
     // To show this to user, set clipType to "No"
     if (offsettable_poly === 1 || offsettable_poly === 2) {
-      $('input[type="radio"][name="clipType"][value=""]').attr('checked', 'checked');
+      $('input[type="radio"][name="clipType"][value=""]').prop('checked', true);
       clipType = "";
     }
     make_clip();
@@ -1777,7 +1777,7 @@ function main() {
       return;
     }
     // disable buttons that are not allowed to click when running
-    $("button,input,select").attr('disabled', 'disabled');
+    $("button,input,select").prop('disabled', true);
     $("#benchmark1,#benchmark2,#benchmark1b,#benchmark2b").each(function () {
       $(this).attr('disabled', ($(this).attr("id") != clicked_benchmark_button_id));
     });
@@ -1871,11 +1871,11 @@ function main() {
   $("#cleandelta").val(cleandelta_default);
   $('#lighten').prop('checked', lighten);
   $('#lighten_distance').val(lighten_distance_default);
-  $('input[type="radio"][name="subject_fillType"][value="' + subject_fillType + '"]').attr('checked', 'checked');
-  $('input[type="radio"][name="clip_fillType"][value="' + clip_fillType + '"]').attr('checked', 'checked');
-  $('input[type="radio"][name="polygons"][value="' + polygons_default + '"]').attr('checked', 'checked').change();
+  $('input[type="radio"][name="subject_fillType"][value="' + subject_fillType + '"]').prop('checked', true);
+  $('input[type="radio"][name="clip_fillType"][value="' + clip_fillType + '"]').prop('checked', true);
+  $('input[type="radio"][name="polygons"][value="' + polygons_default + '"]').prop('checked', true).change();
   rnd_sett = (parseInt(polygons_default, 10) === 4) ? rnd_sett_defaults.rects['default'] : rnd_sett_defaults.norm['default'];
-  $('input[type="radio"][name="offsettable_poly"][value="' + offsettable_poly + '"]').attr('checked', 'checked');
+  $('input[type="radio"][name="offsettable_poly"][value="' + offsettable_poly + '"]').prop('checked', true);
   $('#subj_polygon_count').val(rnd_sett.subj_polygon_count);
   $('#subj_point_count').val(rnd_sett.subj_point_count);
   $('#clip_polygon_count').val(rnd_sett.clip_polygon_count);
