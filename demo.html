@@ -195,11 +195,11 @@
               <tr>
                 <td style="padding-right:6px;">
                   <b><span style="display:block;padding-bottom:3px">Polygon</span></b>
-                  <label><input type="radio" name="offsettable_poly" value="1">Subject</label>
+                  <label><input type="radio" name="offsettable_poly" value="subject">Subject</label>
                   <br>
-                  <label><input type="radio" name="offsettable_poly" value="2">Clip</label>
+                  <label><input type="radio" name="offsettable_poly" value="clip">Clip</label>
                   <br>
-                  <label><input type="radio" id="offsettable_poly3" name="offsettable_poly" value="3" checked>Solution</label>
+                  <label><input type="radio" name="offsettable_poly" value="solution" checked>Solution</label>
                 </td>
                 <td style="padding-right:6px;">
                   <b><span style="display:block;padding-bottom:3px">JoinType</span></b>
@@ -258,7 +258,7 @@
             </label>&nbsp;&nbsp;
             <label>
               <b>Explorer</b>
-              <input type="checkbox" id="sub_poly_links_update" value="1" title="Enable/disable Polygon Explorer">
+              <input type="checkbox" id="explorer_enabled" title="Enable/disable Polygon Explorer">
             </label>
             <br>
             <button id="benchmark1" title="Execute Normal benchmark">Run NB</button>
@@ -282,9 +282,9 @@
                         </td>
                         <td style="padding:0px;vertical-align:middle">
                           <select id="output_format" title="Output format" style="width:73px;margin-left:5px">
-                            <option value="0">Clipper</option>
-                            <option value="1">Plain</option>
-                            <option value="2">SVG</option>
+                            <option>Clipper</option>
+                            <option>Plain</option>
+                            <option>SVG</option>
                           </select>
                         </td>
                       </tr>
