@@ -39,8 +39,8 @@ var dontRoundAndScale = false;
 
 var bevel = 0;
 var explorerEnabled = true;
-
-var ss, cc, sss, cpr;
+var clipper = new ClipperLib.Clipper();
+var ss, cc, sss;
 var offsetResult;
 var SVG = {}, p, p1, p2, p3;
 var scaledPaths = [];
@@ -181,11 +181,11 @@ function normalize_clipper_poly(polystr) {
 
   // if not array of arrays, convert to array of arrays
   if (_.isArray(poly) && poly.length > 0 && !_.isArray(poly[0])) poly = [poly];
-  var pp, n = [[]], m, pm, x, y;
+  var pp, x, y;
   np = [[]];
-  for (i = 0, m = poly.length; i < m; i++) {
+  for (i = 0; i < poly.length; i++) {
     np[i] = [];
-    for (j = 0, pm = poly[i].length; j < pm; j++) {
+    for (j = 0; j < poly[i].length; j++) {
       pp = {};
       y = null;
       x = null;
@@ -262,47 +262,47 @@ function svgpath_to_clipper_polygons(d) {
   return polygons_arr;
 }
 
-function format_output(polystr) {
-  if (typeof polystr !== "string" || polystr === "") return "";
-  var poly;
+function format_output(polygonString) {
+  if (typeof polygonString !== "string" || polygonString === "") return "";
+  var polygon;
   try {
-    poly = JSON.parse(polystr);
+    polygon = JSON.parse(polygonString);
   } catch (err) {
     console.warn("Unable to parse polygon for output", err.message);
     return "";
   }
-  var i, j, n, newpolystr = "";
+  var i, j, n, result = "";
   if (outputFormat === 'Clipper') {
-    return polystr;
+    return polygonString;
   }
-  var m = poly.length;
+  var m = polygon.length;
   if (outputFormat === 'Plain') {
     for (i = 0; i < m; i++) {
-      newpolystr += "[";
-      n = poly[i].length;
+      result += "[";
+      n = polygon[i].length;
       for (j = 0; j < n; j++) {
-        newpolystr += poly[i][j].X + "," + poly[i][j].Y;
-        if (j !== n - 1) newpolystr += ", ";
+        result += polygon[i][j].X + "," + polygon[i][j].Y;
+        if (j !== n - 1) result += ", ";
       }
-      newpolystr += "]";
-      if (i !== m - 1) newpolystr += ",";
+      result += "]";
+      if (i !== m - 1) result += ",";
     }
-    return "[" + newpolystr + "]";
+    return "[" + result + "]";
   }
   if (outputFormat === 'SVG') {
     for (i = 0; i < m; i++) {
-      n = poly[i].length;
+      n = polygon[i].length;
       for (j = 0; j < n; j++) {
-        if (j===0) newpolystr += "M";
-        else newpolystr += "L";
-        newpolystr += poly[i][j].X + "," + poly[i][j].Y;
-        if (j !== n - 1) newpolystr += " ";
+        if (j===0) result += "M";
+        else result += "L";
+        result += polygon[i][j].X + "," + polygon[i][j].Y;
+        if (j !== n - 1) result += " ";
       }
-      newpolystr += "Z";
-      if (i !== m - 1) newpolystr += " ";
+      result += "Z";
+      if (i !== m - 1) result += " ";
     }
-    if (newpolystr.trim() === "Z") newpolystr = "";
-    return newpolystr;
+    if (result.trim() === "Z") result = "";
+    return result;
   }
 }
 
@@ -1582,8 +1582,7 @@ function main() {
     scale = scale - scaleAddition;
     scale = Math.round(scale / scaleAddition) * scaleAddition;
     if (scale <= 0) scale = 1.0;
-    $('#scale').val(scale.toFixed(1));
-    $('#scale').trigger('change');
+    $('#scale').val(scale.toFixed(1)).trigger('change');
   });
   $('#scale').change(function () {
     if (this.value && !isNaN(this.value) && parseInt(this.value, 10).toString() !== "0") {
@@ -1598,8 +1597,7 @@ function main() {
     if (scale_orig && !isNaN(scale_orig) && parseInt(scale_orig, 10).toString() !== "0") scale = parseFloat(scale_orig);
     scale = scale + scaleAddition;
     scale = Math.round(scale / scaleAddition) * scaleAddition;
-    $('#scale').val(scale.toFixed(1));
-    $('#scale').trigger('change');
+    $('#scale').val(scale.toFixed(1)).trigger('change');
   });
 
   $('#subj_polygon_count_minus').hold(function () {
@@ -1896,13 +1894,13 @@ function make_offset() {
     // Simplifying is only needed when offsetting original polys, because results of boolean operations are already simplified.
     // Note! if clip polygon is the same as subject polygon then it seems that simplifying is needed also for result of boolean operation (ie. solution).
     if (offsettablePoly === 'subject') {
-      off_poly = cpr.SimplifyPolygons(off_poly, subj.fillType);
+      off_poly = clipper.SimplifyPolygons(off_poly, subj.fillType);
     }
     if (offsettablePoly === 'clip') {
-      off_poly = cpr.SimplifyPolygons(off_poly, clip.fillType);
+      off_poly = clipper.SimplifyPolygons(off_poly, clip.fillType);
     }
     if (offsettablePoly === 'solution') {
-      off_poly = cpr.SimplifyPolygons(off_poly, clip.fillType);
+      off_poly = clipper.SimplifyPolygons(off_poly, clip.fillType);
       if (subj.fillType !== clip.fillType) {
         console.log("Subject filltype and Clip filltype are different. We used Clip filltype in SimplifyPolygons().");
       }
@@ -1911,11 +1909,11 @@ function make_offset() {
 
   // Actual offset operation
   if (delta) {
-    cpr.Clear();
+    clipper.Clear();
     var param_delta = roundTo(delta * scale, 3);
     var param_miterLimit = roundTo(miterLimit, 3);
     var B0 = bench.start("Offset", "Offset(" + param_delta + ", " + joinType + ", " + param_miterLimit + ", " + autoFix + ")");
-    offsetResult = cpr.OffsetPolygons(off_poly, param_delta, joinType, param_miterLimit, autoFix);
+    offsetResult = clipper.OffsetPolygons(off_poly, param_delta, joinType, param_miterLimit, autoFix);
     bench.end(B0);
   } else {
     offsetResult = off_poly;
@@ -1926,7 +1924,7 @@ function make_offset() {
     offsetResult = ClipperLib.Lighten(offsetResult, lightenDistance * scale);
     // Because lighten may produce self-intersections, must Simplify to be sure that result is free of them, but only if user wants
     if (simplify) {
-      offsetResult = cpr.SimplifyPolygons(offsetResult, subj.fillType);
+      offsetResult = clipper.SimplifyPolygons(offsetResult, subj.fillType);
     }
   }
 
@@ -1957,18 +1955,14 @@ function make_offset() {
 
 function make_clip() {
   ClipperLib.biginteger_used = null;
-  if (!cpr) {
-    cpr = new ClipperLib.Clipper();
-  } else {
-    cpr.Clear();
-  }
+  clipper.Clear();
   get_polys();
   if (clipType !== "" && offsettablePoly === 'solution') {
-    cpr.AddPolygons(ss, ClipperLib.PolyType.ptSubject);
-    cpr.AddPolygons(cc, ClipperLib.PolyType.ptClip);
+    clipper.AddPolygons(ss, ClipperLib.PolyType.ptSubject);
+    clipper.AddPolygons(cc, ClipperLib.PolyType.ptClip);
     sss = new ClipperLib.Polygons();
     var B1 = bench.start("Boolean", "Execute(" + clipType + ", sss, " + subj.fillType + ", " + clip.fillType + ")");
-    cpr.Execute(clipType, sss, subj.fillType, clip.fillType);
+    clipper.Execute(clipType, sss, subj.fillType, clip.fillType);
     bench.end(B1);
   }
   make_offset();
