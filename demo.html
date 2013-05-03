@@ -7,7 +7,8 @@
     <script src="clipper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/1.2.0/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/1.2.1/lodash.min.js"></script>
+    <script src="vendor/lodash.math.js"></script>
     <script src="vendor/rgb-color.js"></script>
     <script src="vendor/jquery.repeated-click.js"></script>
     <script src="vendor/jquery.total-storage.js"></script>
@@ -95,7 +96,6 @@
               <button id="removeall_custom_polygon" title="Remove all custom polygon sets">Del all</button>
               <button id="help_custom_polygon" title="Get help about custom polygons">?</button>
             </div>
-            <div id="custom_poly_message_box_green"></div>
           </fieldset>
           <fieldset id="random_polygons_fieldset">
             <legend>Random polygon settings</legend>
@@ -295,8 +295,7 @@
                   <th style="white-space:nowrap; width:31px;" title="Polygon type">Type</th>
                   <th style="white-space:nowrap; width:35px;" title="Count of subpolygons">Polys</th>
                   <th style="white-space:nowrap; width:40px;" title="Count of points in all sub polygons. Hover numbers below to see the whole multi-polygon highlighted. Click them to see coordinates as strings and the area of multi-polygon (sum of areas of sub polygons).">Points</th>
-                  <th style="white-space:nowrap;" title="Count of points in sub polygons. Hover numbers below to see sub polygons highlighted. Click to see coordinates as strings and the area of sub polygon."
-                    >Points in subpolygons</th>
+                  <th style="white-space:nowrap;" title="Count of points in sub polygons. Hover numbers below to see sub polygons highlighted. Click to see coordinates as strings and the area of sub polygon.">Points in subpolygons</th>
                 </tr>
                 <tr>
                   <td id="subject_box" title="Subject">
@@ -368,9 +367,6 @@
               <div id="benchmark_multiple_table_cont"></div>
             </div>
           </fieldset>
-        </td>
-        <td id="td3" style="vertical-align:top;">
-          <div id="svg_source_container2"></div>
         </td>
       </tr>
     </table>
