@@ -111,15 +111,10 @@ var randomSettings = {
 var randomSetting = defaultPolygons === 4 ? randomSettings.rect['default'] : randomSettings.norm['default'];
 
 window.onload = function () {
-  if (typeof jQuery === 'undefined') alert('Failed to load jQuery.');
-  else if (typeof Raphael === 'undefined') alert('Failed to load Raphael.');
-  else if (typeof ClipperLib === 'undefined') alert('Failed to load ClipperLib.');
-  else {
-    ClipperLibOriginalMaxSteps = ClipperLib.MaxSteps;
-    bench = new Benchmark('bench');
-    p = SVG.create();
-    main();
-  }
+  ClipperLibOriginalMaxSteps = ClipperLib.MaxSteps;
+  bench = new Benchmark('bench');
+  p = SVG.create();
+  main();
 };
 
 /* Input can be JSON-stringified version of the following:
@@ -131,22 +126,22 @@ window.onload = function () {
  - SVG path string with commands MLVHZ and mlvhz
  Returns normalized Clipper Polygons object stringified or false in failure
 */
-function normalizeClipperPoly(polystr) {
-  if (typeof polystr !== 'string') return false;
-  polystr = polystr.trim();
+function normalizeClipperPoly(polygonString) {
+  if (typeof polygonString !== 'string') return false;
+  polygonString = polygonString.trim();
   var np, poly;
-  if (polystr.substr(0, 1).toUpperCase() === 'M') {
-    np = SVGPathToClipperPolygons(polystr);
+  if (polygonString.substr(0, 1).toUpperCase() === 'M') {
+    np = SVGPathToClipperPolygons(polygonString);
     if (np === false) {
       return !!console.warn('Unable to parse SVG path string');
     }
     return JSON.stringify(np);
   }
-  polystr = polystr.replace(/[\s,]+/g, ',');
-  if (polystr.substr(0, 1) !== '[') polystr = '[' + polystr;
-  if (polystr.substr(-1, 1) !== ']') polystr = polystr + ']';
+  polygonString = polygonString.replace(/[\s,]+/g, ',');
+  if (polygonString.substr(0, 1) !== '[') polygonString = '[' + polygonString;
+  if (polygonString.substr(-1, 1) !== ']') polygonString = polygonString + ']';
   try {
-    poly = JSON.parse(polystr);
+    poly = JSON.parse(polygonString);
   } catch (err) {
     return !!console.warn('Unable to parse polygon string');
   }
@@ -219,9 +214,10 @@ function SVGPathToClipperPolygons(d) {
       x = 0,
       y = 0,
       pt = {},
-      subpath_start = {};
-    subpath_start.x = '';
-    subpath_start.y = '';
+      subPathStart = {
+        x: '',
+        y: ''
+      };
     for (var i = 0; i < arr.length; i++) {
       letter = arr[i][0].toUpperCase();
       if (letter !== 'M' && letter !== 'L' && letter !== 'Z') continue;
@@ -246,13 +242,13 @@ function SVGPathToClipperPolygons(d) {
           }
         }
       }
-      if ((letter !== 'Z' && subpath_start.x === '') || letter === 'M') {
-        subpath_start.x = x;
-        subpath_start.y = y;
+      if ((letter !== 'Z' && subPathStart.x === '') || letter === 'M') {
+        subPathStart.x = x;
+        subPathStart.y = y;
       }
       if (letter === 'Z') {
-        x = subpath_start.x;
-        y = subpath_start.y;
+        x = subPathStart.x;
+        y = subPathStart.y;
       }
     }
     polygons_arr.push(polygon_arr);
@@ -377,15 +373,14 @@ function get_glyph_and_grid() {
 }
 
 function get_custom_poly() {
-  var selected_value = $('#custom_polygons_select').val();
+  var value = $('#custom_polygons_select').val();
   var arr = $.totalStorage('custom_polygons');
-  if (selected_value) {
+  if (value) {
     return {
-      "ss": deserialize_clipper_poly(arr[selected_value].subj),
-      "cc": deserialize_clipper_poly(arr[selected_value].clip)
+      "ss": deserialize_clipper_poly(arr[value].subj),
+      "cc": deserialize_clipper_poly(arr[value].clip)
     };
   }
-  //else return { "ss": '[[{"X":0,"Y":0},{"X":1,"Y":1}]]', "cc": '[[{"X":0,"Y":0},{"X":1,"Y":1}]]' };
   return {
     "ss": deserialize_clipper_poly(defaultCustomSubjectPolygon),
     "cc": deserialize_clipper_poly(defaultCustomClipPolygon)
@@ -475,9 +470,9 @@ function round(a) {
   return Math.floor(a * scale);
 }
 
-function deserialize_clipper_poly(polystr) {
+function deserialize_clipper_poly(polygonString) {
   lsk++;
-  var poly = JSON.parse(polystr);
+  var poly = JSON.parse(polygonString);
   var i, j, pp, n = [[]];
   var np = new ClipperLib.Polygons();
   for (i = 0; i < poly.length; i++) {
@@ -743,29 +738,28 @@ $('.polygon_explorer').on({
 }, '.subpolylinks');
 
 function setDefaultCustomPolygons() {
-  var def_obj = {
+  var arr = $.totalStorage('custom_polygons');
+  if (typeof arr === 'undefined' || arr === null || !_.isArray(arr) || arr.length === 0) arr = [];
+  arr[0] = {
     subj: defaultCustomSubjectPolygon,
     clip: defaultCustomClipPolygon
   };
-  var arr = $.totalStorage('custom_polygons');
-  if (typeof arr === 'undefined' || arr === null || !_.isArray(arr) || arr.length === 0) arr = [];
-  arr[0] = def_obj;
   $.totalStorage('custom_polygons', arr);
 }
 
 function updateCustomPolygonsSelect() {
   var arr = $.totalStorage('custom_polygons');
-  var selected_value = _.parseInt($('#custom_polygons_select').val()) || 0;
+  var value = _.parseInt($('#custom_polygons_select').val()) || 0;
   $('#custom_polygons_select option').remove();
-  var i, arr_length = (_.isArray(arr)) ? arr.length : 0;
+  var i, arr_length = _.isArray(arr) ? arr.length : 0;
   if (arr_length > 0)
     for (i = 0; i < arr_length; i++) {
-      if (arr[i] !== null) $('#custom_polygons_select').append('<option ' + (i === selected_value ? 'selected' : '') + ' value="' + i + '">Poly ' + i + '</option>');
+      if (arr[i] !== null) $('#custom_polygons_select').append('<option ' + (i === value ? 'selected' : '') + ' value="' + i + '">Poly ' + i + '</option>');
     }
   if ($('#custom_polygons_select option').length === 0) setDefaultCustomPolygons();
   // If previously selected value is removed, select the next one
-  if (arr_length > 0 && arr[selected_value] === null)
-    for (i = _.parseInt(selected_value); i < arr_length; i++) {
+  if (arr_length > 0 && arr[value] === null)
+    for (i = _.parseInt(value); i < arr_length; i++) {
       if (arr[i] !== null) {
         $('#custom_polygons_select').val(i);
         break;
@@ -777,8 +771,8 @@ function updateCustomPolygonsSelect() {
 function svg_source_enlarge() {
   var source = $('#svg_source_textarea').val().replace(/ id=\"/g, ' id="_');
   $('#enlarged_svg').html(source);
-  var original_height = $('#_p').attr('height');
-  var original_width = $('#_p').attr('width');
+  var originalHeight = $('#_p').attr('height');
+  var originalWidth = $('#_p').attr('width');
   // get bbox of all children of svg
   $('body').append('<div id="dummy" style="display:block;visibility:hidden"><svg><g id="g123"></g></svg></div>');
   $('#g123').append($('#_p').children().clone());
@@ -792,8 +786,8 @@ function svg_source_enlarge() {
   $('#_p').attr('viewBox', g_x + ' ' + g_y + ' ' + g_width + ' ' + g_height);
   $('#enlarged_svg').html($('#enlarged_svg').html()).show();
 
-  $('#_p').attr('width', windowWidth).attr('height', _.parseInt((windowWidth / original_width) * original_height));
-  $('#_p1, #_p2, #_p3').css('stroke-width', 0.8 * (original_width / windowWidth));
+  $('#_p').attr('width', windowWidth).attr('height', _.parseInt((windowWidth / originalWidth) * originalHeight));
+  $('#_p1, #_p2, #_p3').css('stroke-width', 0.8 * (originalWidth / windowWidth));
 
   $('#svg_source_textarea').hide();
   $('#svg_source_enlarge_button').html('<button ' + (benchmarkRunning ? 'disabled' : '') + ' class="textarea_hide_buttons" onClick="show_svg_source_f()" title="Show SVG source">Show SVG source</button>');
@@ -825,9 +819,7 @@ function show_svg_source_click(non_click) {
   var svg_source = $('#svgcontainer').html().replace(/\>/g, '>\n');
   $('#svg_source_textarea').val(svg_source);
 }
-// ADDITIONAL SVG WINDOW ENDS
 
-// BENCHMARKING STARTS
 function benchmark2(i) {
   var startTime = new Date().getTime();
   var obj = benchmarkGlob[i];
@@ -856,51 +848,49 @@ function benchmark2(i) {
   scale = obj.scale;
   $('#scale').val(scale);
   if (obj.polygon_id === 4 || obj.polygon_id === 5) randomSetting = obj.randomSetting;
-  $('input[name="polygons"][value="' + obj.polygon_id + '"]').prop('checked', true).trigger("change");
+  $('input[name="polygons"][value="' + obj.polygon_id + '"]').prop('checked', true).trigger('change');
   obj = null;
   lastCompletedBenchmark = i;
   var endTime = new Date().getTime();
   var time = endTime - startTime;
-  benchmarkGlob[i].measured_time = time;
+  benchmarkGlob[i].measuredTime = time;
   benchmarkElapsedTime += time;
-  benchmarkGlob[i].elapsed_time = benchmarkElapsedTime;
+  benchmarkGlob[i].elapsedTime = benchmarkElapsedTime;
   // update next timeouts
   for (var lsk = i + 1; lsk < benchmarkGlob.length; lsk++) {
     clearTimeout(benchmarkGlob[lsk].setTimeout);
-    benchmarkGlob[lsk].setTimeout = setTimeout("benchmark2(" + lsk + ")",
-    benchmarkGlob[lsk].elapsed_time + lsk * benchmarkGlob[lsk].time);
+    benchmarkGlob[lsk].setTimeout = setTimeout('benchmark2(' + lsk + ')', benchmarkGlob[lsk].elapsedTime + lsk * benchmarkGlob[lsk].time);
   }
   var multipleRunsTable;
   var elapsedTime = endTime - bench.list[0].start;
-  var results = Math.floor((i + 1) / benchmarkGlob.length * 100) + " % (";
-  results += (elapsedTime / 1000).toFixed(1) + " s) of ";
-  results += "benchmark " + (repeat + 1) + " / " + repeatTimes + ". ";
-  results += "Remaining: " + Math.floor((((elapsedTime / (i + 1)) * (benchmarkGlob.length - i + 1)) / 1000)) + " s.";
+  var results = Math.floor((i + 1) / benchmarkGlob.length * 100) + ' % (';
+  results += (elapsedTime / 1000).toFixed(1) + ' s) of ';
+  results += 'benchmark ' + (repeat + 1) + ' / ' + repeatTimes + '. ';
+  results += 'Remaining: ' + Math.floor((((elapsedTime / (i + 1)) * (benchmarkGlob.length - i + 1)) / 1000)) + ' s.';
   $('#benchmark_multiple_status').html(results).css('display', 'table-cell');
   if (i === 0) {
     multipleRunsTable = bench.printMultipleRuns();
-    if ($("#benchmark_multiple_table").length) $("#benchmark_multiple_table").remove();
-    $("#benchmark_multiple_table_cont").append(multipleRunsTable);
+    if ($('#benchmark_multiple_table').length) $('#benchmark_multiple_table').remove();
+    $('#benchmark_multiple_table_cont').append(multipleRunsTable);
   } else if (i === benchmarkGlob.length - 1) {
-    if (!$("#benchmark_exports_textarea").length) {
+    if (!$('#benchmark_exports_textarea').length) {
       var textarea = '<div id="benchmark_exports_textarea_div">';
       textarea += '<button class="textarea_hide_buttons" onClick="$(\'#benchmark_exports_textarea_div\').remove()" title="Hide Benchmark exports">Hide</button><br>';
-      textarea += '<textarea id="benchmark_exports_textarea"></textarea>';
-      textarea += '</div>';
-      $("#benchmark_exports_container").append(textarea);
+      textarea += '<textarea id="benchmark_exports_textarea"></textarea></div>';
+      $('#benchmark_exports_container').append(textarea);
     }
-    if (!_.contains(benchmarkExports, "maxPointX")) {
-      benchmarkExports += "bench.maxPointX:" + bench.maxPointX + '\n';
-      benchmarkExports += "bench.maxPointY:" + bench.maxPointY + '\n';
-      benchmarkExports += "bench.minPointX:" + bench.minPointX + '\n';
-      benchmarkExports += "bench.minPointY:" + bench.minPointY + '\n';
+    if (!_.contains(benchmarkExports, 'maxPointX')) {
+      benchmarkExports += 'bench.maxPointX:' + bench.maxPointX + '\n';
+      benchmarkExports += 'bench.maxPointY:' + bench.maxPointY + '\n';
+      benchmarkExports += 'bench.minPointX:' + bench.minPointX + '\n';
+      benchmarkExports += 'bench.minPointY:' + bench.minPointY + '\n';
     }
-    benchmarkExports += bench.totals + ";" + JSON.stringify($.browser) + '\n';
-    $("#benchmark_exports_textarea").val(benchmarkExports);
+    benchmarkExports += bench.totals + ';' + JSON.stringify($.browser) + '\n';
+    $('#benchmark_exports_textarea').val(benchmarkExports);
     bench.totals_arr_multiple.push(bench.totals_arr[0]);
     multipleRunsTable = bench.printMultipleRuns();
-    if ($("#benchmark_multiple_table").length) $("#benchmark_multiple_table").remove();
-    $("#benchmark_multiple_table_cont").append(multipleRunsTable);
+    if ($('#benchmark_multiple_table').length) $('#benchmark_multiple_table').remove();
+    $('#benchmark_multiple_table_cont').append(multipleRunsTable);
     repeat++;
     var clickedBenchmark = $('#' + benchmarkClickedButtonId);
     if (repeat < repeatTimes) {
@@ -953,8 +943,8 @@ Benchmark.prototype.end = function (index) {
   this.list[index].end = new Date().getTime();
   this.list[index].time = this.list[index].end - this.list[index].start;
   var this_list_cat = this.list[index].cat;
-  var this_list_cat_counts = this_list_cat + "_counts";
-  var this_list_cat_time_sum = this_list_cat + "_time_sum";
+  var this_list_cat_counts = this_list_cat + '_counts';
+  var this_list_cat_time_sum = this_list_cat + '_time_sum';
   if (typeof this.cats[this_list_cat_counts] === 'undefined') this.cats.arr.push(this_list_cat);
   if (typeof this.cats[this_list_cat_time_sum] === 'undefined') this.cats[this_list_cat_time_sum] = 0;
   if (typeof this.cats[this_list_cat_counts] === 'undefined') this.cats[this_list_cat_counts] = 0;
@@ -1002,11 +992,11 @@ Benchmark.prototype.print = function (all) {
       this_list_i_cat = this.cats.arr[i];
       tbl2 += this_list_i_cat;
       tbl2 += '</td><td>';
-      this_list_i_cat_counts = this.cats[this_list_i_cat + "_counts"];
+      this_list_i_cat_counts = this.cats[this_list_i_cat + '_counts'];
       tbl2 += this_list_i_cat_counts;
       counts_sum += this_list_i_cat_counts;
       tbl2 += '</td><td>';
-      this_list_i_cat_time_sum = this.cats[this_list_i_cat + "_time_sum"];
+      this_list_i_cat_time_sum = this.cats[this_list_i_cat + '_time_sum'];
       tbl2 += this_list_i_cat_time_sum;
       cat_time_sum += this_list_i_cat_time_sum;
       tbl2 += '</td><td>';
@@ -1017,10 +1007,10 @@ Benchmark.prototype.print = function (all) {
   if (this.cats.arr.length > 0) {
     tbl2 += '<tfoot><tr><td class="bench_foot" colspan="2">Total</td>';
     totals_arr_item.push(counts_sum);
-    this.totals += counts_sum + ";";
+    this.totals += counts_sum + ';';
     tbl2 += '<td>' + counts_sum + '</td>';
     totals_arr_item.push(cat_time_sum);
-    this.totals += cat_time_sum + ";";
+    this.totals += cat_time_sum + ';';
     tbl2 += '<td>' + cat_time_sum + '</td>';
     item = (cat_time_sum / counts_sum).toFixed(4);
     totals_arr_item.push(item);
@@ -1066,17 +1056,17 @@ Benchmark.prototype.printMultipleRuns = function () {
   tbl2 += '<tr><td colspan="4" id="benchmark_multiple_status" style="display:none"></td></tr>';
   if (!isNaN(average)) {
     tbl2 += '<tr><td colspan="4">';
-    tbl2 += '<b>Average:</b> ' + average + " ms<br>";
-    tbl2 += '<b>Min:</b> ' + min + " ms<br>";
-    tbl2 += '<b>Max:</b> ' + max + " ms<br>";
-    tbl2 += '<b>Range:</b> ' + range.toFixed(4) + " ms<br>";
-    tbl2 += '<b>Minus-Range:</b> ' + minusRange.toFixed(4) + " ms<br>";
-    tbl2 += '<b>Plus-Range:</b> ' + plusRange.toFixed(4) + " ms<br>";
-    tbl2 += '<b>Stdev:</b> ' + standardDeviation + " ms<br>";
-    tbl2 += '<b>Range/Average %:</b> ' + (range / average * 100).toFixed(4) + "<br>";
-    tbl2 += '<b>Minus-Range/Average %:</b> ' + (minusRange / average * 100).toFixed(4) + "<br>";
-    tbl2 += '<b>Plus-Range/Average %:</b> ' + (plusRange / average * 100).toFixed(4) + "<br>";
-    tbl2 += '<b>Stdev/Average %:</b> ' + (standardDeviation / average * 100).toFixed(4) + "<br>";
+    tbl2 += '<b>Average:</b> ' + average + ' ms<br>';
+    tbl2 += '<b>Min:</b> ' + min + ' ms<br>';
+    tbl2 += '<b>Max:</b> ' + max + ' ms<br>';
+    tbl2 += '<b>Range:</b> ' + range.toFixed(4) + ' ms<br>';
+    tbl2 += '<b>Minus-Range:</b> ' + minusRange.toFixed(4) + ' ms<br>';
+    tbl2 += '<b>Plus-Range:</b> ' + plusRange.toFixed(4) + ' ms<br>';
+    tbl2 += '<b>Stdev:</b> ' + standardDeviation + ' ms<br>';
+    tbl2 += '<b>Range/Average %:</b> ' + (range / average * 100).toFixed(4) + '<br>';
+    tbl2 += '<b>Minus-Range/Average %:</b> ' + (minusRange / average * 100).toFixed(4) + '<br>';
+    tbl2 += '<b>Plus-Range/Average %:</b> ' + (plusRange / average * 100).toFixed(4) + '<br>';
+    tbl2 += '<b>Stdev/Average %:</b> ' + (standardDeviation / average * 100).toFixed(4) + '<br>';
     tbl2 += '</td></tr>';
   }
   tbl2 += '</tbody>';
@@ -1085,35 +1075,35 @@ Benchmark.prototype.printMultipleRuns = function () {
 // BENCHMARKING ENDS
 
 function colorizeBoxes() {
-  var bgColor = new RGBColor($("#p").css("background-color"));
+  var bgColor = new RGBColor($('#p').css('background-color'));
   var fillColor, strokeColor, fillOpacity, strokeOpacity, box;
   for (var i = 1; i <= 3; i++) {
-    fillColor = new RGBColor($("#p" + i).css("fill"));
-    fillOpacity = $("#p" + i).css("fill-opacity");
+    fillColor = new RGBColor($('#p' + i).css('fill'));
+    fillOpacity = $('#p' + i).css('fill-opacity');
     fillColor = fillColor.flattenRGBA(fillOpacity, bgColor);
-    strokeColor = new RGBColor($("#p" + i).css("stroke"));
-    strokeOpacity = $("#p" + i).css("stroke-opacity");
+    strokeColor = new RGBColor($('#p' + i).css('stroke'));
+    strokeOpacity = $('#p' + i).css('stroke-opacity');
     strokeColor = strokeColor.flattenRGBA(strokeOpacity, bgColor);
-    if (i === 1) box = "#subject_box";
-    else if (i === 2) box = "#clip_box";
-    else if (i === 3) box = "#solution_box";
-    $(box).css("background-color", fillColor);
+    if (i === 1) box = '#subject_box';
+    else if (i === 2) box = '#clip_box';
+    else if (i === 3) box = '#solution_box';
+    $(box).css('background-color', fillColor);
   }
 }
 
 function roundTo(num, dec) {
   if (typeof num === 'undefined' || typeof dec === 'undefined' || isNaN(dec)) {
-    return !!console.warn("Cannot round other than number");
+    return !!console.warn('Cannot round other than number');
   }
   return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
 }
 
 function updateEnlargedSVGIfNeeded() {
   if (updateEnlargedSVG) {
-    show_svg_source_click("non_click");
+    show_svg_source_click('non_click');
     svg_source_enlarge();
   } else if (updateEnlargedSVGSource && !updateEnlargedSVG) {
-    show_svg_source_click("non_click");
+    show_svg_source_click('non_click');
   }
 }
 
@@ -1136,8 +1126,8 @@ function get_polys(scale_again) {
     ss = polygons[polygon].ss;
     cc = polygons[polygon].cc;
   } else {
-    if (!subj.random) subj.random = get_random_polys("subj");
-    if (!clip.random) clip.random = get_random_polys("clip");
+    if (!subj.random) subj.random = get_random_polys('subj');
+    if (!clip.random) clip.random = get_random_polys('clip');
     if (scale_again) {
       subj.random = scaleAgainRandomPoly(subj.random);
       clip.random = scaleAgainRandomPoly(clip.random);
@@ -1152,23 +1142,23 @@ function get_polys(scale_again) {
 // setups defaults, attach events and finally draw the default svg image
 function main() {
   // formats internal representation of polygons to specified output format and prints them on input fields
-  $("#output_format").change(function () {
+  $('#output_format').change(function () {
     outputFormat = $(this).val();
-    if (!$("#custom_polygons_fieldset").is(":hidden")) {
-      var subj = normalizeClipperPoly($("#custom_polygon_subj").val());
-      var clip = normalizeClipperPoly($("#custom_polygon_clip").val());
+    if (!$('#custom_polygons_fieldset').is(':hidden')) {
+      var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
+      var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
       if (subj !== false && clip !== false) {
-        $("#custom_polygon_subj").val(formatOutput(subj));
-        $("#custom_polygon_clip").val(formatOutput(clip));
+        $('#custom_polygon_subj').val(formatOutput(subj));
+        $('#custom_polygon_clip').val(formatOutput(clip));
       }
     }
-    var polygon_explorer_string = normalizeClipperPoly($("#polygon_explorer_string_inp").val());
+    var polygon_explorer_string = normalizeClipperPoly($('#polygon_explorer_string_inp').val());
     if (polygon_explorer_string !== false) {
-      $("#polygon_explorer_string_inp").val(formatOutput(polygon_explorer_string));
+      $('#polygon_explorer_string_inp').val(formatOutput(polygon_explorer_string));
     }
   });
   // Select dropdown
-  $("#sample_custom_polygon").change(function () {
+  $('#sample_custom_polygon').change(function () {
     var polygon = _.parseInt($(this).val());
     var subj = '', clip = '';
     dontRoundAndScale = true;
@@ -1189,16 +1179,16 @@ function main() {
       subj = polygons[polygon].ss;
       clip = polygons[polygon].cc;
     } else {
-      subj = get_random_polys("subj", polygon);
-      clip = get_random_polys("clip", polygon);
+      subj = get_random_polys('subj', polygon);
+      clip = get_random_polys('clip', polygon);
     }
     dontRoundAndScale = false;
     if (subj !== '') subj = JSON.stringify(subj);
     if (clip !== '') clip = JSON.stringify(clip);
-    $("#custom_polygon_subj").val(formatOutput(subj));
-    $("#custom_polygon_clip").val(formatOutput(clip));
+    $('#custom_polygon_subj').val(formatOutput(subj));
+    $('#custom_polygon_clip').val(formatOutput(clip));
   });
-  $("#help_custom_polygon").click(function () {
+  $('#help_custom_polygon').click(function () {
     var txt = 'A) You can add your own custom polygons in several formats:\n\n';
     txt += '1) The program uses as an inner default the following format: JSON-stringified array of arrays of point objects eg. [[{"X":100,"Y":100},{"X":200,"Y":100},{"X":200,"Y":200},{"X":100,"Y":200}],[{"X":110,"Y":110},{"X":210,"Y":110},{"X":210,"Y":210},{"X":110,"Y":210}]]. This format allows to input sub polygons. Each sub polygon is an array of point objects. This format makes it easy to transfer polygons to other programs that use Clipper library and is suitable for storing polygons in database.\n\n';
     txt += '2) JSON-stringified array of point objects eg. [{"X":100,"Y":100},{"X":200,"Y":100},{"X":200,"Y":200},{"X":100,"Y":200}]. This format doesn\'t allow to input sub polygons.\n\n';
@@ -1208,13 +1198,13 @@ function main() {
     txt += 'B) Custom polygons are saved in browser\'s Local Storage, so they should be tolerant for page reload and browser crashes.';
     alert(txt);
   });
-  $("#help_builtin_polygon_sets").click(function() {
+  $('#help_builtin_polygon_sets').click(function() {
     var txt = 'Builtin polygon sets\n\n';
     txt += 'You can add builtin polygon sets into Subj and Clip input fields to edit copies of them.\n\n';
     txt += 'Note! Before saving, nothing happens. After saving, the SVG window is also updated.';
     alert(txt);
   });
-  $("#help_output_format").click(function() {
+  $('#help_output_format').click(function() {
     var txt = 'Output format\n\n';
     txt += 'To change the polygon coordinate output format please use the above dropdown. The available formats are:\n\n';
     txt += '- Clipper: [[{"X":100,"Y":100},{"X":200,"Y":200}]]\n\n';
@@ -1223,80 +1213,75 @@ function main() {
     txt += 'There are two places where this has effect: 1) the above text box 2) the Subj and Clip text boxes in Custom Polygon fieldset.';
     alert(txt);
   });
-  $("#remove_custom_polygon").click(function () {
-    var selected_value = $("#custom_polygons_select").val();
-    if (selected_value+'' === "0") {
-      alert("Cannot remove the default polygon.");
-    } else if (selected_value) {
-      if (confirm("Remove custom polygon " + selected_value + "?")) {
+  $('#remove_custom_polygon').click(function () {
+    var value = $('#custom_polygons_select').val();
+    if (value+'' === '0') {
+      alert('Cannot remove the default polygon.');
+    } else if (value) {
+      if (confirm('Remove custom polygon ' + value + '?')) {
         var arr = $.totalStorage('custom_polygons');
-        arr[selected_value] = null;
+        arr[value] = null;
         $.totalStorage('custom_polygons', arr);
         updateCustomPolygonsSelect();
       }
     }
-    else alert('Nothing removable.');
   });
-  $("#removeall_custom_polygon").click(function () {
-    var count = $("#custom_polygons_select option").length;
+  $('#removeall_custom_polygon').click(function () {
+    var count = $('#custom_polygons_select option').length;
     if (count > 1) {
-      if (confirm("Remove all " + (count -1)  + " custom polygons?")) {
+      if (confirm('Remove all ' + (count -1)  + ' custom polygons?')) {
         $.totalStorage('custom_polygons', []);
         setDefaultCustomPolygons();
         updateCustomPolygonsSelect();
       }
     }
-    else alert('Nothing removable.');
   });
-  $("#save_custom_polygon").click(function () {
-    var subj = normalizeClipperPoly($("#custom_polygon_subj").val());
-    var clip = normalizeClipperPoly($("#custom_polygon_clip").val());
+  $('#save_custom_polygon').click(function () {
+    var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
+    var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
     if (subj === false || clip === false) return false;
     if (typeof $.totalStorage('custom_polygons') === 'undefined' || $.totalStorage('custom_polygons') === null) {
       setDefaultCustomPolygons();
     }
     var arr2 = $.totalStorage('custom_polygons');
-    var selected_value = $("#custom_polygons_select").val();
-    if (selected_value+'' !== "0" && selected_value) {
-      arr2[selected_value] = {
+    var value = $('#custom_polygons_select').val();
+    if (value+'' !== '0' && value) {
+      arr2[value] = {
         subj: subj,
         clip: clip
       };
       $.totalStorage('custom_polygons', arr2);
       updateCustomPolygonsSelect();
-      alert("Polygon " + selected_value + " updated!");
-    } else if (selected_value+'' === "0") {
-      alert("The default custom polygon cannot be overwrited. If you want to modify it, save it first as a new.");
+      alert('Polygon ' + value + ' updated!');
+    } else if (value+'' === '0') {
+      alert('The default custom polygon cannot be overwrited. If you want to modify it, save it first as a new.');
     }
-    else alert("Polygon update failed!");
+    else alert('Polygon update failed!');
   });
-
-  $("#add_as_new_custom_polygon").click(function () {
-    var subj = $("#custom_polygon_subj").val();
-    var clip = $("#custom_polygon_clip").val();
-    subj = normalizeClipperPoly(subj);
-    clip = normalizeClipperPoly(clip);
+  $('#add_as_new_custom_polygon').click(function () { ;
+    var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
+    var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
     if (subj === false || clip === false) return false;
     if (typeof $.totalStorage('custom_polygons') === 'undefined' || $.totalStorage('custom_polygons') === null) {
       setDefaultCustomPolygons();
     }
-    var arr2 = $.totalStorage('custom_polygons');
-    arr2.push({
+    var customPolygons = $.totalStorage('custom_polygons');
+    customPolygons.push({
       subj: subj,
       clip: clip
     });
-    $.totalStorage('custom_polygons', arr2);
+    $.totalStorage('custom_polygons', customPolygons);
     updateCustomPolygonsSelect();
-    $('#custom_polygons_select').val(arr2.length - 1).change();
-    alert("New polygon " + (arr2.length - 1) + " added!");
+    $('#custom_polygons_select').val(customPolygons.length - 1).change();
+    alert('New polygon ' + (customPolygons.length - 1) + ' added!');
   });
-  $("#custom_polygons_select").change(function () {
-    var selected_value = $("#custom_polygons_select").val();
-    if (!selected_value && selected_value + '' !== "0") selected_value = 0;
+  $('#custom_polygons_select').change(function () {
+    var value = $('#custom_polygons_select').val();
+    if (!value && value + '' !== '0') value = 0;
     var arr = $.totalStorage('custom_polygons');
-    if (_.isArray(arr) && arr.length && typeof arr[selected_value] !== 'undefined') {
-      $("#custom_polygon_subj").val(formatOutput(arr[selected_value].subj));
-      $("#custom_polygon_clip").val(formatOutput(arr[selected_value].clip));
+    if (_.isArray(arr) && arr.length && typeof arr[value] !== 'undefined') {
+      $('#custom_polygon_subj').val(formatOutput(arr[value].subj));
+      $('#custom_polygon_clip').val(formatOutput(arr[value].clip));
       make_clip();
     }
   });
@@ -1304,16 +1289,16 @@ function main() {
   // reveal custom fieldsets
   $("input[type='radio'][name='polygons']").change(function () {
     var val = _.parseInt($(this).val());
-    $("#custom_polygons_fieldset, #random_polygons_fieldset").hide();
+    $('#custom_polygons_fieldset, #random_polygons_fieldset').hide();
     if (val === 10) {
-      $("#custom_polygons_fieldset").show();
+      $('#custom_polygons_fieldset').show();
       setDefaultCustomPolygons();
       updateCustomPolygonsSelect();
-      $("#custom_polygons_select").change();
+      $('#custom_polygons_select').change();
     }
     if (val === 4 || val === 5) {
-      $("#random_polygons_fieldset").show();
-      randomSettings.current = (val === 4) ? "rect" : "norm";
+      $('#random_polygons_fieldset').show();
+      randomSettings.current = (val === 4) ? 'rect' : 'norm';
       var r = randomSetting, rs = randomSettings;
       // Test for ranges
       if (r.clipPointCount < rs[rs.current].min.clipPointCount) r.clipPointCount = rs[rs.current].min.clipPointCount;
@@ -1328,14 +1313,14 @@ function main() {
       if (r.subjPolygonCount < rs[rs.current].min.subjPolygonCount) r.subjPolygonCount = rs[rs.current].min.subjPolygonCount;
       if (r.subjPolygonCount > rs[rs.current].max.subjPolygonCount) r.subjPolygonCount = rs[rs.current].max.subjPolygonCount;
       $('#subj_polygon_count').val(r.subjPolygonCount);
-      subj.random = get_random_polys("subj", val);
-      clip.random = get_random_polys("clip", val);
+      subj.random = get_random_polys('subj', val);
+      clip.random = get_random_polys('clip', val);
     }
     make_clip();
   });
   $('#generate_random_polygons').hold(function () {
-    subj.random = get_random_polys("subj");
-    clip.random = get_random_polys("clip");
+    subj.random = get_random_polys('subj');
+    clip.random = get_random_polys('clip');
     make_clip();
   });
 
@@ -1353,13 +1338,8 @@ function main() {
 
   // Clip type (operation)
   $("input[name='clipType']").change(function () {
-    if ($('input[name="clipType"][value=""]').is(":checked")) {
-      $('input[name="offsettable_poly"][value="subject"]').prop('checked', true);
-      offsettablePoly = 'subject';
-    } else {
-      $('input[name="offsettable_poly"][value="solution"]').prop('checked', true);
-      offsettablePoly = 'solution';
-    }
+    offsettablePoly = $('input[name="clipType"][value=""]').is(":checked") ? 'subject' : 'solution';
+    $('input[name="offsettable_poly"][value="' + offsettablePoly + '"]').prop('checked', true);
     clipType = $('input[name="clipType"]:checked').val();
     if (clipType !== '') clipType = _.parseInt(clipType);
     make_clip();
@@ -1368,30 +1348,30 @@ function main() {
   // Cleaning and simplifying
   $('#clean').change(function () {
     clean = $(this).prop('checked');
-    if (clean && !$("#cleandelta").val()+''.trim()) {
+    if (clean && !$('#cleandelta').val()+''.trim()) {
       cleanDelta = cleanDeltaDefault;
-      $("#cleandelta").val(cleanDelta);
+      $('#cleandelta').val(cleanDelta);
     }
     make_clip();
   });
-  $("#cleandelta").change(function () {
+  $('#cleandelta').change(function () {
     var value = parseFloat(this.value);
     if (!isNaN(value)) cleanDelta = value;
     make_clip();
   });
-  $("#simplify").change(function () {
+  $('#simplify').change(function () {
     simplify = $(this).prop('checked');
     make_clip();
   });
-  $("#lighten").change(function () {
+  $('#lighten').change(function () {
     lighten = $(this).prop('checked');
-    if (lighten && !$("#lighten_distance").val()+''.trim()) {
+    if (lighten && !$('#lighten_distance').val()+''.trim()) {
       lightenDistance = lightenDistanceDefault;
-      $("#lighten_distance").val(lightenDistance);
+      $('#lighten_distance').val(lightenDistance);
     }
     make_clip();
   });
-  $("#lighten_distance").change(function () {
+  $('#lighten_distance').change(function () {
     var value = parseFloat(this.value);
     if (!isNaN(value)) lightenDistance = value;
     make_clip();
@@ -1454,7 +1434,7 @@ function main() {
     $('#scale').val(scale.toFixed(1)).trigger('change');
   });
   $('#scale').change(function () {
-    if (this.value && !isNaN(this.value) && _.parseInt(this.value).toString() !== "0") {
+    if (this.value && !isNaN(this.value) && _.parseInt(this.value).toString() !== '0') {
       scale = parseFloat(this.value);
       get_polys(true);
       sss = cc;
@@ -1463,7 +1443,7 @@ function main() {
   });
   $('#scale_plus').hold(function () {
     var original = $('#scale').val();
-    if (original && !isNaN(original) && _.parseInt(original).toString() !== "0") scale = parseFloat(original);
+    if (original && !isNaN(original) && _.parseInt(original).toString() !== '0') scale = parseFloat(original);
     scale = scale + scaleAddition;
     scale = Math.round(scale / scaleAddition) * scaleAddition;
     $('#scale').val(scale.toFixed(1)).trigger('change');
@@ -1482,8 +1462,8 @@ function main() {
         if (r[key] > rs[rs.current].max[key]) r[key] = rs[rs.current].max[key];
       }
       $('#' + input).val(r[key]);
-      subj.random = get_random_polys("subj");
-      clip.random = get_random_polys("clip");
+      subj.random = get_random_polys('subj');
+      clip.random = get_random_polys('clip');
       make_clip();
     };
   }
@@ -1504,13 +1484,13 @@ function main() {
   $('#bevel').change(function () {
     bevel = $(this).prop('checked');
     if (bevel) {
-      $("#p3").attr("filter", "url(#innerbewel)");
+      $('#p3').attr('filter', 'url(#innerbewel)');
     } else {
-      $("#p3").removeAttr("filter");
+      $('#p3').removeAttr('filter');
     }
     updateEnlargedSVGIfNeeded();
   });
-  $("#show_svg_source").click(show_svg_source_click);
+  $('#show_svg_source').click(show_svg_source_click);
   $('#explorer_enabled').change(function () {
     explorerEnabled = $(this).prop('checked');
     if (explorerEnabled) {
@@ -1520,12 +1500,12 @@ function main() {
       if (p3) p3.remove();
       SVG.addPaths(ss, cc, offsetResult, subj.fillType, clip.fillType);
     } else {
-      $("#subj_subpolygons, #subj_points_in_subpolygons, #subj_points_total, #clip_subpolygons, #clip_points_in_subpolygons, #clip_points_total, #solution_subpolygons, #solution_points_in_subpolygons, #solution_points_total, #points_total, #all_subpolygons").html('');
+      $('#subj_subpolygons, #subj_points_in_subpolygons, #subj_points_total, #clip_subpolygons, #clip_points_in_subpolygons, #clip_points_total, #solution_subpolygons, #solution_points_in_subpolygons, #solution_points_total, #points_total, #all_subpolygons').html('');
     }
   });
   $('#output_format').val(outputFormat);
 
-  $("#benchmark1, #benchmark2, #benchmark1b, #benchmark2b").click(function () {
+  $('#benchmark1, #benchmark2, #benchmark1b, #benchmark2b').click(function () {
     benchmarkClickedButtonId = this.id;
     if (benchmarkRunning && !benchmarkAutomaticClick) {
       for (var lsk = 0; lsk < benchmarkGlob.length; lsk++) {
@@ -1558,12 +1538,12 @@ function main() {
     var deltaLocals = [-5, 0, 10, 30];
     var deltaLocal_i, m;
     var this_id = this.id;
-    repeatTimes = (this_id === "benchmark1b" || this_id === "benchmark2b") ? 5 : 1;
+    repeatTimes = (this_id === 'benchmark1b' || this_id === 'benchmark2b') ? 5 : 1;
     for (count = 0; count < 2; count++) {
-      if (this_id === "benchmark1" || this_id === "benchmark1b") {
+      if (this_id === 'benchmark1' || this_id === 'benchmark1b') {
         scaleLocal = 100;
         if (count === 1) continue;
-      } else if (this_id === "benchmark2" || this_id === "benchmark2b") {
+      } else if (this_id === 'benchmark2' || this_id === 'benchmark2b') {
         scaleLocal = 100000000;
         if (count === 1) continue;
       }
@@ -1609,7 +1589,7 @@ function main() {
                       }
                     };
                     timeout_time += timeout_time_addition;
-                    benchmarkGlob[benchmarkGlob.length - 1].setTimeout = setTimeout("benchmark2(" + (benchmarkGlob.length - 1) + ")", timeout_time);
+                    benchmarkGlob[benchmarkGlob.length - 1].setTimeout = setTimeout('benchmark2(' + (benchmarkGlob.length - 1) + ')', timeout_time);
                     benchmarkGlob[benchmarkGlob.length - 1].timeout_time = timeout_time;
                   }
                 }
