@@ -393,57 +393,46 @@ function get_custom_poly() {
 }
 
 function get_random_polys(which, polygon) {
-  var point_count, polygon_count;
-  if (which === 'subj') {
-    point_count = randomSetting.subjPointCount;
-    polygon_count = randomSetting.subjPolygonCount;
-  } else if (which === 'clip') {
-    point_count = randomSetting.clipPointCount;
-    polygon_count = randomSetting.clipPolygonCount;
-  }
+  var pointCount = randomSetting[which + 'PointCount'];
+  var polygonCount = randomSetting[which + 'PolygonCount'];
   if (arguments.length === 1) polygon = _.parseInt($('input[name="polygons"]:checked').val());
   if (polygon !== 4 && polygon !== 5) return new ClipperLib.Polygons();
   var svg = $('#p');
   var margin = 10;
-  randomSetting.rand_min_x = 0 + margin;
+  randomSetting.rand_min_x = margin;
   randomSetting.rand_max_x = parseFloat(svg.attr('width'), 10) - margin;
-  randomSetting.rand_min_y = 0 + margin;
+  randomSetting.rand_min_y = margin;
   randomSetting.rand_max_y = parseFloat(svg.attr('height'), 10) - margin;
   var i, j, pp, np = new ClipperLib.Polygons(),
     prev_x = null,
     prev_y = null,
-    horiz_or_vertic = null,
-    prev_horiz_or_vertic = null;
-  for (i = 0; i < polygon_count; i++) {
+    vertical = null,
+    previousVertical = null;
+  for (i = 0; i < polygonCount; i++) {
     np[i] = new ClipperLib.Polygon();
-    for (j = 0; j < point_count; j++) {
+    for (j = 0; j < pointCount; j++) {
       pp = new ClipperLib.IntPoint();
       if (polygon === 4) {
-        horiz_or_vertic = _.random(0, 1); // 0 = horiz, 1 = vertic
-        if (prev_horiz_or_vertic === horiz_or_vertic) {
-          if (horiz_or_vertic === 0) horiz_or_vertic = 1;
-          else if (horiz_or_vertic === 1) horiz_or_vertic = 0;
-          else horiz_or_vertic = 0;
+        vertical = !!_.random(0, 1); // 0 = horiz, 1 = vertic
+        if (previousVertical === vertical) {
+          vertical = !vertical;
         }
         // horiz => y remains same
-        if (horiz_or_vertic === 0) {
+        if (!vertical) {
           pp.X = round(randomFloat(randomSetting.rand_min_x, randomSetting.rand_max_x));
           pp.Y = (prev_y === null) ? round(randomFloat(randomSetting.rand_min_y, randomSetting.rand_max_y)) : prev_y;
-          prev_x = pp.X;
-          prev_y = pp.Y;
-          prev_horiz_or_vertic = horiz_or_vertic;
         // vertic => x remains same
         } else {
           pp.Y = round(randomFloat(randomSetting.rand_min_y, randomSetting.rand_max_y));
           pp.X = (prev_x === null) ? round(randomFloat(randomSetting.rand_min_x, randomSetting.rand_max_x)) : prev_x;
-          prev_x = pp.X;
-          prev_y = pp.Y;
-          prev_horiz_or_vertic = horiz_or_vertic;
         }
+        prev_x = pp.X;
+        prev_y = pp.Y;
+        previousVertical = vertical;
         // last point fix
-        if (j === point_count - 1 && point_count !== 1) {
+        if (j === pointCount - 1 && pointCount !== 1) {
           // horiz => y remains same
-          if (horiz_or_vertic === 0) {
+          if (!vertical) {
             pp.X = np[i][0].X;
           // vertic => x remains same
           } else {
@@ -452,7 +441,7 @@ function get_random_polys(which, polygon) {
           np[i].push(pp);
         }
         else np[i].push(pp);
-      } else if (polygon === 5) {
+      } else {
         pp.X = round(randomFloat(randomSetting.rand_min_x, randomSetting.rand_max_x));
         pp.Y = round(randomFloat(randomSetting.rand_min_y, randomSetting.rand_max_y));
         np[i].push(pp);
@@ -460,8 +449,8 @@ function get_random_polys(which, polygon) {
     }
     prev_x = null;
     prev_y = null;
-    horiz_or_vertic = null;
-    prev_horiz_or_vertic = null;
+    vertical = null;
+    previousVertical = null;
   }
   randomSetting.scale = scale;
   return np;
