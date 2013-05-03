@@ -840,11 +840,11 @@ function benchmark2(i) {
   simplify = obj.simplify;
   $('#simplify').prop('checked', simplify);
   subj.fillType = obj.subject_fillType;
-  $("input[name='subject_fillType'][value='" + subj.fillType + "']").prop('checked', true);
+  $('input[name="subject_fillType"][value="' + subj.fillType + '"]').prop('checked', true);
   clip.fillType = obj.clip_fillType;
-  $("input[name='clip_fillType'][value='" + clip.fillType + "']").prop('checked', true);
+  $('input[name="clip_fillType"][value="' + clip.fillType + '"]').prop('checked', true);
   clipType = obj.clipType;
-  $("input[name='clipType'][value='" + clipType + "']").prop('checked', true);
+  $('input[name="clipType"][value="' + clipType + '"]').prop('checked', true);
   scale = obj.scale;
   $('#scale').val(scale);
   if (obj.polygon_id === 4 || obj.polygon_id === 5) randomSetting = obj.randomSetting;
@@ -1287,7 +1287,7 @@ function main() {
   });
 
   // reveal custom fieldsets
-  $("input[type='radio'][name='polygons']").change(function () {
+  $('input[type="radio"][name="polygons"]').change(function () {
     var val = _.parseInt($(this).val());
     $('#custom_polygons_fieldset, #random_polygons_fieldset').hide();
     if (val === 10) {
@@ -1325,20 +1325,20 @@ function main() {
   });
 
   // Subject FillType
-  $("input[name='subject_fillType']").change(function () {
+  $('input[name="subject_fillType"]').change(function () {
     subj.fillType = _.parseInt(this.value);
     make_clip();
   });
 
   // Clip FillType
-  $("input[name='clip_fillType']").change(function () {
+  $('input[name="clip_fillType"]').change(function () {
     clip.fillType = _.parseInt(this.value);
     make_clip();
   });
 
   // Clip type (operation)
-  $("input[name='clipType']").change(function () {
-    offsettablePoly = $('input[name="clipType"][value=""]').is(":checked") ? 'subject' : 'solution';
+  $('input[name="clipType"]').change(function () {
+    offsettablePoly = $('input[name="clipType"][value=""]').is(':checked') ? 'subject' : 'solution';
     $('input[name="offsettable_poly"][value="' + offsettablePoly + '"]').prop('checked', true);
     clipType = $('input[name="clipType"]:checked').val();
     if (clipType !== '') clipType = _.parseInt(clipType);
@@ -1378,7 +1378,7 @@ function main() {
   });
 
   // Offsetting
-  $("input[name='offsettable_poly']").change(function () {
+  $('input[name="offsettable_poly"]').change(function () {
     offsettablePoly = this.value;
     // When offsettable poly is set to Subject or Clip, then boolean operations are not done.
     // To show this to user, set clipType to "No"
@@ -1388,7 +1388,7 @@ function main() {
     }
     make_clip();
   });
-  $("input[name='joinType']").change(function () {
+  $('input[name="joinType"]').change(function () {
     joinType = _.parseInt(this.value);
     //make_offset();
     make_clip();
