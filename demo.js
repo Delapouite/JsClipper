@@ -325,10 +325,10 @@ var defaultPolygons = [
   }, { // Glyph and grid
     subj: '[[{"X":105.65,"Y":51.37},{"X":105.65,"Y":295.26},{"X":395.09,"Y":295.26},{"X":395.01,"Y":51.37},{"X":108.51,"Y":51.37},{"X":105.65,"Y":51.37}],[{"X":380.09,"Y":89.4799},{"X":349.33,"Y":89.4799},{"X":349.33,"Y":66.37},{"X":380.09,"Y":66.37},{"X":380.09,"Y":66.37},{"X":380.09,"Y":89.4799}],[{"X":257.87,"Y":127.7},{"X":257.87,"Y":104.48},{"X":288.63,"Y":104.48},{"X":288.44,"Y":127.7},{"X":283.0396,"Y":127.7},{"X":257.87,"Y":127.7}],[{"X":288.63,"Y":142.7},{"X":288.63,"Y":165.81},{"X":257.87,"Y":165.81},{"X":257.87,"Y":142.7},{"X":257.87,"Y":142.7},{"X":288.63,"Y":142.7}],[{"X":242.87,"Y":127.7},{"X":212.11,"Y":127.7},{"X":212.11,"Y":104.48},{"X":242.87,"Y":104.48},{"X":242.87,"Y":104.48},{"X":242.87,"Y":127.7}],[{"X":242.87,"Y":142.7},{"X":242.87,"Y":165.81},{"X":212.11,"Y":165.81},{"X":212.11,"Y":142.7},{"X":212.11,"Y":142.7},{"X":242.87,"Y":142.7}],[{"X":197.11,"Y":165.81},{"X":166.41,"Y":165.81},{"X":166.41,"Y":142.7},{"X":197.11,"Y":142.7},{"X":197.11,"Y":142.7},{"X":197.11,"Y":165.81}],[{"X":197.11,"Y":180.81},{"X":197.11,"Y":203.92},{"X":166.41,"Y":203.92},{"X":166.41,"Y":180.81},{"X":166.41,"Y":180.81},{"X":197.11,"Y":180.81}],[{"X":212.11,"Y":180.81},{"X":242.87,"Y":180.81},{"X":242.87,"Y":203.92},{"X":212.11,"Y":203.92},{"X":212.11,"Y":203.92},{"X":212.11,"Y":180.81}],[{"X":242.87,"Y":218.92},{"X":242.87,"Y":242.14},{"X":212.11,"Y":242.14},{"X":212.11,"Y":218.92},{"X":212.11,"Y":218.92},{"X":242.87,"Y":218.92}],[{"X":257.87,"Y":218.92},{"X":288.63,"Y":218.92},{"X":288.63,"Y":242.14},{"X":257.87,"Y":242.14},{"X":257.87,"Y":242.14},{"X":257.87,"Y":218.92}],[{"X":257.87,"Y":203.92},{"X":257.87,"Y":180.81},{"X":288.63,"Y":180.81},{"X":288.63,"Y":203.92},{"X":288.63,"Y":203.92},{"X":257.87,"Y":203.92}],[{"X":303.63,"Y":180.81},{"X":334.33004,"Y":180.81},{"X":334.33004,"Y":203.92},{"X":303.63,"Y":203.92},{"X":303.63,"Y":203.92},{"X":303.63,"Y":180.81}],[{"X":303.63,"Y":165.81},{"X":303.63,"Y":142.7},{"X":334.33004,"Y":142.7},{"X":334.33004,"Y":165.81},{"X":334.33004,"Y":165.81},{"X":303.63,"Y":165.81}],[{"X":303.63,"Y":127.7},{"X":303.63,"Y":104.48},{"X":334.33004,"Y":104.48},{"X":334.07,"Y":127.7},{"X":328.6696,"Y":127.7},{"X":303.63,"Y":127.7}],[{"X":303.63,"Y":89.4799},{"X":303.63,"Y":66.37},{"X":334.33004,"Y":66.37},{"X":334.15,"Y":89.4799},{"X":316.15,"Y":89.4799},{"X":303.63,"Y":89.4799}],[{"X":288.63,"Y":89.4799},{"X":257.87,"Y":89.4799},{"X":257.87,"Y":66.37},{"X":288.63,"Y":66.37},{"X":288.63,"Y":89.4799},{"X":288.63,"Y":89.4799}],[{"X":242.87,"Y":89.4799},{"X":212.11,"Y":89.4799},{"X":212.11,"Y":66.37},{"X":242.87,"Y":66.37},{"X":242.87,"Y":66.37},{"X":242.87,"Y":89.4799}],[{"X":197.11,"Y":89.4799},{"X":166.41,"Y":89.4799},{"X":166.41,"Y":66.37},{"X":197.11,"Y":66.37},{"X":197.11,"Y":66.37},{"X":197.11,"Y":89.4799}],[{"X":197.11,"Y":104.48},{"X":196.93,"Y":127.7},{"X":166.41,"Y":127.7},{"X":166.41,"Y":104.48},{"X":166.41,"Y":104.48},{"X":197.11,"Y":104.48}],[{"X":151.41,"Y":127.7},{"X":120.65,"Y":127.7},{"X":120.65,"Y":104.48},{"X":151.41,"Y":104.48},{"X":151.41,"Y":104.48},{"X":151.41,"Y":127.7}],[{"X":151.41,"Y":142.7},{"X":151.41,"Y":165.81},{"X":120.65,"Y":165.81},{"X":120.65,"Y":142.7},{"X":120.65,"Y":142.7},{"X":151.41,"Y":142.7}],[{"X":151.41,"Y":180.81},{"X":151.41,"Y":203.92},{"X":120.65,"Y":203.92},{"X":120.65,"Y":180.81},{"X":120.65,"Y":180.81},{"X":151.41,"Y":180.81}],[{"X":151.41,"Y":218.92},{"X":151.41,"Y":242.14},{"X":120.65,"Y":242.14},{"X":120.65,"Y":218.92},{"X":120.65,"Y":218.92},{"X":151.41,"Y":218.92}],[{"X":166.41,"Y":218.92},{"X":197.11,"Y":218.92},{"X":197.11,"Y":242.14},{"X":166.41,"Y":242.14},{"X":166.41,"Y":242.14},{"X":166.41,"Y":218.92}],[{"X":197.11,"Y":257.14},{"X":197.11,"Y":280.26},{"X":166.41,"Y":280.26},{"X":166.41,"Y":257.14},{"X":166.41,"Y":257.14},{"X":197.11,"Y":257.14}],[{"X":212.11,"Y":257.14},{"X":242.87,"Y":257.14},{"X":242.87,"Y":280.26},{"X":212.11,"Y":280.26},{"X":212.11,"Y":280.26},{"X":212.11,"Y":257.14}],[{"X":257.87,"Y":257.14},{"X":288.63,"Y":257.14},{"X":288.63,"Y":280.26},{"X":257.87,"Y":280.26},{"X":257.87,"Y":280.26},{"X":257.87,"Y":257.14}],[{"X":303.63,"Y":257.14},{"X":334.33004,"Y":257.14},{"X":334.33004,"Y":280.26},{"X":303.63,"Y":280.26},{"X":303.63,"Y":280.26},{"X":303.63,"Y":257.14}],[{"X":303.63,"Y":242.14},{"X":303.63,"Y":218.92},{"X":334.33004,"Y":218.92},{"X":334.33004,"Y":242.14},{"X":334.33004,"Y":242.14},{"X":303.63,"Y":242.14}],[{"X":349.33,"Y":218.92},{"X":380.09,"Y":218.92},{"X":380.09,"Y":242.14},{"X":349.33,"Y":242.14},{"X":349.33,"Y":242.14},{"X":349.33,"Y":218.92}],[{"X":349.33,"Y":203.92},{"X":349.33,"Y":180.81},{"X":380.09,"Y":180.81},{"X":380.09,"Y":203.92},{"X":380.09,"Y":203.92},{"X":349.33,"Y":203.92}],[{"X":349.33,"Y":165.81},{"X":349.33,"Y":142.7},{"X":380.09,"Y":142.7},{"X":380.09,"Y":165.81},{"X":380.09,"Y":165.81},{"X":349.33,"Y":165.81}],[{"X":349.33,"Y":127.7},{"X":349.33,"Y":104.48},{"X":380.09,"Y":104.48},{"X":379.9,"Y":127.7},{"X":374.5,"Y":127.7},{"X":349.33,"Y":127.7}],[{"X":151.41,"Y":66.37},{"X":151.12,"Y":89.4799},{"X":120.65,"Y":89.4799},{"X":120.65,"Y":66.37},{"X":120.65,"Y":66.37},{"X":151.41,"Y":66.37}],[{"X":120.65,"Y":257.14},{"X":151.41,"Y":257.14},{"X":151.41,"Y":280.26},{"X":120.65,"Y":280.26},{"X":120.65,"Y":280.26},{"X":120.65,"Y":257.14}],[{"X":349.33,"Y":280.26},{"X":349.33,"Y":257.14},{"X":380.09,"Y":257.14},{"X":380.09,"Y":280.26},{"X":380.09,"Y":280.26},{"X":349.33,"Y":280.26}]]',
     clip: '[[{"X":305.08004,"Y":241.97},{"X":306,"Y":251.51},{"X":308.18,"Y":256.4},{"X":311.72,"Y":259.09003},{"X":317.31,"Y":260.01},{"X":324.71004,"Y":259.01},{"X":332.45,"Y":255.86},{"X":335.57,"Y":257.5396},{"X":337.6,"Y":260.44},{"X":336.94,"Y":262.33004},{"X":328.27,"Y":268.74},{"X":317.9,"Y":273.4196},{"X":307.94,"Y":275.49},{"X":296.26,"Y":275.23},{"X":286.64,"Y":272.99},{"X":279.7896,"Y":269.31},{"X":274.14,"Y":263.55},{"X":271.6597,"Y":260.21004},{"X":269.2,"Y":261.06},{"X":254.83,"Y":268.51},{"X":242.11,"Y":272.97},{"X":227.59,"Y":275.23},{"X":209.91,"Y":275.48},{"X":197.47,"Y":273.63},{"X":187.91,"Y":270.13},{"X":180.48002,"Y":265.09003},{"X":175.32,"Y":258.88},{"X":172.2098,"Y":251.44},{"X":171.1,"Y":242.23},{"X":172.24,"Y":233.63},{"X":175.49,"Y":226.24},{"X":181,"Y":219.54},{"X":189.42002,"Y":213.3},{"X":201.36,"Y":207.73},{"X":217.23,"Y":203.25},{"X":238.28,"Y":200.1},{"X":265.24,"Y":198.78},{"X":269.37,"Y":198.47},{"X":269.98,"Y":182.93},{"X":268.74,"Y":171.32},{"X":266.05,"Y":163.7098},{"X":261.58004,"Y":157.72},{"X":255.24,"Y":153.24},{"X":247.06,"Y":150.3298},{"X":235.44,"Y":149.13},{"X":224.71,"Y":150.05},{"X":215.91,"Y":153},{"X":210.23002,"Y":156.86},{"X":207.64,"Y":160.85},{"X":207.19,"Y":165.28},{"X":209.34,"Y":169.86},{"X":212.0198,"Y":174.15},{"X":212.14,"Y":177.99},{"X":209.8,"Y":181.78},{"X":204.22,"Y":185.79},{"X":197.62,"Y":187.68},{"X":188.65,"Y":187.43},{"X":182.41,"Y":185.39},{"X":178.45,"Y":181.77},{"X":176.2098,"Y":176.9},{"X":176.03,"Y":170.64},{"X":178.2,"Y":164.13},{"X":183.09,"Y":157.7},{"X":191.04002,"Y":151.36},{"X":202.01,"Y":145.8298},{"X":216.09,"Y":141.57},{"X":232.08,"Y":139.24},{"X":250.07,"Y":139.18},{"X":266.13,"Y":141.23002},{"X":279.05,"Y":145.06},{"X":289.1597,"Y":150.3},{"X":295.9196,"Y":156.19},{"X":300.73,"Y":163.41},{"X":303.85,"Y":172.47},{"X":305.07,"Y":183.78},{"X":305.07,"Y":241.97},{"X":305.08004,"Y":241.97}],[{"X":243.99,"Y":64.95},{"X":255.92,"Y":66.07},{"X":266.21004,"Y":69.28},{"X":274.98,"Y":74.44},{"X":280.65,"Y":80.19},{"X":284.03,"Y":86.85},{"X":285.26,"Y":94.52001},{"X":284.28,"Y":102.84},{"X":281.24,"Y":109.66},{"X":276.0396,"Y":115.43},{"X":267.89,"Y":120.46},{"X":257.68,"Y":123.93},{"X":245.79,"Y":125.33},{"X":232.93,"Y":124.53},{"X":222.21,"Y":121.74},{"X":213.14,"Y":117.11},{"X":207.36,"Y":111.92},{"X":203.7,"Y":105.75},{"X":201.94,"Y":98.18},{"X":202.34,"Y":90.12},{"X":204.86,"Y":83.4},{"X":210.01,"Y":76.81},{"X":217.49,"Y":71.33},{"X":227.17,"Y":67.31},{"X":238.35,"Y":65.2},{"X":243.75,"Y":64.95},{"X":243.99,"Y":64.95}],[{"X":269.99,"Y":212.88},{"X":269.48,"Y":208.76},{"X":266.59003,"Y":208.36},{"X":245.76,"Y":210.86},{"X":230.95,"Y":214.67},{"X":220.9,"Y":219.34},{"X":213.82,"Y":224.85},{"X":209.69,"Y":230.71},{"X":207.92002,"Y":237.03},{"X":208.4,"Y":244.49},{"X":210.86,"Y":250.57},{"X":215.2,"Y":255.08},{"X":221.69,"Y":258.13},{"X":230.57,"Y":259.43},{"X":242.52,"Y":258.58004},{"X":255.27,"Y":255.23},{"X":266.07,"Y":250.04},{"X":269.34003,"Y":247.02},{"X":269.99,"Y":244.81},{"X":269.99,"Y":212.88},{"X":269.99,"Y":212.88}],[{"X":243.63,"Y":73.34},{"X":235.93,"Y":74.4},{"X":230.07,"Y":77.36},{"X":225.65,"Y":82.21001},{"X":223.05,"Y":88.57},{"X":222.41,"Y":96.92},{"X":223.94,"Y":104.53},{"X":227.23,"Y":110.22},{"X":231.99,"Y":114.29},{"X":238.44,"Y":116.65},{"X":246.81,"Y":116.94},{"X":253.73,"Y":115.1},{"X":258.87,"Y":111.5},{"X":262.63,"Y":106.12},{"X":264.65,"Y":98.93},{"X":264.59003,"Y":90.25},{"X":262.47,"Y":83.41},{"X":258.6597,"Y":78.43},{"X":253.37,"Y":75.08},{"X":246.08,"Y":73.43},{"X":243.68,"Y":73.34},{"X":243.63,"Y":73.34}]]'
-  }, get_custom_poly()
+  }, getCustomPolygons()
 ];
 
-function get_custom_poly() {
+function getCustomPolygons() {
   var value = $('#custom_polygons_select').val();
   var arr = $.totalStorage('custom_polygons');
   if (value) {
@@ -343,7 +343,7 @@ function get_custom_poly() {
   };
 }
 
-function get_random_polys(which, polygon) {
+function getRandomPolygons(which, polygon) {
   var pointCount = randomSetting[which + 'PointCount'];
   var polygonCount = randomSetting[which + 'PolygonCount'];
   if (arguments.length === 1) polygon = _.parseInt($('input[name="polygons"]:checked').val());
@@ -407,6 +407,25 @@ function get_random_polys(which, polygon) {
   return np;
 }
 
+function getPolygons(scaleAgain) {
+  var polygon = _.parseInt($('input[name="polygons"]:checked').val());
+  if(polygon !== 4 && polygon !== 5) {
+    ss = deserializeClipperPolygon(defaultPolygons[polygon].subj);
+    cc = deserializeClipperPolygon(defaultPolygons[polygon].clip);
+  } else {
+    if (!subj.random) subj.random = getRandomPolygons('subj');
+    if (!clip.random) clip.random = getRandomPolygons('clip');
+    if (scaleAgain) {
+      subj.random = scaleAgainRandomPoly(subj.random);
+      clip.random = scaleAgainRandomPoly(clip.random);
+      randomSetting.scale = scale;
+    }
+    ss = subj.random;
+    cc = clip.random;
+  }
+  sss = [[]];
+}
+
 function scaleAgainRandomPoly(poly) {
   for (var i = 0; i < poly.length; i++) {
     for (var j = 0; j < poly[i].length; j++) {
@@ -426,7 +445,7 @@ function round(a) {
   return Math.floor(a * scale);
 }
 
-function deserialize_clipper_poly(polygonString) {
+function deserializeClipperPolygon(polygonString) {
   lsk++;
   var poly = JSON.parse(polygonString);
   var i, j, pp, n = [[]];
@@ -1063,25 +1082,6 @@ function updateEnlargedSVGIfNeeded() {
   }
 }
 
-function get_polys(scale_again) {
-  var polygon = _.parseInt($('input[name="polygons"]:checked').val());
-  if(polygon !== 4 && polygon !== 5) {
-    ss = deserialize_clipper_poly(defaultPolygons[polygon].subj);
-    cc = deserialize_clipper_poly(defaultPolygons[polygon].clip);
-  } else {
-    if (!subj.random) subj.random = get_random_polys('subj');
-    if (!clip.random) clip.random = get_random_polys('clip');
-    if (scale_again) {
-      subj.random = scaleAgainRandomPoly(subj.random);
-      clip.random = scaleAgainRandomPoly(clip.random);
-      randomSetting.scale = scale;
-    }
-    ss = subj.random;
-    cc = clip.random;
-  }
-  sss = [[]];
-}
-
 // setups defaults, attach events and finally draw the default svg image
 function main() {
   // formats internal representation of polygons to specified output format and prints them on input fields
@@ -1106,11 +1106,11 @@ function main() {
     var subj = '', clip = '';
     dontRoundAndScale = true;
     if(polygon !== 4 && polygon !== 5) {
-      subj = deserialize_clipper_poly(defaultPolygons[polygon].subj);
-      clip = deserialize_clipper_poly(defaultPolygons[polygon].clip);
+      subj = deserializeClipperPolygon(defaultPolygons[polygon].subj);
+      clip = deserializeClipperPolygon(defaultPolygons[polygon].clip);
     } else {
-      subj = get_random_polys('subj', polygon);
-      clip = get_random_polys('clip', polygon);
+      subj = getRandomPolygons('subj', polygon);
+      clip = getRandomPolygons('clip', polygon);
     }
     dontRoundAndScale = false;
     if (subj !== '') subj = JSON.stringify(subj);
@@ -1243,14 +1243,14 @@ function main() {
       if (r.subjPolygonCount < rs[rs.current].min.subjPolygonCount) r.subjPolygonCount = rs[rs.current].min.subjPolygonCount;
       if (r.subjPolygonCount > rs[rs.current].max.subjPolygonCount) r.subjPolygonCount = rs[rs.current].max.subjPolygonCount;
       $('#subj_polygon_count').val(r.subjPolygonCount);
-      subj.random = get_random_polys('subj', val);
-      clip.random = get_random_polys('clip', val);
+      subj.random = getRandomPolygons('subj', val);
+      clip.random = getRandomPolygons('clip', val);
     }
     make_clip();
   });
   $('#generate_random_polygons').hold(function () {
-    subj.random = get_random_polys('subj');
-    clip.random = get_random_polys('clip');
+    subj.random = getRandomPolygons('subj');
+    clip.random = getRandomPolygons('clip');
     make_clip();
   });
 
@@ -1366,7 +1366,7 @@ function main() {
   $('#scale').change(function () {
     if (this.value && !isNaN(this.value) && _.parseInt(this.value).toString() !== '0') {
       scale = parseFloat(this.value);
-      get_polys(true);
+      getPolygons(true);
       sss = cc;
       make_clip();
     }
@@ -1392,8 +1392,8 @@ function main() {
         if (r[key] > rs[rs.current].max[key]) r[key] = rs[rs.current].max[key];
       }
       $('#' + input).val(r[key]);
-      subj.random = get_random_polys('subj');
-      clip.random = get_random_polys('clip');
+      subj.random = getRandomPolygons('subj');
+      clip.random = getRandomPolygons('clip');
       make_clip();
     };
   }
@@ -1644,7 +1644,7 @@ function make_offset() {
 function make_clip() {
   ClipperLib.biginteger_used = null;
   clipper.Clear();
-  get_polys();
+  getPolygons();
   if (clipType !== '' && offsettablePoly === 'solution') {
     clipper.AddPolygons(ss, ClipperLib.PolyType.ptSubject);
     clipper.AddPolygons(cc, ClipperLib.PolyType.ptClip);
