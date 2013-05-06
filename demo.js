@@ -330,11 +330,11 @@ var defaultPolygons = [
 
 function getCustomPolygons() {
   var value = $('#custom_polygons_select').val();
-  var arr = $.totalStorage('custom_polygons');
   if (value) {
+    var customPolygons = $.totalStorage('custom_polygons');
     return {
-      subj: arr[value].subj,
-      clip: arr[value].clip
+      subj: customPolygons[value].subj,
+      clip: customPolygons[value].clip
     };
   }
   return {
@@ -713,13 +713,13 @@ $('.polygon_explorer').on({
 }, '.subpolylinks');
 
 function setDefaultCustomPolygons() {
-  var arr = $.totalStorage('custom_polygons');
-  if (typeof arr === 'undefined' || arr === null || !_.isArray(arr) || arr.length === 0) arr = [];
-  arr[0] = {
+  var customPolygons = $.totalStorage('custom_polygons');
+  if (!_.isArray(customPolygons) || _.isEmpty(customPolygons)) customPolygons = [];
+  customPolygons[0] = {
     subj: defaultCustomSubjectPolygon,
     clip: defaultCustomClipPolygon
   };
-  $.totalStorage('custom_polygons', arr);
+  $.totalStorage('custom_polygons', customPolygons);
 }
 
 function updateCustomPolygonsSelect() {
@@ -1149,9 +1149,9 @@ function main() {
       alert('Cannot remove the default polygon.');
     } else if (value) {
       if (confirm('Remove custom polygon ' + value + '?')) {
-        var arr = $.totalStorage('custom_polygons');
-        arr[value] = null;
-        $.totalStorage('custom_polygons', arr);
+        var customPolygons = $.totalStorage('custom_polygons');
+        customPolygons[value] = null;
+        $.totalStorage('custom_polygons', customPolygons);
         updateCustomPolygonsSelect();
       }
     }
