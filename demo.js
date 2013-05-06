@@ -114,7 +114,11 @@ window.onload = function () {
   ClipperLibOriginalMaxSteps = ClipperLib.MaxSteps;
   bench = new Benchmark('bench');
   p = SVG.create();
-  main();
+  bindHelp();
+  bindInputListeners();
+  setInputValues();
+  makeClip();
+  colorizeBoxes();
 };
 
 /* Input can be JSON-stringified version of the following:
@@ -350,13 +354,13 @@ function getRandomPolygons(which, polygon) {
   if (polygon !== 4 && polygon !== 5) return new ClipperLib.Polygons();
   var svg = $('#p');
   var margin = 10;
-  randomSetting.rand_min_x = margin;
-  randomSetting.rand_max_x = parseFloat(svg.attr('width'), 10) - margin;
-  randomSetting.rand_min_y = margin;
-  randomSetting.rand_max_y = parseFloat(svg.attr('height'), 10) - margin;
+  randomSetting.randomMinX = 100 * margin;
+  randomSetting.randomMaxX = 100 * (parseFloat(svg.attr('width'), 10) - margin);
+  randomSetting.randomMinY = 100 * margin;
+  randomSetting.randomMaxY = 100 * (parseFloat(svg.attr('height'), 10) - margin);
   var i, j, pp, np = new ClipperLib.Polygons(),
-    prev_x = null,
-    prev_y = null,
+    previousX = null,
+    previousY = null,
     vertical = null,
     previousVertical = null;
   for (i = 0; i < polygonCount; i++) {
@@ -370,15 +374,15 @@ function getRandomPolygons(which, polygon) {
         }
         // horiz => y remains same
         if (!vertical) {
-          pp.X = round(randomFloat(randomSetting.rand_min_x, randomSetting.rand_max_x));
-          pp.Y = (prev_y === null) ? round(randomFloat(randomSetting.rand_min_y, randomSetting.rand_max_y)) : prev_y;
+          pp.X = _.random(randomSetting.randomMinX, randomSetting.randomMaxX);
+          pp.Y = (previousY === null) ? _.random(randomSetting.randomMinY, randomSetting.randomMaxY) : previousY;
         // vertic => x remains same
         } else {
-          pp.Y = round(randomFloat(randomSetting.rand_min_y, randomSetting.rand_max_y));
-          pp.X = (prev_x === null) ? round(randomFloat(randomSetting.rand_min_x, randomSetting.rand_max_x)) : prev_x;
+          pp.Y = _.random(randomSetting.randomMinY, randomSetting.randomMaxY);
+          pp.X = (previousX === null) ? _.random(randomSetting.randomMinX, randomSetting.randomMaxX) : previousX;
         }
-        prev_x = pp.X;
-        prev_y = pp.Y;
+        previousX = pp.X;
+        previousY = pp.Y;
         previousVertical = vertical;
         // last point fix
         if (j === pointCount - 1 && pointCount !== 1) {
@@ -393,13 +397,13 @@ function getRandomPolygons(which, polygon) {
         }
         else np[i].push(pp);
       } else {
-        pp.X = round(randomFloat(randomSetting.rand_min_x, randomSetting.rand_max_x));
-        pp.Y = round(randomFloat(randomSetting.rand_min_y, randomSetting.rand_max_y));
+        pp.X = _.random(randomSetting.randomMinX, randomSetting.randomMaxX);
+        pp.Y = _.random(randomSetting.randomMinY, randomSetting.randomMaxY);
         np[i].push(pp);
       }
     }
-    prev_x = null;
-    prev_y = null;
+    previousX = null;
+    previousY = null;
     vertical = null;
     previousVertical = null;
   }
@@ -434,10 +438,6 @@ function scaleAgainRandomPoly(poly) {
     }
   }
   return poly;
-}
-
-function randomFloat(min, max) {
-  return (min + (max - min) * Math.random()).toFixed(2);
 }
 
 function round(a) {
@@ -1082,42 +1082,7 @@ function updateEnlargedSVGIfNeeded() {
   }
 }
 
-// setups defaults, attach events and finally draw the default svg image
-function main() {
-  // formats internal representation of polygons to specified output format and prints them on input fields
-  $('#output_format').change(function () {
-    outputFormat = $(this).val();
-    if (!$('#custom_polygons_fieldset').is(':hidden')) {
-      var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
-      var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
-      if (subj !== false && clip !== false) {
-        $('#custom_polygon_subj').val(formatOutput(subj));
-        $('#custom_polygon_clip').val(formatOutput(clip));
-      }
-    }
-    var polygon_explorer_string = normalizeClipperPoly($('#polygon_explorer_string_inp').val());
-    if (polygon_explorer_string !== false) {
-      $('#polygon_explorer_string_inp').val(formatOutput(polygon_explorer_string));
-    }
-  });
-  // Select dropdown
-  $('#sample_custom_polygon').change(function () {
-    var polygon = _.parseInt($(this).val());
-    var subj = '', clip = '';
-    dontRoundAndScale = true;
-    if(polygon !== 4 && polygon !== 5) {
-      subj = deserializeClipperPolygon(defaultPolygons[polygon].subj);
-      clip = deserializeClipperPolygon(defaultPolygons[polygon].clip);
-    } else {
-      subj = getRandomPolygons('subj', polygon);
-      clip = getRandomPolygons('clip', polygon);
-    }
-    dontRoundAndScale = false;
-    if (subj !== '') subj = JSON.stringify(subj);
-    if (clip !== '') clip = JSON.stringify(clip);
-    $('#custom_polygon_subj').val(formatOutput(subj));
-    $('#custom_polygon_clip').val(formatOutput(clip));
-  });
+function bindHelp() {
   $('#help_custom_polygon').click(function () {
     var txt = 'A) You can add your own custom polygons in several formats:\n\n';
     txt += '1) The program uses as an inner default the following format: JSON-stringified array of arrays of point objects eg. [[{"X":100,"Y":100},{"X":200,"Y":100},{"X":200,"Y":200},{"X":100,"Y":200}],[{"X":110,"Y":110},{"X":210,"Y":110},{"X":210,"Y":210},{"X":110,"Y":210}]]. This format allows to input sub polygons. Each sub polygon is an array of point objects. This format makes it easy to transfer polygons to other programs that use Clipper library and is suitable for storing polygons in database.\n\n';
@@ -1143,28 +1108,63 @@ function main() {
     txt += 'There are two places where this has effect: 1) the above text box 2) the Subj and Clip text boxes in Custom Polygon fieldset.';
     alert(txt);
   });
-  $('#remove_custom_polygon').click(function () {
-    var value = $('#custom_polygons_select').val();
-    if (value+'' === '0') {
-      alert('Cannot remove the default polygon.');
-    } else if (value) {
-      if (confirm('Remove custom polygon ' + value + '?')) {
-        var customPolygons = $.totalStorage('custom_polygons');
-        customPolygons[value] = null;
-        $.totalStorage('custom_polygons', customPolygons);
-        updateCustomPolygonsSelect();
-      }
+}
+
+function bindInputListeners() {
+  // reveal custom fieldsets
+  $('input[type="radio"][name="polygons"]').change(function () {
+    var val = _.parseInt($(this).val());
+    $('#custom_polygons_fieldset, #random_polygons_fieldset').hide();
+    if (val === 10) {
+      $('#custom_polygons_fieldset').show();
+      setDefaultCustomPolygons();
+      updateCustomPolygonsSelect();
+      $('#custom_polygons_select').change();
     }
+    if (val === 4 || val === 5) {
+      $('#random_polygons_fieldset').show();
+      randomSettings.current = (val === 4) ? 'rect' : 'norm';
+      var r = randomSetting, rs = randomSettings;
+      // Test for ranges
+      if (r.clipPointCount < rs[rs.current].min.clipPointCount) r.clipPointCount = rs[rs.current].min.clipPointCount;
+      if (r.clipPointCount > rs[rs.current].max.clipPointCount) r.clipPointCount = rs[rs.current].max.clipPointCount;
+      $('#clip_point_count').val(r.clipPointCount);
+      if (r.clipPolygonCount < rs[rs.current].min.clipPolygonCount) r.clipPolygonCount = rs[rs.current].min.clipPolygonCount;
+      if (r.clipPolygonCount > rs[rs.current].max.clipPolygonCount) r.clipPolygonCount = rs[rs.current].max.clipPolygonCount;
+      $('#clip_polygon_count').val(r.clipPolygonCount);
+      if (r.subjPointCount < rs[rs.current].min.subjPointCount) r.subjPointCount = rs[rs.current].min.subjPointCount;
+      if (r.subjPointCount > rs[rs.current].max.subjPointCount) r.subjPointCount = rs[rs.current].max.subjPointCount;
+      $('#subj_point_count').val(r.subjPointCount);
+      if (r.subjPolygonCount < rs[rs.current].min.subjPolygonCount) r.subjPolygonCount = rs[rs.current].min.subjPolygonCount;
+      if (r.subjPolygonCount > rs[rs.current].max.subjPolygonCount) r.subjPolygonCount = rs[rs.current].max.subjPolygonCount;
+      $('#subj_polygon_count').val(r.subjPolygonCount);
+      subj.random = getRandomPolygons('subj', val);
+      clip.random = getRandomPolygons('clip', val);
+    }
+    makeClip();
   });
-  $('#removeall_custom_polygon').click(function () {
-    var count = $('#custom_polygons_select option').length;
-    if (count > 1) {
-      if (confirm('Remove all ' + (count -1)  + ' custom polygons?')) {
-        $.totalStorage('custom_polygons', []);
-        setDefaultCustomPolygons();
-        updateCustomPolygonsSelect();
-      }
+  $('#generate_random_polygons').hold(function () {
+    subj.random = getRandomPolygons('subj');
+    clip.random = getRandomPolygons('clip');
+    makeClip();
+  });
+  // Select dropdown
+  $('#sample_custom_polygon').change(function () {
+    var polygon = _.parseInt($(this).val());
+    var subj = '', clip = '';
+    dontRoundAndScale = true;
+    if(polygon !== 4 && polygon !== 5) {
+      subj = deserializeClipperPolygon(defaultPolygons[polygon].subj);
+      clip = deserializeClipperPolygon(defaultPolygons[polygon].clip);
+    } else {
+      subj = getRandomPolygons('subj', polygon);
+      clip = getRandomPolygons('clip', polygon);
     }
+    dontRoundAndScale = false;
+    if (subj !== '') subj = JSON.stringify(subj);
+    if (clip !== '') clip = JSON.stringify(clip);
+    $('#custom_polygon_subj').val(formatOutput(subj));
+    $('#custom_polygon_clip').val(formatOutput(clip));
   });
   $('#save_custom_polygon').click(function () {
     var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
@@ -1212,58 +1212,43 @@ function main() {
     if (_.isArray(arr) && arr.length && typeof arr[value] !== 'undefined') {
       $('#custom_polygon_subj').val(formatOutput(arr[value].subj));
       $('#custom_polygon_clip').val(formatOutput(arr[value].clip));
-      make_clip();
+      makeClip();
     }
   });
-
-  // reveal custom fieldsets
-  $('input[type="radio"][name="polygons"]').change(function () {
-    var val = _.parseInt($(this).val());
-    $('#custom_polygons_fieldset, #random_polygons_fieldset').hide();
-    if (val === 10) {
-      $('#custom_polygons_fieldset').show();
-      setDefaultCustomPolygons();
-      updateCustomPolygonsSelect();
-      $('#custom_polygons_select').change();
+  $('#remove_custom_polygon').click(function () {
+    var value = $('#custom_polygons_select').val();
+    if (value+'' === '0') {
+      alert('Cannot remove the default polygon.');
+    } else if (value) {
+      if (confirm('Remove custom polygon ' + value + '?')) {
+        var customPolygons = $.totalStorage('custom_polygons');
+        customPolygons[value] = null;
+        $.totalStorage('custom_polygons', customPolygons);
+        updateCustomPolygonsSelect();
+      }
     }
-    if (val === 4 || val === 5) {
-      $('#random_polygons_fieldset').show();
-      randomSettings.current = (val === 4) ? 'rect' : 'norm';
-      var r = randomSetting, rs = randomSettings;
-      // Test for ranges
-      if (r.clipPointCount < rs[rs.current].min.clipPointCount) r.clipPointCount = rs[rs.current].min.clipPointCount;
-      if (r.clipPointCount > rs[rs.current].max.clipPointCount) r.clipPointCount = rs[rs.current].max.clipPointCount;
-      $('#clip_point_count').val(r.clipPointCount);
-      if (r.clipPolygonCount < rs[rs.current].min.clipPolygonCount) r.clipPolygonCount = rs[rs.current].min.clipPolygonCount;
-      if (r.clipPolygonCount > rs[rs.current].max.clipPolygonCount) r.clipPolygonCount = rs[rs.current].max.clipPolygonCount;
-      $('#clip_polygon_count').val(r.clipPolygonCount);
-      if (r.subjPointCount < rs[rs.current].min.subjPointCount) r.subjPointCount = rs[rs.current].min.subjPointCount;
-      if (r.subjPointCount > rs[rs.current].max.subjPointCount) r.subjPointCount = rs[rs.current].max.subjPointCount;
-      $('#subj_point_count').val(r.subjPointCount);
-      if (r.subjPolygonCount < rs[rs.current].min.subjPolygonCount) r.subjPolygonCount = rs[rs.current].min.subjPolygonCount;
-      if (r.subjPolygonCount > rs[rs.current].max.subjPolygonCount) r.subjPolygonCount = rs[rs.current].max.subjPolygonCount;
-      $('#subj_polygon_count').val(r.subjPolygonCount);
-      subj.random = getRandomPolygons('subj', val);
-      clip.random = getRandomPolygons('clip', val);
-    }
-    make_clip();
   });
-  $('#generate_random_polygons').hold(function () {
-    subj.random = getRandomPolygons('subj');
-    clip.random = getRandomPolygons('clip');
-    make_clip();
+  $('#removeall_custom_polygon').click(function () {
+    var count = $('#custom_polygons_select option').length;
+    if (count > 1) {
+      if (confirm('Remove all ' + (count -1)  + ' custom polygons?')) {
+        $.totalStorage('custom_polygons', []);
+        setDefaultCustomPolygons();
+        updateCustomPolygonsSelect();
+      }
+    }
   });
 
   // Subject FillType
   $('input[name="subject_fillType"]').change(function () {
     subj.fillType = _.parseInt(this.value);
-    make_clip();
+    makeClip();
   });
 
   // Clip FillType
   $('input[name="clip_fillType"]').change(function () {
     clip.fillType = _.parseInt(this.value);
-    make_clip();
+    makeClip();
   });
 
   // Clip type (operation)
@@ -1272,7 +1257,7 @@ function main() {
     $('input[name="offsettable_poly"][value="' + offsettablePoly + '"]').prop('checked', true);
     clipType = $('input[name="clipType"]:checked').val();
     if (clipType !== '') clipType = _.parseInt(clipType);
-    make_clip();
+    makeClip();
   });
 
   // Cleaning and simplifying
@@ -1282,16 +1267,16 @@ function main() {
       cleanDelta = cleanDeltaDefault;
       $('#cleandelta').val(cleanDelta);
     }
-    make_clip();
+    makeClip();
   });
   $('#cleandelta').change(function () {
     var value = parseFloat(this.value);
     if (!isNaN(value)) cleanDelta = value;
-    make_clip();
+    makeClip();
   });
   $('#simplify').change(function () {
     simplify = $(this).prop('checked');
-    make_clip();
+    makeClip();
   });
   $('#lighten').change(function () {
     lighten = $(this).prop('checked');
@@ -1299,12 +1284,12 @@ function main() {
       lightenDistance = lightenDistanceDefault;
       $('#lighten_distance').val(lightenDistance);
     }
-    make_clip();
+    makeClip();
   });
   $('#lighten_distance').change(function () {
     var value = parseFloat(this.value);
     if (!isNaN(value)) lightenDistance = value;
-    make_clip();
+    makeClip();
   });
 
   // Offsetting
@@ -1316,12 +1301,12 @@ function main() {
       $('input[name="clipType"][value=""]').prop('checked', true);
       clipType = '';
     }
-    make_clip();
+    makeClip();
   });
   $('input[name="joinType"]').change(function () {
     joinType = _.parseInt(this.value);
-    //make_offset();
-    make_clip();
+    //makeOffset();
+    makeClip();
   });
 
   function getDeltaChanger(direction) {
@@ -1329,7 +1314,7 @@ function main() {
       var original = $('#delta').val();
       if (!isNaN(original)) delta = parseFloat(original);
       delta += direction;
-      make_clip();
+      makeClip();
     };
   }
   $('#delta_minus').hold(getDeltaChanger(-1));
@@ -1342,7 +1327,7 @@ function main() {
       if (!isNaN(original)) miterLimit = parseFloat(original);
       miterLimit += direction;
       if (miterLimit < 1.0) miterLimit = 1.0;
-      make_clip();
+      makeClip();
     };
   }
   $('#miterLimit_minus').hold(getMiterChanger(-0.1));
@@ -1351,7 +1336,7 @@ function main() {
 
   $('#autoFix').change(function () {
     autoFix = $(this).prop('checked');
-    make_clip();
+    makeClip();
   });
 
   // Scale
@@ -1368,7 +1353,7 @@ function main() {
       scale = parseFloat(this.value);
       getPolygons(true);
       sss = cc;
-      make_clip();
+      makeClip();
     }
   });
   $('#scale_plus').hold(function () {
@@ -1394,7 +1379,7 @@ function main() {
       $('#' + input).val(r[key]);
       subj.random = getRandomPolygons('subj');
       clip.random = getRandomPolygons('clip');
-      make_clip();
+      makeClip();
     };
   }
   $('#subj_polygon_count_minus').hold(getChanger('subjPolygonCount', -1));
@@ -1433,7 +1418,22 @@ function main() {
       $('#subj_subpolygons, #subj_points_in_subpolygons, #subj_points_total, #clip_subpolygons, #clip_points_in_subpolygons, #clip_points_total, #solution_subpolygons, #solution_points_in_subpolygons, #solution_points_total, #points_total, #all_subpolygons').html('');
     }
   });
-  $('#output_format').val(outputFormat);
+  // formats internal representation of polygons to specified output format and prints them on input fields
+  $('#output_format').change(function () {
+    outputFormat = $(this).val();
+    if (!$('#custom_polygons_fieldset').is(':hidden')) {
+      var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
+      var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
+      if (subj !== false && clip !== false) {
+        $('#custom_polygon_subj').val(formatOutput(subj));
+        $('#custom_polygon_clip').val(formatOutput(clip));
+      }
+    }
+    var polygonExplorerString = normalizeClipperPoly($('#polygon_explorer_string_inp').val());
+    if (polygonExplorerString !== false) {
+      $('#polygon_explorer_string_inp').val(formatOutput(polygonExplorerString));
+    }
+  });
 
   $('#benchmark1, #benchmark2, #benchmark1b, #benchmark2b').click(function () {
     benchmarkClickedButtonId = this.id;
@@ -1530,30 +1530,32 @@ function main() {
       }
     }
   });
-  $('#scale').val(scale.toFixed(1));
-  $('#delta').val(delta.toFixed(1));
-  $('#miterLimit').val(miterLimit.toFixed(1));
-  $('#autoFix').prop('checked', autoFix);
-  $('#simplify').prop('checked', simplify);
-  $('#clean').prop('checked', clean);
-  $('#cleandelta').val(cleanDeltaDefault);
-  $('#lighten').prop('checked', lighten);
-  $('#lighten_distance').val(lightenDistanceDefault);
-  $('input[name="subject_fillType"][value="' + subj.fillType + '"]').prop('checked', true);
-  $('input[name="clip_fillType"][value="' + clip.fillType + '"]').prop('checked', true);
+}
+
+function setInputValues() {
   $('input[name="polygons"][value="' + selectedPolygons + '"]').prop('checked', true).change();
-  $('input[name="offsettable_poly"][value="' + offsettablePoly + '"]').prop('checked', true);
   $('#subj_polygon_count').val(randomSetting.subjPolygonCount);
   $('#subj_point_count').val(randomSetting.subjPointCount);
   $('#clip_polygon_count').val(randomSetting.clipPolygonCount);
   $('#clip_point_count').val(randomSetting.clipPointCount);
+  $('input[name="subject_fillType"][value="' + subj.fillType + '"]').prop('checked', true);
+  $('input[name="clip_fillType"][value="' + clip.fillType + '"]').prop('checked', true);
+  $('input[name="offsettable_poly"][value="' + offsettablePoly + '"]').prop('checked', true);
+  $('#delta').val(delta.toFixed(1));
+  $('#miterLimit').val(miterLimit.toFixed(1));
+  $('#autoFix').prop('checked', autoFix);
+  $('#clean').prop('checked', clean);
+  $('#cleandelta').val(cleanDeltaDefault);
+  $('#simplify').prop('checked', simplify);
+  $('#lighten').prop('checked', lighten);
+  $('#lighten_distance').val(lightenDistanceDefault);
+  $('#scale').val(scale.toFixed(1));
   $('#bevel').prop('checked', bevel);
   $('#explorer_enabled').prop('checked', explorerEnabled);
-  make_clip();
-  colorizeBoxes();
-} // main()
+  $('#output_format').val(outputFormat);
+}
 
-function make_offset() {
+function makeOffset() {
   // Select ofsettable polygon
   var off_poly, B3;
   offsettablePoly = $('input[name="offsettable_poly"]:checked').val();
@@ -1641,7 +1643,7 @@ function make_offset() {
   updateEnlargedSVGIfNeeded();
 }
 
-function make_clip() {
+function makeClip() {
   ClipperLib.biginteger_used = null;
   clipper.Clear();
   getPolygons();
@@ -1653,5 +1655,5 @@ function make_clip() {
     clipper.Execute(clipType, sss, subj.fillType, clip.fillType);
     bench.end(B1);
   }
-  make_offset();
+  makeOffset();
 }
