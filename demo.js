@@ -42,7 +42,7 @@ var explorerEnabled = true;
 var clipper = new ClipperLib.Clipper();
 var ss, cc, sss;
 var offsetResult;
-var SVG = {}, p, p1, p2, p3;
+var p, p1, p2, p3;
 var scaledPaths = [];
 var repeatTimes;
 var repeat = 0;
@@ -136,16 +136,153 @@ var defaultPolygons = [
     clip: '[[{"X":305.08004,"Y":241.97},{"X":306,"Y":251.51},{"X":308.18,"Y":256.4},{"X":311.72,"Y":259.09003},{"X":317.31,"Y":260.01},{"X":324.71004,"Y":259.01},{"X":332.45,"Y":255.86},{"X":335.57,"Y":257.5396},{"X":337.6,"Y":260.44},{"X":336.94,"Y":262.33004},{"X":328.27,"Y":268.74},{"X":317.9,"Y":273.4196},{"X":307.94,"Y":275.49},{"X":296.26,"Y":275.23},{"X":286.64,"Y":272.99},{"X":279.7896,"Y":269.31},{"X":274.14,"Y":263.55},{"X":271.6597,"Y":260.21004},{"X":269.2,"Y":261.06},{"X":254.83,"Y":268.51},{"X":242.11,"Y":272.97},{"X":227.59,"Y":275.23},{"X":209.91,"Y":275.48},{"X":197.47,"Y":273.63},{"X":187.91,"Y":270.13},{"X":180.48002,"Y":265.09003},{"X":175.32,"Y":258.88},{"X":172.2098,"Y":251.44},{"X":171.1,"Y":242.23},{"X":172.24,"Y":233.63},{"X":175.49,"Y":226.24},{"X":181,"Y":219.54},{"X":189.42002,"Y":213.3},{"X":201.36,"Y":207.73},{"X":217.23,"Y":203.25},{"X":238.28,"Y":200.1},{"X":265.24,"Y":198.78},{"X":269.37,"Y":198.47},{"X":269.98,"Y":182.93},{"X":268.74,"Y":171.32},{"X":266.05,"Y":163.7098},{"X":261.58004,"Y":157.72},{"X":255.24,"Y":153.24},{"X":247.06,"Y":150.3298},{"X":235.44,"Y":149.13},{"X":224.71,"Y":150.05},{"X":215.91,"Y":153},{"X":210.23002,"Y":156.86},{"X":207.64,"Y":160.85},{"X":207.19,"Y":165.28},{"X":209.34,"Y":169.86},{"X":212.0198,"Y":174.15},{"X":212.14,"Y":177.99},{"X":209.8,"Y":181.78},{"X":204.22,"Y":185.79},{"X":197.62,"Y":187.68},{"X":188.65,"Y":187.43},{"X":182.41,"Y":185.39},{"X":178.45,"Y":181.77},{"X":176.2098,"Y":176.9},{"X":176.03,"Y":170.64},{"X":178.2,"Y":164.13},{"X":183.09,"Y":157.7},{"X":191.04002,"Y":151.36},{"X":202.01,"Y":145.8298},{"X":216.09,"Y":141.57},{"X":232.08,"Y":139.24},{"X":250.07,"Y":139.18},{"X":266.13,"Y":141.23002},{"X":279.05,"Y":145.06},{"X":289.1597,"Y":150.3},{"X":295.9196,"Y":156.19},{"X":300.73,"Y":163.41},{"X":303.85,"Y":172.47},{"X":305.07,"Y":183.78},{"X":305.07,"Y":241.97},{"X":305.08004,"Y":241.97}],[{"X":243.99,"Y":64.95},{"X":255.92,"Y":66.07},{"X":266.21004,"Y":69.28},{"X":274.98,"Y":74.44},{"X":280.65,"Y":80.19},{"X":284.03,"Y":86.85},{"X":285.26,"Y":94.52001},{"X":284.28,"Y":102.84},{"X":281.24,"Y":109.66},{"X":276.0396,"Y":115.43},{"X":267.89,"Y":120.46},{"X":257.68,"Y":123.93},{"X":245.79,"Y":125.33},{"X":232.93,"Y":124.53},{"X":222.21,"Y":121.74},{"X":213.14,"Y":117.11},{"X":207.36,"Y":111.92},{"X":203.7,"Y":105.75},{"X":201.94,"Y":98.18},{"X":202.34,"Y":90.12},{"X":204.86,"Y":83.4},{"X":210.01,"Y":76.81},{"X":217.49,"Y":71.33},{"X":227.17,"Y":67.31},{"X":238.35,"Y":65.2},{"X":243.75,"Y":64.95},{"X":243.99,"Y":64.95}],[{"X":269.99,"Y":212.88},{"X":269.48,"Y":208.76},{"X":266.59003,"Y":208.36},{"X":245.76,"Y":210.86},{"X":230.95,"Y":214.67},{"X":220.9,"Y":219.34},{"X":213.82,"Y":224.85},{"X":209.69,"Y":230.71},{"X":207.92002,"Y":237.03},{"X":208.4,"Y":244.49},{"X":210.86,"Y":250.57},{"X":215.2,"Y":255.08},{"X":221.69,"Y":258.13},{"X":230.57,"Y":259.43},{"X":242.52,"Y":258.58004},{"X":255.27,"Y":255.23},{"X":266.07,"Y":250.04},{"X":269.34003,"Y":247.02},{"X":269.99,"Y":244.81},{"X":269.99,"Y":212.88},{"X":269.99,"Y":212.88}],[{"X":243.63,"Y":73.34},{"X":235.93,"Y":74.4},{"X":230.07,"Y":77.36},{"X":225.65,"Y":82.21001},{"X":223.05,"Y":88.57},{"X":222.41,"Y":96.92},{"X":223.94,"Y":104.53},{"X":227.23,"Y":110.22},{"X":231.99,"Y":114.29},{"X":238.44,"Y":116.65},{"X":246.81,"Y":116.94},{"X":253.73,"Y":115.1},{"X":258.87,"Y":111.5},{"X":262.63,"Y":106.12},{"X":264.65,"Y":98.93},{"X":264.59003,"Y":90.25},{"X":262.47,"Y":83.41},{"X":258.6597,"Y":78.43},{"X":253.37,"Y":75.08},{"X":246.08,"Y":73.43},{"X":243.68,"Y":73.34},{"X":243.63,"Y":73.34}]]'
   }, getCustomPolygons()
 ];
+var SVG = {
+  subPolyLinks: null,
+  total: null,
+  create: function () {
+    p = Raphael('svgcontainer', 500, 350);
+    p.canvas.id = 'p';
+    var filter = '<filter id="innerbevel" x0="-50%" y0="-50%" width="200%" height="200%" >';
+    filter += '<feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>';
+    filter += '<feOffset dy="3" dx="3"/>';
+    filter += '<feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="hlDiff"/>';
+    filter += '<feFlood flood-color="white" flood-opacity="0.8"/>'; // changed to 1.0 for speed
+    filter += '<feComposite in2="hlDiff" operator="in"/>';
+    filter += '<feComposite in2="SourceGraphic" operator="over" result="withGlow"/>';
+    filter += '<feOffset in="blur" dy="-3" dx="-3"/>';
+    filter += '<feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowDiff"/>';
+    filter += '<feFlood flood-color="black" flood-opacity="0.5"/>'; // changed to 1.0 for speed
+    filter += '<feComposite in2="shadowDiff" operator="in"/>';
+    filter += '<feComposite in2="withGlow" operator="over"/>';
+    filter += '</filter>';
+    // Markers to show start, mid and end points of path
+    var markers = '<marker id="StartMarker" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="10" markerHeight="10" stroke="red" fill="none" orient="auto">';
+    markers += '<path d="M0,5L10,5M5,0L10,5M5,10L10,5">';
+    markers += '</marker>';
+    markers += '<marker id="MidMarker" viewBox="-1 -1 12 12" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="4" markerHeight="4" stroke="red" fill="yellow" fill-opacity="0.5" orient="0" >';
+    markers += '<circle cx="5" cy="5" r="5"></circle>';
+    markers += '</marker>';
+    markers += '<marker id="EndMarker" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="8" stroke="blue" fill="none" orient="auto">';
+    markers += '<rect x="0" y="0" width="10" height="10"></rect>';
+    markers += '</marker>';
 
-window.onload = function () {
-  ClipperLibOriginalMaxSteps = ClipperLib.MaxSteps;
-  bench = new Benchmark('bench');
-  p = SVG.create();
-  bindHelp();
-  bindInputListeners();
-  setInputValues();
-  makeClip();
-  colorizeBoxes();
+    // This second invisible marker is needed to avoid noisy after images in Chrome:
+    markers += '<marker id="StartMarker2" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="10" markerHeight="10" stroke="none" fill="none" orient="auto">';
+    markers += '<path d="M0,5L10,5M5,0L10,5M5,10L10,5">';
+    markers += '</marker>';
+    markers += '<marker id="MidMarker2" viewBox="-1 -1 12 12" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="4" markerHeight="4" stroke="none" fill="none" orient="0">';
+    markers += '<circle cx="5" cy="5" r="5"></circle>';
+    markers += '</marker>';
+    markers += '<marker id="EndMarker2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="8" stroke="none" fill="none" orient="auto">';
+    markers += '<rect x="0" y="0" width="10" height="10"></rect>';
+    markers += '</marker>';
+    // http://stackoverflow.com/questions/3642035/jquerys-append-not-working-with-svg-element
+    $('body').append('<svg id="dummy" style="display:none"><defs>' + filter + markers + '</defs></svg>');
+    $('#p defs').append($('#innerbevel'), $('#dummy marker'));
+    $('#dummy').remove();
+    return p;
+  },
+  update: function() {
+      if (!p) p = SVG.create();
+      if (p1) p1.remove();
+      if (p2) p2.remove();
+      if (p3) p3.remove();
+  },
+  addPaths: function (a, b, c, a1, b1) {
+    if (a) {
+      subj.subPolygons = a.length;
+      a = this.polysToPath(a, 1);
+      if (explorerEnabled) {
+        if (typeof subj.subPolygons === 'undefined') subj.subPolygons = 0;
+        $('#subj_subpolygons').html(subj.subPolygons);
+        $('#subj_points_in_subpolygons').html(this.subPolyLinks);
+        $('#subj_points_total').html(this.total.toString());
+        subj.totalPoints = this.total;
+      }
+    }
+    if (b) {
+      clip.subPolygons = b.length;
+      b = this.polysToPath(b, 2);
+      if (explorerEnabled) {
+        if (typeof clip.subPolygons === 'undefined') clip.subPolygons = 0;
+        $('#clip_subpolygons').html(clip.subPolygons);
+        $('#clip_points_in_subpolygons').html(this.subPolyLinks);
+        $('#clip_points_total').html(this.total.toString());
+        clip.totalPoints = this.total;
+      }
+    }
+    solution.subPolygons = (typeof c !== 'undefined' && typeof c.length !== 'undefined') ? c.length : 0;
+    if (c) {
+      c = this.polysToPath(c, 3);
+      if (explorerEnabled) {
+        $('#solution_subpolygons').html(solution.subPolygons);
+        $('#solution_points_in_subpolygons').html(this.subPolyLinks);
+        $('#solution_points_total').html(this.total.toString());
+        solution.totalPoints = this.total;
+      }
+    }
+    if (explorerEnabled) {
+      $('#points_total').html((subj.totalPoints + clip.totalPoints + solution.totalPoints).toString());
+      if (isNaN(subj.subPolygons)) subj.subPolygons = 0;
+      else if (isNaN(clip.subPolygons)) clip.subPolygons = 0;
+      else if (isNaN(solution.subPolygons)) solution.subPolygons = 0;
+      $('#all_subpolygons').html(subj.subPolygons + clip.subPolygons + solution.subPolygons);
+    }
+    if (a) {
+      p1 = p.path(a);
+      p1.node.id = 'p1';
+      $('#p1').removeAttr('fill stroke')
+        .attr('fill-rule', a1 === 0 ? 'evenodd' : 'nonzero');
+    }
+    if (b) {
+      p2 = p.path(b);
+      p2.node.id = 'p2';
+      $('#p2').removeAttr('fill stroke')
+        .attr('fill-rule', b1 === 0 ? 'evenodd' : 'nonzero');
+    }
+    if (c) {
+      p3 = p.path(c);
+      p3.node.id = 'p3';
+      $('#p3').removeAttr('fill stroke');
+      if (bevel) {
+        $('#p3').attr('filter', 'url(#innerbevel)');
+      } else {
+        $('#p3').removeAttr('filter');
+      }
+    }
+  },
+  polysToPath: function (a, fr) {
+    scaledPaths[fr] = [];
+    var path = '', i, j, d;
+    this.subPolyCounts = [];
+    this.subPolyLinks = [];
+    this.total = 0;
+    if (!scale) scale = 1;
+    for (i = 0; i < a.length; i++) {
+      this.subPolyCounts.push(a[i].length);
+      d = '';
+      for (j = 0; j < a[i].length; j++) {
+        this.total++;
+        if (j === 0) {
+          d += 'M';
+        } else {
+          d += 'L';
+        }
+        d += (a[i][j].X / scale) + ', ' + (a[i][j].Y / scale);
+      }
+      d += 'Z';
+      path += d;
+      if (explorerEnabled) {
+        if (d.trim() === 'Z') d = '';
+        scaledPaths[fr].push(d);
+        this.subPolyLinks.push('<span class="subpolylinks" data-id="' + i + '" data-role="' + fr + '">' + a[i].length + '</span>');
+      }
+    }
+    if (explorerEnabled) this.subPolyLinks = this.subPolyLinks.join(', ');
+    if (path.trim() === 'Z') path = '';
+
+    return path;
+  }
 };
 
 /* Input can be JSON-stringified version of the following:
@@ -478,245 +615,6 @@ function deserializeClipperPolygon(polygonString) {
   }
   return np;
 }
-
-SVG.create = function () {
-  p = Raphael('svgcontainer', 500, 350);
-  p.canvas.id = 'p';
-  var str = "<filter id='innerbevel' x0='-50%' y0='-50%' width='200%' height='200%' >";
-  str += "<feGaussianBlur in='SourceAlpha' stdDeviation='2' result='blur'/>";
-  str += "<feOffset dy='3' dx='3'/>";
-  str += "<feComposite in2='SourceAlpha' operator='arithmetic' k2='-1' k3='1' result='hlDiff'/>";
-  str += "<feFlood flood-color='white' flood-opacity='0.8'/>"; // changed to 1.0 for speed
-  str += "<feComposite in2='hlDiff' operator='in'/>";
-  str += "<feComposite in2='SourceGraphic' operator='over' result='withGlow'/>";
-  str += "<feOffset in='blur' dy='-3' dx='-3'/>";
-  str += "<feComposite in2='SourceAlpha' operator='arithmetic' k2='-1' k3='1' result='shadowDiff'/>";
-  str += "<feFlood flood-color='black' flood-opacity='0.5'/>"; // changed to 1.0 for speed
-  str += "<feComposite in2='shadowDiff' operator='in'/>";
-  str += "<feComposite in2='withGlow' operator='over'/>";
-  str += "</filter>";
-  var markers = '';
-  // Markers to show start, mid and end points of path
-  markers += '<marker id="StartMarker" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="10" markerHeight="10" stroke="red" stroke-width="1" fill="none" orient="auto">';
-  markers += '<path d="M0,5L10,5M5,0L10,5M5,10L10,5">';
-  markers += '</marker>';
-
-  markers += '<marker id="MidMarker" stroke-opacity="1.0" viewBox="-1 -1 12 12" refX="5" refY="5" markerWidth="4" markerHeight="4" stroke="red" stroke-width="1" fill="yellow" stroke-opacity="0.5" fill-opacity="0.5" orient="0" markerUnits="strokeWidth">';
-  markers += '<circle cx="5" cy="5" r="5"></circle>';
-  markers += '</marker>';
-
-  markers += '<marker id="EndMarker" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="8" stroke="blue" stroke-width="1" fill="none" orient="auto">';
-  markers += '<rect x="0" y="0" width="10" height="10"></rect>';
-  markers += '</marker>';
-
-  // This second invisible marker is needed to avoid noisy after images in Chrome:
-  markers += '<marker id="StartMarker2" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="10" markerHeight="10" stroke="none" fill="none" orient="auto">';
-  markers += '<path d="M0,5L10,5M5,0L10,5M5,10L10,5">';
-  markers += '</marker>';
-  markers += '<marker id="MidMarker2" stroke-opacity="1.0" viewBox="-1 -1 12 12" refX="5" refY="5" markerWidth="4" markerHeight="4" stroke="none" fill="none" orient="0" markerUnits="strokeWidth">';
-  markers += '<circle cx="5" cy="5" r="5"></circle>';
-  markers += '</marker>';
-  markers += '<marker id="EndMarker2" viewBox="0 0 10 10" refX="5" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="8" stroke="none" fill="none" orient="auto">';
-  markers += '<rect x="0" y="0" width="10" height="10"></rect>';
-  markers += '</marker>';
-  $('body').append('<svg id="dummy" style="display:none"><defs>' + str + markers + '</defs></svg>');
-  $('#p defs').append($('#innerbevel'), $('#dummy marker'));
-  $('#dummy').remove();
-  return p;
-};
-SVG.addPaths = function (a, b, c, a1, b1) {
-  if (a) {
-    subj.subPolygons = a.length;
-    a = this.polysToPath(a, 1);
-    if (explorerEnabled) {
-      if (typeof subj.subPolygons === 'undefined') subj.subPolygons = 0;
-      $('#subj_subpolygons').html(subj.subPolygons);
-      $('#subj_points_in_subpolygons').html(this.subPolyLinks);
-      $('#subj_points_total').html(this.total.toString());
-      subj.totalPoints = this.total;
-    }
-  }
-  if (b) {
-    clip.subPolygons = b.length;
-    b = this.polysToPath(b, 2);
-    if (explorerEnabled) {
-      if (typeof clip.subPolygons === 'undefined') clip.subPolygons = 0;
-      $('#clip_subpolygons').html(clip.subPolygons);
-      $('#clip_points_in_subpolygons').html(this.subPolyLinks);
-      $('#clip_points_total').html(this.total.toString());
-      clip.totalPoints = this.total;
-    }
-  }
-  solution.subPolygons = (typeof c !== 'undefined' && typeof c.length !== 'undefined') ? c.length : 0;
-  if (c) {
-    c = this.polysToPath(c, 3);
-    if (explorerEnabled) {
-      $('#solution_subpolygons').html(solution.subPolygons);
-      $('#solution_points_in_subpolygons').html(this.subPolyLinks);
-      $('#solution_points_total').html(this.total.toString());
-      solution.totalPoints = this.total;
-    }
-  }
-  if (explorerEnabled) {
-    $('#points_total').html((subj.totalPoints + clip.totalPoints + solution.totalPoints).toString());
-    if (isNaN(subj.subPolygons)) subj.subPolygons = 0;
-    else if (isNaN(clip.subPolygons)) clip.subPolygons = 0;
-    else if (isNaN(solution.subPolygons)) solution.subPolygons = 0;
-    $('#all_subpolygons').html(subj.subPolygons + clip.subPolygons + solution.subPolygons);
-  }
-  if (a) {
-    p1 = p.path(a);
-    p1.node.id = 'p1';
-    $('#p1').removeAttr('fill stroke')
-      .attr('fill-rule', a1 === 0 ? 'evenodd' : 'nonzero');
-  }
-  if (b) {
-    p2 = p.path(b);
-    p2.node.id = 'p2';
-    $('#p2').removeAttr('fill stroke')
-      .attr('fill-rule', b1 === 0 ? 'evenodd' : 'nonzero');
-  }
-  if (c) {
-    p3 = p.path(c);
-    p3.node.id = 'p3';
-    $('#p3').removeAttr('fill stroke');
-    if (bevel) {
-      $('#p3').attr('filter', 'url(#innerbevel)');
-    } else {
-      $('#p3').removeAttr('filter');
-    }
-  }
-};
-SVG.subPolyLinks = null;
-SVG.total = null;
-SVG.polysToPath = function (a, fr) {
-  scaledPaths[fr] = [];
-  var path = '', i, j, d;
-  this.subPolyCounts = [];
-  this.subPolyLinks = [];
-  this.total = 0;
-  if (!scale) scale = 1;
-  for (i = 0; i < a.length; i++) {
-    this.subPolyCounts.push(a[i].length);
-    d = '';
-    for (j = 0; j < a[i].length; j++) {
-      this.total++;
-      if (j === 0) {
-        d += 'M';
-      } else {
-        d += 'L';
-      }
-      d += (a[i][j].X / scale) + ', ' + (a[i][j].Y / scale);
-    }
-    d += 'Z';
-    path += d;
-    if (explorerEnabled) {
-      if (d.trim() === 'Z') d = '';
-      scaledPaths[fr].push(d);
-      this.subPolyLinks.push('<span class="subpolylinks" data-id="' + i + '" data-role="' + fr + '">' + a[i].length + '</span>');
-    }
-  }
-  if (explorerEnabled) this.subPolyLinks = this.subPolyLinks.join(', ');
-  if (path.trim() === 'Z') path = '';
-
-  return path;
-};
-
-$('.polygon_explorer').on({
-  // set and show hightlighted path
-  mouseover: function() {
-    if (benchmarkRunning) return false;
-    var id = this.dataset.id,
-      role = this.dataset.role,
-      d = typeof id === 'undefined' ? scaledPaths[role].join(' ') : scaledPaths[role][id];
-    SVG.highlightedPath = p.path(d);
-    $(SVG.highlightedPath.node).removeAttr('fill stroke').attr({
-      'class': 'svg_mypath',
-      'fill-rule': $('#p' + role).attr('fill-rule'),
-      'vector-effect': 'non-scaling-stroke'
-    });
-  },
-  // enlarge highligthed path
-  click: function() {
-    if (benchmarkRunning) return false;
-    var id = this.dataset.id,
-      role = this.dataset.role,
-      d = typeof id === 'undefined' ? scaledPaths[role].join(' ') : scaledPaths[role][id],
-      points_string = normalizeClipperPoly(d),
-      area = 0;
-    if (points_string !== false) {
-      if (typeof id === 'undefined') {
-        $('#polygon_explorer_string_inp').val(formatOutput(points_string));
-        for (var j = 0; j < scaledPaths.length; j++) {
-          var points_str = normalizeClipperPoly(scaledPaths[role][j], true);
-          if (points_str !== false) {
-            var polygon = JSON.parse(points_str.replace(/^\[\[/, '[').replace(/\]\]$/, ']'));
-            area += ClipperLib.Clipper.Area(polygon);
-          }
-        }
-      } else {
-        $('#polygon_explorer_string_inp').val(formatOutput(points_string).replace(/^\[\[/, '[').replace(/\]\]$/, ']'));
-        area = ClipperLib.Clipper.Area(JSON.parse(points_string.replace(/^\[\[/, '[').replace(/\]\]$/, ']')));
-      }
-      $('#area').html('Area: ' + area);
-    } else {
-      $('#polygon_explorer_string_inp').val('Some error occurred when parsing polygon points!');
-    }
-    $(SVG.highlightedPath.node).removeAttr('fill stroke').attr({
-      'class': 'svg_mypath',
-      'fill-rule': $('#p' + role).attr('fill-rule'),
-      'vector-effect': 'non-scaling-stroke'
-    });
-    var bb = SVG.highlightedPath.node.getBBox();
-    var svg_w = _.parseInt($('#p').attr('width'));
-    var svg_h = _.parseInt($('#p').attr('height'));
-    var x_scale = (svg_w - 20) / bb.width;
-    var y_scale = (svg_h - 20) / bb.height;
-    var scal = Math.min(x_scale, y_scale);
-    var x_trans = -(bb.x + bb.width / 2) + svg_w / 2;
-    var y_trans = -(bb.y + bb.height / 2) + svg_h / 2;
-    $('#StartMarker')[0].setAttribute('markerWidth', 10 / scal * 2);
-    $('#StartMarker')[0].setAttribute('markerHeight', 10 / scal * 2);
-    $('#MidMarker')[0].setAttribute('markerWidth', 4 / scal * 2);
-    $('#MidMarker')[0].setAttribute('markerHeight', 4 / scal * 2);
-    $('#EndMarker')[0].setAttribute('markerWidth', 4 / scal * 2);
-    $('#EndMarker')[0].setAttribute('markerHeight', 4 / scal * 2);
-    SVG.highlightedPath.animate({
-      'transform': 't' + x_trans + ' ' + y_trans + 's' + scal + ' ' + scal
-    }, 500, function () {
-      $(SVG.highlightedPath.node).attr({
-        'marker-start': 'url(#StartMarker)',
-        'marker-mid': 'url(#MidMarker)',
-        'marker-end': 'url(#EndMarker)'
-      });
-    });
-  },
-  // hide highlighted path
-  mouseout: function() {
-    if (!SVG.highlightedPath) return;
-    $(SVG.highlightedPath.node).attr({
-      'marker-start': 'url(#StartMarker2)',
-      'marker-mid': 'url(#MidMarker2)',
-      'marker-end': 'url(#EndMarker2)'
-    });
-    if ($(SVG.highlightedPath.node).attr('transform'))
-      SVG.highlightedPath.animate({
-        'transform': 's1 1'
-      }, 500, function () {
-        this.animate({
-          'opacity': '0'
-        }, 500, function () {
-          this.remove();
-        });
-      });
-    else
-      SVG.highlightedPath.animate({
-        'opacity': '0'
-      }, 300, function () {
-        this.remove();
-      });
-  }
-}, '.subpolylinks');
 
 function setDefaultCustomPolygons() {
   var customPolygons = $.totalStorage('custom_polygons');
@@ -1398,7 +1296,7 @@ function bindInputListeners() {
   $('#bevel').change(function () {
     bevel = $(this).prop('checked');
     if (bevel) {
-      $('#p3').attr('filter', 'url(#innerbewel)');
+      $('#p3').attr('filter', 'url(#innerbevel)');
     } else {
       $('#p3').removeAttr('filter');
     }
@@ -1408,10 +1306,7 @@ function bindInputListeners() {
   $('#explorer_enabled').change(function () {
     explorerEnabled = $(this).prop('checked');
     if (explorerEnabled) {
-      if (!p) p = SVG.create();
-      if (p1) p1.remove();
-      if (p2) p2.remove();
-      if (p3) p3.remove();
+      SVG.update();
       SVG.addPaths(ss, cc, offsetResult, subj.fillType, clip.fillType);
     } else {
       $('#subj_subpolygons, #subj_points_in_subpolygons, #subj_points_total, #clip_subpolygons, #clip_points_in_subpolygons, #clip_points_total, #solution_subpolygons, #solution_points_in_subpolygons, #solution_points_total, #points_total, #all_subpolygons').html('');
@@ -1529,6 +1424,102 @@ function bindInputListeners() {
       }
     }
   });
+
+  $('.polygon_explorer').on({
+    // set and show hightlighted path
+    mouseover: function() {
+      if (benchmarkRunning) return false;
+      var id = this.dataset.id,
+        role = this.dataset.role,
+        d = typeof id === 'undefined' ? scaledPaths[role].join(' ') : scaledPaths[role][id];
+      SVG.highlightedPath = p.path(d);
+      $(SVG.highlightedPath.node).removeAttr('fill stroke').attr({
+        'class': 'svg_mypath',
+        'fill-rule': $('#p' + role).attr('fill-rule'),
+        'vector-effect': 'non-scaling-stroke'
+      });
+    },
+    // enlarge highligthed path
+    click: function() {
+      if (benchmarkRunning) return false;
+      var id = this.dataset.id,
+        role = this.dataset.role,
+        d = typeof id === 'undefined' ? scaledPaths[role].join(' ') : scaledPaths[role][id],
+        points_string = normalizeClipperPoly(d),
+        area = 0;
+      if (points_string !== false) {
+        if (typeof id === 'undefined') {
+          $('#polygon_explorer_string_inp').val(formatOutput(points_string));
+          for (var j = 0; j < scaledPaths.length; j++) {
+            var points_str = normalizeClipperPoly(scaledPaths[role][j], true);
+            if (points_str !== false) {
+              var polygon = JSON.parse(points_str.replace(/^\[\[/, '[').replace(/\]\]$/, ']'));
+              area += ClipperLib.Clipper.Area(polygon);
+            }
+          }
+        } else {
+          $('#polygon_explorer_string_inp').val(formatOutput(points_string).replace(/^\[\[/, '[').replace(/\]\]$/, ']'));
+          area = ClipperLib.Clipper.Area(JSON.parse(points_string.replace(/^\[\[/, '[').replace(/\]\]$/, ']')));
+        }
+        $('#area').html('Area: ' + area);
+      } else {
+        $('#polygon_explorer_string_inp').val('Some error occurred when parsing polygon points!');
+      }
+      $(SVG.highlightedPath.node).removeAttr('fill stroke').attr({
+        'class': 'svg_mypath',
+        'fill-rule': $('#p' + role).attr('fill-rule'),
+        'vector-effect': 'non-scaling-stroke'
+      });
+      var bb = SVG.highlightedPath.node.getBBox();
+      var svg_w = _.parseInt($('#p').attr('width'));
+      var svg_h = _.parseInt($('#p').attr('height'));
+      var x_scale = (svg_w - 20) / bb.width;
+      var y_scale = (svg_h - 20) / bb.height;
+      var scal = Math.min(x_scale, y_scale);
+      var x_trans = -(bb.x + bb.width / 2) + svg_w / 2;
+      var y_trans = -(bb.y + bb.height / 2) + svg_h / 2;
+      $('#StartMarker')[0].setAttribute('markerWidth', 10 / scal * 2);
+      $('#StartMarker')[0].setAttribute('markerHeight', 10 / scal * 2);
+      $('#MidMarker')[0].setAttribute('markerWidth', 4 / scal * 2);
+      $('#MidMarker')[0].setAttribute('markerHeight', 4 / scal * 2);
+      $('#EndMarker')[0].setAttribute('markerWidth', 4 / scal * 2);
+      $('#EndMarker')[0].setAttribute('markerHeight', 4 / scal * 2);
+      SVG.highlightedPath.animate({
+        'transform': 't' + x_trans + ' ' + y_trans + 's' + scal + ' ' + scal
+      }, 500, function () {
+        $(SVG.highlightedPath.node).attr({
+          'marker-start': 'url(#StartMarker)',
+          'marker-mid': 'url(#MidMarker)',
+          'marker-end': 'url(#EndMarker)'
+        });
+      });
+    },
+    // hide highlighted path
+    mouseout: function() {
+      if (!SVG.highlightedPath) return;
+      $(SVG.highlightedPath.node).attr({
+        'marker-start': 'url(#StartMarker2)',
+        'marker-mid': 'url(#MidMarker2)',
+        'marker-end': 'url(#EndMarker2)'
+      });
+      if ($(SVG.highlightedPath.node).attr('transform'))
+        SVG.highlightedPath.animate({
+          'transform': 's1 1'
+        }, 500, function () {
+          this.animate({
+            'opacity': '0'
+          }, 500, function () {
+            this.remove();
+          });
+        });
+      else
+        SVG.highlightedPath.animate({
+          'opacity': '0'
+        }, 300, function () {
+          this.remove();
+        });
+    }
+  }, '.subpolylinks');
 }
 
 function setInputValues() {
@@ -1556,23 +1547,23 @@ function setInputValues() {
 
 function makeOffset() {
   // Select ofsettable polygon
-  var off_poly, B3;
+  var B3;
   offsettablePoly = $('input[name="offsettable_poly"]:checked').val();
   if (offsettablePoly === 'subject') {
-    off_poly = ClipperLib.Clone(ss);
+    offsetResult = ClipperLib.Clone(ss);
   } else if (offsettablePoly === 'clip') {
-    off_poly = ClipperLib.Clone(cc);
+    offsetResult = ClipperLib.Clone(cc);
   } else if (offsettablePoly === 'solution') {
-    off_poly = sss;
+    offsetResult = sss;
   }
 
-  if (typeof off_poly === 'undefined' || !_.isArray(sss)) off_poly = [[]];
+  if (typeof offsetResult === 'undefined' || !_.isArray(sss)) offsetResult = [[]];
 
   if (ClipperLib.biginteger_used === null) ClipperLib.biginteger_used = 0;
 
   // Clean
   if (clean) {
-    off_poly = ClipperLib.Clean(off_poly, cleanDelta * scale);
+    offsetResult = ClipperLib.Clean(offsetResult, cleanDelta * scale);
   }
 
   // Simplify
@@ -1583,13 +1574,13 @@ function makeOffset() {
     // Simplifying is only needed when offsetting original polys, because results of boolean operations are already simplified.
     // Note! if clip polygon is the same as subject polygon then it seems that simplifying is needed also for result of boolean operation (ie. solution).
     if (offsettablePoly === 'subject') {
-      off_poly = clipper.SimplifyPolygons(off_poly, subj.fillType);
+      offsetResult = clipper.SimplifyPolygons(offsetResult, subj.fillType);
     }
     if (offsettablePoly === 'clip') {
-      off_poly = clipper.SimplifyPolygons(off_poly, clip.fillType);
+      offsetResult = clipper.SimplifyPolygons(offsetResult, clip.fillType);
     }
     if (offsettablePoly === 'solution') {
-      off_poly = clipper.SimplifyPolygons(off_poly, clip.fillType);
+      offsetResult = clipper.SimplifyPolygons(offsetResult, clip.fillType);
       if (subj.fillType !== clip.fillType) {
         console.log('Subject filltype and Clip filltype are different. We used Clip filltype in SimplifyPolygons().');
       }
@@ -1602,10 +1593,8 @@ function makeOffset() {
     var param_delta = roundTo(delta * scale, 3);
     var param_miterLimit = roundTo(miterLimit, 3);
     var B0 = bench.start('Offset', 'Offset(' + param_delta + ', ' + joinType + ', ' + param_miterLimit + ', ' + autoFix + ')');
-    offsetResult = clipper.OffsetPolygons(off_poly, param_delta, joinType, param_miterLimit, autoFix);
+    offsetResult = clipper.OffsetPolygons(offsetResult, param_delta, joinType, param_miterLimit, autoFix);
     bench.end(B0);
-  } else {
-    offsetResult = off_poly;
   }
 
   // Lightening
@@ -1617,11 +1606,7 @@ function makeOffset() {
     }
   }
 
-  // SVG Update
-  if (!p) p = SVG.create();
-  if (p1) p1.remove();
-  if (p2) p2.remove();
-  if (p3) p3.remove();
+  SVG.update();
   if (bench.includeSVG) B3 = bench.start('SVG', 'addPaths(ss, cc, offsetResult,  ' + subj.fillType + ', ' + clip.fillType + ')');
   SVG.addPaths(ss, cc, offsetResult, subj.fillType, clip.fillType);
   if (bench.includeSVG) bench.end(B3);
@@ -1656,3 +1641,14 @@ function makeClip() {
   }
   makeOffset();
 }
+
+window.onload = function () {
+  ClipperLibOriginalMaxSteps = ClipperLib.MaxSteps;
+  bench = new Benchmark('bench');
+  p = SVG.create();
+  bindHelp();
+  bindInputListeners();
+  setInputValues();
+  makeClip();
+  colorizeBoxes();
+};
