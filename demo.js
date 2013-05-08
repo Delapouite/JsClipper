@@ -63,7 +63,7 @@ var outputFormat = 'Clipper'; //, Plain, SVG
 var ClipperLibOriginalMaxSteps;
 var windowWidth = $(document).width() * 0.9;
 var updateEnlargedSVG = false;
-var updateEnlargedSVGSource = false;
+var updateSVGSource = false;
 var lsk = 0;
 var randomSettings = {
   current: 'norm',
@@ -647,60 +647,26 @@ function updateCustomPolygonsSelect() {
   $('#custom_polygons_select').change();
 }
 
-function svg_source_enlarge() {
-  var source = $('#svg_source_textarea').val().replace(/ id=\"/g, ' id="_');
-  $('#enlarged_svg').html(source);
-  var originalHeight = $('#_p').attr('height');
-  var originalWidth = $('#_p').attr('width');
-  // get bbox of all children of svg
-  $('body').append('<div id="dummy" style="display:block;visibility:hidden"><svg><g id="g123"></g></svg></div>');
-  $('#g123').append($('#_p').children().clone());
-  $('#dummy').html($('#dummy').html());
-  var bBox = $('#g123')[0].getBBox();
-  $('#dummy').remove();
-  $('#_p').attr('viewBox', (bBox.x - 5) + ' ' + (bBox.y - 5) + ' ' + (bBox.width + 10) + ' ' + (bBox.height + 10));
-  $('#enlarged_svg').html($('#enlarged_svg').html()).show();
-
-  $('#_p').attr('width', windowWidth).attr('height', _.parseInt((windowWidth / originalWidth) * originalHeight));
-  $('#_p1, #_p2, #_p3').css('stroke-width', 0.8 * (originalWidth / windowWidth));
-
-  $('#svg_source_textarea').hide();
-  $('#svg_source_enlarge_button').html('<button ' + (benchmarkRunning ? 'disabled' : '') + ' onClick="show_svg_source_f()" title="Show SVG source">Show SVG source</button>');
-  updateEnlargedSVGSource = true;
-  updateEnlargedSVG = true;
-}
-
-function show_svg_source_f() {
-  $('#svg_source_textarea').hide();
-  show_svg_source_click('non_click');
-  $('#enlarged_svg').html('');
-  $('#svg_source_enlarge_button').html('<button ' + (benchmarkRunning ? 'disabled' : '') + ' onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button>');
-  updateEnlargedSVGSource = true;
-  updateEnlargedSVG = false;
-}
-
-function show_svg_source_click(non_click) {
-  updateEnlargedSVGSource = true;
-  if (!updateEnlargedSVG) updateEnlargedSVG = false;
-  if (non_click !== 'non_click') {
-    var textarea = '<div id="svg_source_textarea_div">';
-    textarea += '<button onClick="$(\'#svg_source_textarea_div\').remove();updateEnlargedSVGSource=false;updateEnlargedSVG=false" title="Hide SVG source">Hide</button>';
-    textarea += '<span id="svg_source_enlarge_button"><button ' + (benchmarkRunning ? 'disabled' : '') + ' onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button></span><br>';
-    textarea += '<div id="enlarged_svg"></div>';
-    textarea += '<textarea id="svg_source_textarea"></textarea>';
-    textarea += '</div>';
-    $('#svg_source_container').append(textarea);
+function updateEnlargedSVGSource() {
+  var source = $('#svgcontainer').html().replace(/\>/g, '>\n');
+  if (updateSVGSource) {
+    $('#svg_source_textarea').val(source);
   }
-  var svg_source = $('#svgcontainer').html().replace(/\>/g, '>\n');
-  $('#svg_source_textarea').val(svg_source);
-}
-
-function updateEnlargedSVGIfNeeded() {
   if (updateEnlargedSVG) {
-    show_svg_source_click('non_click');
-    svg_source_enlarge();
-  } else if (updateEnlargedSVGSource && !updateEnlargedSVG) {
-    show_svg_source_click('non_click');
+    $('#enlarged_svg').html(source.replace(/ id=\"/g, ' id="_'));
+    var originalHeight = $('#_p').attr('height');
+    var originalWidth = $('#_p').attr('width');
+    // get bbox of all children of svg
+    $('body').append('<div id="dummy" style="display:block;visibility:hidden"><svg><g id="g123"></g></svg></div>');
+    $('#g123').append($('#_p').children().clone());
+    $('#dummy').html($('#dummy').html());
+    var bBox = $('#g123')[0].getBBox();
+    $('#dummy').remove();
+    $('#_p').attr('viewBox', (bBox.x - 5) + ' ' + (bBox.y - 5) + ' ' + (bBox.width + 10) + ' ' + (bBox.height + 10));
+    $('#enlarged_svg').html($('#enlarged_svg').html()).show();
+
+    $('#_p').attr('width', windowWidth).attr('height', _.parseInt((windowWidth / originalWidth) * originalHeight));
+    $('#_p1, #_p2, #_p3').css('stroke-width', 0.8 * (originalWidth / windowWidth));
   }
 }
 
@@ -1296,9 +1262,18 @@ function bindInputListeners() {
     } else {
       $('#p3').removeAttr('filter');
     }
-    updateEnlargedSVGIfNeeded();
+    updateEnlargedSVGSource();
   });
-  $('#show_svg_source').click(show_svg_source_click);
+  $('#show_svg_source').click(function() {
+    updateSVGSource = !updateSVGSource;
+    $('#svg_source_container').toggle(updateSVGSource);
+    updateEnlargedSVGSource();
+  });
+  $('#show_enlarged_svg').click(function() {
+    updateEnlargedSVG = !updateEnlargedSVG;
+    $('#enlarged_svg').toggle(updateEnlargedSVG);
+    updateEnlargedSVGSource();
+  });
   $('#explorer_enabled').change(function () {
     explorerEnabled = $(this).prop('checked');
     if (explorerEnabled) {
@@ -1620,7 +1595,7 @@ function makeOffset() {
   $('#miterLimit').val(miterLimit.toFixed(1));
   // Print benchmark
   $('#benchmark_div').html(bench.print());
-  updateEnlargedSVGIfNeeded();
+  updateEnlargedSVGSource();
 }
 
 function makeClip() {

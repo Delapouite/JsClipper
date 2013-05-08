@@ -55,7 +55,7 @@ th {
 }
 #svg_source_textarea, #benchmark_exports_textarea {
   height: 300px;
-  width: 1215px;
+  width: 1230px;
 }
 div#svgcontainer {
   margin-right: 2px;
@@ -181,7 +181,7 @@ div#svgcontainer {
     height:100%;
     vertical-align: top;
   }
-#custom_polygons_fieldset, #random_polygons_fieldset {
+#custom_polygons_fieldset, #random_polygons_fieldset, #svg_source_container, #enlarged_svg {
   display: none;
 }
 .custom_polygon_input {

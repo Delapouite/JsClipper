@@ -252,25 +252,21 @@
           <fieldset id="misc_fieldset">
             <legend>Misc</legend>
             <button id="show_svg_source" title="Show current SVG source in textarea at the bottom of the page">Show SVG source</button>&nbsp;
+            <button id="show_enlarged_svg" title="Show current SVG enlarged at the bottom of the page">Show enlarged SVG</button>&nbsp;
             <label>
               <b>Bevel</b>
               <input type="checkbox" id="bevel" value="1" title="Uncheck this to speedup drawing">
             </label>&nbsp;&nbsp;
-            <label>
-              <b>Explorer</b>
-              <input type="checkbox" id="explorer_enabled" title="Enable/disable Polygon Explorer">
-            </label>
-            <br>
-            <button id="benchmark1" title="Execute Normal benchmark">Run NB</button>
-            <button id="benchmark1b" title="Execute Normal benchmark 5x">Run NB 5x</button>
-            <button id="benchmark2" title="Execute Big Integer benchmark">Run BIB</button>
-            <button id="benchmark2b" title="Execute Big Integer benchmark 5x">Run BIB 5x</button>
           </fieldset>
         </td>
         <td id="td1" style="vertical-align:top;width:506px;">
           <div id="svgcontainer"></div>
           <fieldset id="polygon_explorer_fieldset">
             <legend>Polygon explorer</legend>
+            <label>
+              <b>Enable Explorer</b>
+              <input type="checkbox" id="explorer_enabled" title="Enable/disable Polygon Explorer">
+            </label>
             <div id="polygon_explorer_div" style="overflow-y:auto;overflow-x:visible;padding-left:1px;max-height:300px">
               <table class="polygon_explorer">
                 <tr>
@@ -361,6 +357,10 @@
         <td id="td2" style="width:353px;vertical-align:top;">
           <fieldset id="benchmark_fieldset_f" style="min-height:517px">
             <legend id="#benchmark_fieldset">Benchmark</legend>
+            <button id="benchmark1" title="Execute Normal benchmark">Run NB</button>
+            <button id="benchmark1b" title="Execute Normal benchmark 5x">Run NB 5x</button>
+            <button id="benchmark2" title="Execute Big Integer benchmark">Run BIB</button>
+            <button id="benchmark2b" title="Execute Big Integer benchmark 5x">Run BIB 5x</button>
             <div id="benchmark_div_outer">
               <div id="benchmark_div"></div>
               <div id="benchmark_multiple_table_cont"></div>
@@ -369,7 +369,10 @@
         </td>
       </tr>
     </table>
-    <div id="svg_source_container"></div>
+    <div id="svg_source_container">
+      <textarea id="svg_source_textarea"></textarea>
+    </div>
+    <div id="enlarged_svg"></div>
     <div id="benchmark_exports_container"></div>
     <script src="demo.js"></script>
   </body>
