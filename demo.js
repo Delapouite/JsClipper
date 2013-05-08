@@ -656,13 +656,9 @@ function svg_source_enlarge() {
   $('body').append('<div id="dummy" style="display:block;visibility:hidden"><svg><g id="g123"></g></svg></div>');
   $('#g123').append($('#_p').children().clone());
   $('#dummy').html($('#dummy').html());
-  var bb = $('#g123')[0].getBBox();
-  var g_width = bb.width + 10;
-  var g_height = bb.height + 10;
-  var g_x = bb.x - 5;
-  var g_y = bb.y - 5;
+  var bBox = $('#g123')[0].getBBox();
   $('#dummy').remove();
-  $('#_p').attr('viewBox', g_x + ' ' + g_y + ' ' + g_width + ' ' + g_height);
+  $('#_p').attr('viewBox', (bBox.x - 5) + ' ' + (bBox.y - 5) + ' ' + (bBox.width + 10) + ' ' + (bBox.height + 10));
   $('#enlarged_svg').html($('#enlarged_svg').html()).show();
 
   $('#_p').attr('width', windowWidth).attr('height', _.parseInt((windowWidth / originalWidth) * originalHeight));
@@ -1085,7 +1081,7 @@ function bindInputListeners() {
     }
     else alert('Polygon update failed!');
   });
-  $('#add_as_new_custom_polygon').click(function () { ;
+  $('#add_as_new_custom_polygon').click(function () {
     var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
     var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
     if (subj === false || clip === false) return false;
@@ -1470,14 +1466,14 @@ function bindInputListeners() {
         'fill-rule': $('#p' + role).attr('fill-rule'),
         'vector-effect': 'non-scaling-stroke'
       });
-      var bb = SVG.highlightedPath.node.getBBox();
-      var svg_w = _.parseInt($('#p').attr('width'));
-      var svg_h = _.parseInt($('#p').attr('height'));
-      var x_scale = (svg_w - 20) / bb.width;
-      var y_scale = (svg_h - 20) / bb.height;
+      var bBox = SVG.highlightedPath.node.getBBox();
+      var SVGWidth = _.parseInt($('#p').attr('width'));
+      var SVGHeight = _.parseInt($('#p').attr('height'));
+      var x_scale = (SVGWidth - 20) / bBox.width;
+      var y_scale = (SVGHeight - 20) / bBox.height;
       var scal = Math.min(x_scale, y_scale);
-      var x_trans = -(bb.x + bb.width / 2) + svg_w / 2;
-      var y_trans = -(bb.y + bb.height / 2) + svg_h / 2;
+      var x_trans = -(bBox.x + bBox.width / 2) + SVGWidth / 2;
+      var y_trans = -(bBox.y + bBox.height / 2) + SVGHeight / 2;
       $('#StartMarker')[0].setAttribute('markerWidth', 10 / scal * 2);
       $('#StartMarker')[0].setAttribute('markerHeight', 10 / scal * 2);
       $('#MidMarker')[0].setAttribute('markerWidth', 4 / scal * 2);
