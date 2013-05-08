@@ -665,7 +665,7 @@ function svg_source_enlarge() {
   $('#_p1, #_p2, #_p3').css('stroke-width', 0.8 * (originalWidth / windowWidth));
 
   $('#svg_source_textarea').hide();
-  $('#svg_source_enlarge_button').html('<button ' + (benchmarkRunning ? 'disabled' : '') + ' class="textarea_hide_buttons" onClick="show_svg_source_f()" title="Show SVG source">Show SVG source</button>');
+  $('#svg_source_enlarge_button').html('<button ' + (benchmarkRunning ? 'disabled' : '') + ' onClick="show_svg_source_f()" title="Show SVG source">Show SVG source</button>');
   updateEnlargedSVGSource = true;
   updateEnlargedSVG = true;
 }
@@ -674,7 +674,7 @@ function show_svg_source_f() {
   $('#svg_source_textarea').hide();
   show_svg_source_click('non_click');
   $('#enlarged_svg').html('');
-  $('#svg_source_enlarge_button').html('<button ' + (benchmarkRunning ? 'disabled' : '') + ' class="textarea_hide_buttons" onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button>');
+  $('#svg_source_enlarge_button').html('<button ' + (benchmarkRunning ? 'disabled' : '') + ' onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button>');
   updateEnlargedSVGSource = true;
   updateEnlargedSVG = false;
 }
@@ -684,8 +684,8 @@ function show_svg_source_click(non_click) {
   if (!updateEnlargedSVG) updateEnlargedSVG = false;
   if (non_click !== 'non_click') {
     var textarea = '<div id="svg_source_textarea_div">';
-    textarea += '<button class="textarea_hide_buttons" onClick="$(\'#svg_source_textarea_div\').remove();updateEnlargedSVGSource=false;updateEnlargedSVG=false" title="Hide SVG source">Hide</button>';
-    textarea += '<span id="svg_source_enlarge_button"><button ' + (benchmarkRunning ? 'disabled' : '') + ' class="textarea_hide_buttons" onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button></span><br>';
+    textarea += '<button onClick="$(\'#svg_source_textarea_div\').remove();updateEnlargedSVGSource=false;updateEnlargedSVG=false" title="Hide SVG source">Hide</button>';
+    textarea += '<span id="svg_source_enlarge_button"><button ' + (benchmarkRunning ? 'disabled' : '') + ' onClick="svg_source_enlarge()" title="Show SVG">Show SVG</button></span><br>';
     textarea += '<div id="enlarged_svg"></div>';
     textarea += '<textarea id="svg_source_textarea"></textarea>';
     textarea += '</div>';
@@ -759,7 +759,7 @@ function benchmark2(i) {
   } else if (i === benchmarkGlob.length - 1) {
     if (!$('#benchmark_exports_textarea').length) {
       var textarea = '<div id="benchmark_exports_textarea_div">';
-      textarea += '<button class="textarea_hide_buttons" onClick="$(\'#benchmark_exports_textarea_div\').remove()" title="Hide Benchmark exports">Hide</button><br>';
+      textarea += '<button onClick="$(\'#benchmark_exports_textarea_div\').remove()" title="Hide Benchmark exports">Hide</button><br>';
       textarea += '<textarea id="benchmark_exports_textarea"></textarea></div>';
       $('#benchmark_exports_container').append(textarea);
     }
