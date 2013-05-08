@@ -1,22 +1,30 @@
 body {
-  background-color:#F8F8F8;
+  background-color: #F8F8F8;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
 }
 p {
-  margin:0px;
-  padding:0px;
+  margin: 0;
+  padding: 0;
+}
+fieldset {
+  background-color: #EEE;
+  border: 2px solid #AAA;
+  white-space: nowrap;
+}
+legend {
+  font-weight: bold;
+}
+table {
+  border:0;
 }
 th {
-  background-color:#DDDDDD;
-  font-weight:bold;
-  padding: 0px;
-}
-body, th, td, input, legend, fieldset, p, b, button, select, textarea {
-  font-size:13px;
-  font-family:Arial, Helvetica, sans-serif;
+  background-color: #DDD;
+  padding: 0;
 }
 #p, #_p {
-  background-color:#ffffff;
-  border: 2px solid #AAAAAA;
+  background-color: #FFF;
+  border: 2px solid #AAA;
 }
 .svg_mypath {
   stroke:black;
@@ -45,69 +53,41 @@ body, th, td, input, legend, fieldset, p, b, button, select, textarea {
   stroke-opacity:1.0;
   stroke-width:0.8;
 }
-#svg_source_textarea {
-  width: 1215px;
+#svg_source_textarea, #benchmark_exports_textarea {
   height: 300px;
-}
-#benchmark_exports_textarea {
-  width:1215px;
-  height:300px;
+  width: 1215px;
 }
 div#svgcontainer {
   margin-right: 2px;
   margin-top: 6px;
 }
-div#benchmark_div_outer {
-  width:100%;
-}
-div#benchmark_div {
-  width:100%;
-}
 #benchmark_fieldset {
-  width:367px;
-  min-width:367px;
-  height:350px;
+  height: 350px;
+  width: 367px;
 }
 .buttons {
-  display:inline-block;
-  padding:0px;
+  background-color: #666;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 13px;
+  line-height: 20px;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  padding: 0;
   padding-left:12px;
   padding-right:12px;
-  background-color:#666666;
-  color:white;
-  border-radius:10px;
-  text-align:center;
-  line-height:20px;
-  font-size:13px;
-  cursor:pointer;
-  margin-bottom:2px;
-  margin-top:2px;
-  font-family:Helvetica, Arial, sans-serif;
-  white-space:nowrap;
-}
-legend {
-  font-weight:bold;
-}
-fieldset {
-  background-color:#EEEEEE;
-  /*
-  border-radius: 4px 4px 7px 7px;
-  -moz-border-radius: 4px 4px 7px 7px;
-  -webkit-border-radius: 4px 4px 7px 7px;
-  */
-  border: 2px solid #AAAAAA;
-  white-space:nowrap;
-}
-table {
-  border:0;
+  text-align: center;
+  white-space: nowrap;
 }
 .subpolylinks {
-  cursor:pointer;
-  font-size:13px;
-  padding:2px;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px;
 }
 .subpolylinks:hover {
-  background-color:#BBBBBB;
+  background-color:#BBB;
 }
 /* To prevent odd text resizing in mobile Safari */
 @media only screen and (max-device-width: 480px) {
@@ -116,9 +96,9 @@ table {
   }
 }
 .polygon_explorer {
-  text-align:left;
-  border-collapse:collapse;
-  white-space:normal;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: normal;
   width: 461px;
 }
 .polygon_explorer th {
@@ -127,106 +107,95 @@ table {
 .polygon_explorer > tr > th, .polygon_explorer > tr > td,
 .polygon_explorer > tbody > tr > th, .polygon_explorer > tbody > tr > td
 {
-  border:1px solid #666666;
+  border:1px solid #666;
   padding: 3px 4px 3px 4px;
   vertical-align:top;
 }
 .polygons_fieldset {
-  border-collapse:collapse;
-  width:100%;
+  border-collapse: collapse;
+  width: 100%;
 }
 .polygons_fieldset td {
-  vertical-align:top;
-  white-space:nowrap;
-  padding:0px;
-  padding-right:10px;
+  padding: 0;
+  padding-right: 10px;
+  vertical-align: top;
+  white-space: nowrap;
 }
 .polygons_fieldset input[type=radio] {
-  margin-left:0px;
+  margin-left: 0;
 }
 .random {
-  border-collapse:collapse;
-  width:100%;
+  border-collapse: collapse;
+  width: 100%;
 }
 .random td {
-  padding: 0px;
-  padding-right:10px;
+  padding: 0;
+  padding-right: 10px;
 }
 .random_inputs {
-  width:25px
+  width: 25px
 }
 .random th {
-  padding: 0px;
-}
-.random th {
-  background-color:transparent;
+  background-color: transparent;
+  padding: 0;
 }
 .random_new_th {
-  background-color:transparent;
+  background-color: transparent;
 }
 .random_new_th button {
-  margin:0px;
+  margin: 0;
 }
 .random button, .random input {
-  margin-bottom:0px;
-  margin-top:0px;
+  margin-bottom: 0;
+  margin-top: 0;
 }
 #subj_polygon_count {
-  margin-bottom:2px;
+  margin-bottom: 2px;
 }
 .filltype_cliptype {
   border-collapse: collapse;
 }
-.filltype_cliptype td {
-  vertical-align:top;
-  padding:0px;
-}
+  .filltype_cliptype td {
+    padding: 0;
+    vertical-align: top;
+  }
 .offset_outer {
-  border-collapse:collapse;
-  width:100%;
+  border-collapse: collapse;
+  width: 100%;
 }
-.offset_outer td {
-  vertical-align:top;
-  white-space:nowrap;
-  padding:0;
-}
-.offset_outer input[type=radio] {
-  margin-left:0px;
-}
-.offset_inner input[type=text] {
-  margin-bottom:2px;
-}
+  .offset_outer td {
+    padding: 0;
+    vertical-align: top;
+    white-space: nowrap;
+  }
+  .offset_outer input[type=radio] {
+    margin-left: 0;
+  }
+  .offset_inner input[type=text] {
+    margin-bottom: 2px;
+  }
 .offset_inner {
   border-collapse: collapse;
 }
-.offset_inner td {
-  vertical-align:top;
-  height:100%;
-}
-#custom_polygons_fieldset {
+  .offset_inner td {
+    height:100%;
+    vertical-align: top;
+  }
+#custom_polygons_fieldset, #random_polygons_fieldset {
   display: none;
-}
-#random_polygons_fieldset {
-  display: none;
-}
-#misc_fieldset {
-  min-height:81px;
 }
 .custom_polygon_input {
-  width:285px;
-  height:15px;
-  padding: 2px;
+  height: 15px;
   line-height: 15px;
+  padding: 2px;
+  width: 285px;
 }
 #polygon_explorer_string_inp {
-  margin:0px;
   height:15px;
-  width: 371px;
-  padding: 2px;
   line-height: 15px;
-}
-#custom_polygon_inputs {
-  display: block;
+  margin: 0;
+  padding: 2px;
+  width: 371px;
 }
 .custom_polygon_inputs_table {
   border-collapse: collapse;
@@ -235,14 +204,21 @@ table {
   padding-left: 7px;
   padding-right: 7px;
 }
-
 .bench {
   border-collapse: collapse;
   margin-bottom: 10px;
-  white-space: nowrap;
   width: 317px;
+  white-space: nowrap;
 }
-.bench td, .bench th{font-size:12px;text-align:left;border:1px solid #444444; padding:2px}
-.bench th{background-color:#DDDDDD;}
-.bench tfoot td{background-color:#DDDDDD;}
-.bench_foot{font-weight:bold;};
+.bench td, .bench th {
+  border: 1px solid #444;
+  font-size: 12px;
+  padding: 2px;
+  text-align: left;
+}
+.bench tfoot td {
+  background-color: #DDD;
+}
+.bench_foot {
+  font-weight: bold;
+}
