@@ -427,45 +427,30 @@ function SVGPathToClipperPolygons(d) {
 
 function formatOutput(polygonString) {
   if (typeof polygonString !== 'string' || polygonString === '') return '';
-  var polygon;
+  if (outputFormat === 'Clipper') {
+    return polygonString;
+  }
+  var polygons;
   try {
-    polygon = JSON.parse(polygonString);
+    polygons = JSON.parse(polygonString);
   } catch (err) {
     console.warn('Unable to parse polygon for output', err.message);
     return '';
   }
-  var i, j, n, result = '';
-  if (outputFormat === 'Clipper') {
-    return polygonString;
-  }
-  var m = polygon.length;
   if (outputFormat === 'Plain') {
-    for (i = 0; i < m; i++) {
-      result += '[';
-      n = polygon[i].length;
-      for (j = 0; j < n; j++) {
-        result += polygon[i][j].X + ',' + polygon[i][j].Y;
-        if (j !== n - 1) result += ', ';
-      }
-      result += ']';
-      if (i !== m - 1) result += ',';
-    }
-    return '[' + result + ']';
+    return '[' + polygons.map(function(polygon) {
+      return '[' + polygon.map(function(segment) {
+        return segment.X + ',' + segment.Y;
+      }).join(', ') + ']';
+    }).join(',') + ']';
   }
   if (outputFormat === 'SVG') {
-    for (i = 0; i < m; i++) {
-      n = polygon[i].length;
-      for (j = 0; j < n; j++) {
-        if (j===0) result += 'M';
-        else result += 'L';
-        result += polygon[i][j].X + ',' + polygon[i][j].Y;
-        if (j !== n - 1) result += ' ';
-      }
-      result += 'Z';
-      if (i !== m - 1) result += ' ';
-    }
-    if (result.trim() === 'Z') result = '';
-    return result;
+    var result = polygons.map(function(polygon) {
+      return polygon.map(function(segment, i) {
+        return (i === 0 ? 'M' : 'L') + segment.X + ',' + segment.Y;
+      }).join(' ') + 'Z';
+    }).join(' ');
+    return (result.trim() !== 'Z') ? result : '';
   }
 }
 
