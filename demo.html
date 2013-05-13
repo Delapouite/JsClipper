@@ -14,9 +14,9 @@
     <script src="vendor/jquery.total-storage.js"></script>
   </head>
   <body>
-    <table id="outertable">
+    <table>
       <tr>
-        <td id="td0" style="vertical-align:top;width:353px;min-width:353px">
+        <td style="vertical-align:top;width:353px;">
           <fieldset id="PolygonsFieldset">
             <legend title="Builtin polygons">Polygons</legend>
             <table class="polygons_fieldset">
@@ -45,7 +45,7 @@
                   <label><input type="radio" name="polygons" value="8">Grid & star</label>
                   <br>
                 </td>
-                <td style="padding-right:0px">
+                <td>
                   <label><input type="radio" name="polygons" value="9">Glyph</label>
                   <br>
                   <label><input type="radio" name="polygons" value="10" title="Your own custom polygon sets">Custom</label>
@@ -163,10 +163,10 @@
           <fieldset id="ClipTypeFieldset">
             <legend>Clip type (operation)</legend>
             <p>
-              <label><input type="radio" name="clipType" value="">No</label>&nbsp;&nbsp;
-              <label><input type="radio" name="clipType" value="0">Intersect</label>&nbsp;&nbsp;
-              <label><input type="radio" name="clipType" value="1">Union</label>&nbsp;&nbsp;
-              <label><input type="radio" name="clipType" value="2">Difference</label>&nbsp;&nbsp;
+              <label><input type="radio" name="clipType" value="">No</label>&nbsp;
+              <label><input type="radio" name="clipType" value="0">Intersect</label>&nbsp;
+              <label><input type="radio" name="clipType" value="1">Union</label>&nbsp;
+              <label><input type="radio" name="clipType" value="2">Difference</label>&nbsp;
               <label><input type="radio" name="clipType" value="3" checked>Xor</label>
             </p>
           </fieldset>
@@ -177,11 +177,11 @@
                 <b>Clean</b>
                 <input type="checkbox" id="clean" title="Clean. Joins sequential vertices if they are almost coincident. This is needed to prevent polygon breakage when offsetting. Not included in original Clipper, yet. This operation is done before offsetting." value="1">
               </label>
-              <input style="width:28px" type="text" value="" id="cleandelta" title="Delta. The distance used for Clean. Sequential vertices are joined if they are at or below this distance of each other.">&nbsp;&nbsp;
+              <input style="width:28px" type="text" value="" id="cleandelta" title="Delta. The distance used for Clean. Sequential vertices are joined if they are at or below this distance of each other.">&nbsp;
               <label>
                 <b>Simplify</b>
                 <input type="checkbox" id="Simplify" title="Simplify. Convert complex (self-intersecting) polygon to simple ones. Produces multiple polygons, if there are self-intersections. Note! Not work in self-intersections that are too small, you have to remove too-near-vertices using Clean feature. This operation is done before offsetting." value="1">
-              </label>&nbsp;&nbsp;
+              </label>&nbsp;
               <label>
                 <b>Lighten</b>
                 <input type="checkbox" id="lighten" title="Lighten. Removes unnecessary vertices. Not included in original Clipper. This operation is done after offsetting." value="1">
@@ -245,7 +245,8 @@
             <p>
               <button id="scale_minus" class="creaser">-</button>
               <input type="text" id="scale" value="" style="width:80px">
-              <button id="scale_plus" class="creaser">+</button> <span id="scaletest"></span>&nbsp;<b>Bigints used:</b>
+              <button id="scale_plus" class="creaser">+</button>&nbsp;
+              <b>Bigints used:</b>
               <span id="biginteger_used"></span>
             </p>
           </fieldset>
@@ -256,10 +257,10 @@
             <label>
               <b>Bevel</b>
               <input type="checkbox" id="bevel" value="1" title="Uncheck this to speedup drawing">
-            </label>&nbsp;&nbsp;
+            </label>
           </fieldset>
         </td>
-        <td id="td1" style="vertical-align:top;width:506px;">
+        <td style="vertical-align:top;width:506px;">
           <div id="svgcontainer"></div>
           <fieldset id="polygon_explorer_fieldset">
             <legend>Polygon explorer</legend>
@@ -354,7 +355,7 @@
             </div>
           </fieldset>
         </td>
-        <td id="td2" style="width:353px;vertical-align:top;">
+        <td style="vertical-align:top;width:353px;">
           <fieldset id="benchmark_fieldset_f">
             <legend id="#benchmark_fieldset">Benchmark</legend>
             <button id="benchmark1" title="Execute Normal benchmark">Run NB</button>
