@@ -78,7 +78,7 @@
                   <b title="Here you can type or paste custom subject polygons. Click the '?' button below to get help about string formats.">Subj</b>
                 </td>
                 <td>
-                  <textarea class="custom_polygon_input" id="custom_polygon_subj" value=''></textarea>
+                  <textarea class="custom_polygon_input" id="custom_polygon_subj"></textarea>
                 </td>
               </tr>
               <tr>
@@ -86,7 +86,7 @@
                   <b title="Here you can type or paste custom clip polygons. Click the '?' button below to get help about string formats.">Clip</b>
                 </td>
                 <td>
-                 <textarea class="custom_polygon_input" id="custom_polygon_clip" value=''></textarea>
+                 <textarea class="custom_polygon_input" id="custom_polygon_clip"></textarea>
                 </td>
               </tr>
             </table>
@@ -115,14 +115,14 @@
                     <b>Subject</b>
                   </td>
                   <td>
-                    <button id="subj_polygon_count_minus">&nbsp;-&nbsp;</button>
+                    <button id="subj_polygon_count_minus" class="creaser">-</button>
                     <input class="random_inputs" type="text" id="subj_polygon_count" value="1">
-                    <button id="subj_polygon_count_plus">&nbsp;+&nbsp;</button>
+                    <button id="subj_polygon_count_plus" class="creaser">+</button>
                   </td>
                   <td style="padding-right:0px">
-                    <button id="subj_point_count_minus">&nbsp;-&nbsp;</button>
+                    <button id="subj_point_count_minus" class="creaser">-</button>
                     <input class="random_inputs" type="text" id="subj_point_count" value="1">
-                    <button id="subj_point_count_plus">&nbsp;+&nbsp;</button>
+                    <button id="subj_point_count_plus" class="creaser">+</button>
                   </td>
                 </tr>
                 <tr>
@@ -130,14 +130,14 @@
                     <b>Clip</b>
                   </td>
                   <td>
-                    <button id="clip_polygon_count_minus">&nbsp;-&nbsp;</button>
+                    <button id="clip_polygon_count_minus" class="creaser">-</button>
                     <input class="random_inputs" type="text" id="clip_polygon_count" value="1">
-                    <button id="clip_polygon_count_plus">&nbsp;+&nbsp;</button>
+                    <button id="clip_polygon_count_plus" class="creaser">+</button>
                   </td>
                   <td style="padding-right:0px">
-                    <button id="clip_point_count_minus">&nbsp;-&nbsp;</button>
+                    <button id="clip_point_count_minus" class="creaser">-</button>
                     <input class="random_inputs" type="text" id="clip_point_count" value="1">
-                    <button id="clip_point_count_plus">&nbsp;+&nbsp;</button>
+                    <button id="clip_point_count_plus" class="creaser">+</button>
                   </td>
                 </tr>
             </table>
@@ -215,16 +215,16 @@
                     <tr>
                       <td>
                         <b>Delta</b>
-                        <button id="delta_minus">&nbsp;-&nbsp;</button>
+                        <button id="delta_minus" class="creaser">-</button>
                         <input type="text" id="delta" value="" style="width:50px">
-                        <button id="delta_plus">&nbsp;+&nbsp;</button>
+                        <button id="delta_plus" class="creaser">+</button>
                       </td>
                     </tr>
                     <tr>
                       <td><b>MiterLimit</b>
-                        <button id="miterLimit_minus">&nbsp;-&nbsp;</button>
+                        <button id="miterLimit_minus" class="creaser">-</button>
                         <input type="text" id="miterLimit" value="" style="width:20px">
-                        <button id="miterLimit_plus">&nbsp;+&nbsp;</button>
+                        <button id="miterLimit_plus" class="creaser">+</button>
                       </td>
                     </tr>
                     <tr>
@@ -243,9 +243,9 @@
           <fieldset id="ScaleFieldset">
             <legend>Scale</legend>
             <p style="width:200px;">
-              <button id="scale_minus">&nbsp;-&nbsp;</button>
+              <button id="scale_minus" class="creaser">-</button>
               <input type="text" id="scale" value="" style="width:80px">
-              <button id="scale_plus">&nbsp;+&nbsp;</button> <span id="scaletest"></span>&nbsp; <b>Bigints used:</b>
+              <button id="scale_plus" class="creaser">+</button> <span id="scaletest"></span>&nbsp;<b>Bigints used:</b>
               <span id="biginteger_used"></span>
             </p>
           </fieldset>

@@ -222,3 +222,7 @@ div#svgcontainer {
 .bench_foot {
   font-weight: bold;
 }
+/* for minus / plus buttons */
+.creaser {
+  width: 2em;
+}
