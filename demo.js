@@ -581,13 +581,6 @@ function round(a) {
   return Math.floor(a * scale);
 }
 
-function roundTo(num, dec) {
-  if (typeof num === 'undefined' || typeof dec === 'undefined' || isNaN(dec)) {
-    return !!console.warn('Cannot round other than number');
-  }
-  return Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec);
-}
-
 function deserializeClipperPolygon(polygonString) {
   lsk++;
   var poly = JSON.parse(polygonString);
@@ -1547,8 +1540,8 @@ function makeOffset() {
   // Actual offset operation
   if (delta) {
     clipper.Clear();
-    var param_delta = roundTo(delta * scale, 3);
-    var param_miterLimit = roundTo(miterLimit, 3);
+    var param_delta = _.round(delta * scale, 3);
+    var param_miterLimit = _.round(miterLimit, 3);
     var B0 = bench.start('Offset', 'Offset(' + param_delta + ', ' + joinType + ', ' + param_miterLimit + ', ' + autoFix + ')');
     offsetResult = clipper.OffsetPolygons(offsetResult, param_delta, joinType, param_miterLimit, autoFix);
     bench.end(B0);

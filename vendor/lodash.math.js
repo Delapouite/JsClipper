@@ -29,6 +29,13 @@
         return _.map(x, function(i) { return _.pow(i, n); });
   };
 
+  // Round
+  // math.round(12345.6789, 2)
+  //   => 12345.68
+  math.round = function(number, decimals) {
+    return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals);
+  };
+
   // Scale to max value
   // math.scale(1,[2,5,10])
   //   => [ 0.2, 0.5, 1]
