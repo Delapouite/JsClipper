@@ -1,3 +1,4 @@
+/* globals $, _, Raphael, ClipperLib, RGBColor */
 var selectedPolygons = 1; // Texts
 
 var subj = {
