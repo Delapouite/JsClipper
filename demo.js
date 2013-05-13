@@ -188,7 +188,7 @@ var SVG = {
       if (p2) p2.remove();
       if (p3) p3.remove();
   },
-  addPaths: function (a, b, c, a1, b1) {
+  addPaths: function (a, b, c, subjFillType, clipFillType) {
     if (a) {
       subj.subPolygons = a.length;
       a = this.polysToPath(a, 1);
@@ -232,13 +232,13 @@ var SVG = {
       p1 = p.path(a);
       p1.node.id = 'p1';
       $('#p1').removeAttr('fill stroke')
-        .attr('fill-rule', a1 === 0 ? 'evenodd' : 'nonzero');
+        .attr('fill-rule', subjFillType === 0 ? 'evenodd' : 'nonzero');
     }
     if (b) {
       p2 = p.path(b);
       p2.node.id = 'p2';
       $('#p2').removeAttr('fill stroke')
-        .attr('fill-rule', b1 === 0 ? 'evenodd' : 'nonzero');
+        .attr('fill-rule', clipFillType === 0 ? 'evenodd' : 'nonzero');
     }
     if (c) {
       p3 = p.path(c);
@@ -616,14 +616,19 @@ function deserializeClipperPolygon(polygonString) {
   return np;
 }
 
-function setDefaultCustomPolygons() {
+function saveCustomPolygon(index, polygon) {
   var customPolygons = $.totalStorage('custom_polygons');
   if (!_.isArray(customPolygons) || _.isEmpty(customPolygons)) customPolygons = [];
-  customPolygons[0] = {
+  customPolygons[index] = polygon;
+  $.totalStorage('custom_polygons', customPolygons);
+}
+
+function setDefaultCustomPolygons(reset) {
+  if (reset) $.totalStorage('custom_polygons', []);
+  saveCustomPolygon(0, {
     subj: defaultCustomSubjectPolygon,
     clip: defaultCustomClipPolygon
-  };
-  $.totalStorage('custom_polygons', customPolygons);
+  });
 }
 
 function updateCustomPolygonsSelect() {
@@ -635,7 +640,6 @@ function updateCustomPolygonsSelect() {
     for (i = 0; i < arr_length; i++) {
       if (arr[i] !== null) $('#custom_polygons_select').append('<option ' + (i === value ? 'selected' : '') + ' value="' + i + '">Poly ' + i + '</option>');
     }
-  if ($('#custom_polygons_select option').length === 0) setDefaultCustomPolygons();
   // If previously selected value is removed, select the next one
   if (arr_length > 0 && arr[value] === null)
     for (i = _.parseInt(value); i < arr_length; i++) {
@@ -922,7 +926,6 @@ Benchmark.prototype.printMultipleRuns = function () {
   tbl2 += '</tbody>';
   return tbl2;
 };
-// BENCHMARKING ENDS
 
 function colorizeBoxes() {
   var bgColor = new RGBColor($('#p').css('background-color'));
@@ -976,7 +979,6 @@ function bindInputListeners() {
     $('#custom_polygons_fieldset, #random_polygons_fieldset').hide();
     if (val === 10) {
       $('#custom_polygons_fieldset').show();
-      setDefaultCustomPolygons();
       updateCustomPolygonsSelect();
       $('#custom_polygons_select').change();
     }
@@ -1029,20 +1031,15 @@ function bindInputListeners() {
     var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
     var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
     if (subj === false || clip === false) return false;
-    if (typeof $.totalStorage('custom_polygons') === 'undefined' || $.totalStorage('custom_polygons') === null) {
-      setDefaultCustomPolygons();
-    }
-    var arr2 = $.totalStorage('custom_polygons');
-    var value = $('#custom_polygons_select').val();
-    if (value+'' !== '0' && value) {
-      arr2[value] = {
+    var value = _.parseInt($('#custom_polygons_select').val());
+    if (value) {
+      saveCustomPolygon(value, {
         subj: subj,
         clip: clip
-      };
-      $.totalStorage('custom_polygons', arr2);
+      });
       updateCustomPolygonsSelect();
       alert('Polygon ' + value + ' updated!');
-    } else if (value+'' === '0') {
+    } else if (value === 0) {
       alert('The default custom polygon cannot be overwrited. If you want to modify it, save it first as a new.');
     }
     else alert('Polygon update failed!');
@@ -1051,9 +1048,6 @@ function bindInputListeners() {
     var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
     var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
     if (subj === false || clip === false) return false;
-    if (typeof $.totalStorage('custom_polygons') === 'undefined' || $.totalStorage('custom_polygons') === null) {
-      setDefaultCustomPolygons();
-    }
     var customPolygons = $.totalStorage('custom_polygons');
     customPolygons.push({
       subj: subj,
@@ -1065,24 +1059,21 @@ function bindInputListeners() {
     alert('New polygon ' + (customPolygons.length - 1) + ' added!');
   });
   $('#custom_polygons_select').change(function () {
-    var value = $('#custom_polygons_select').val();
-    if (!value && value + '' !== '0') value = 0;
-    var arr = $.totalStorage('custom_polygons');
-    if (_.isArray(arr) && arr.length && typeof arr[value] !== 'undefined') {
-      $('#custom_polygon_subj').val(formatOutput(arr[value].subj));
-      $('#custom_polygon_clip').val(formatOutput(arr[value].clip));
+    var value = _.parseInt($('#custom_polygons_select').val());
+    var customPolygons = $.totalStorage('custom_polygons');
+    if (_.isArray(customPolygons) && customPolygons[value]) {
+      $('#custom_polygon_subj').val(formatOutput(customPolygons[value].subj));
+      $('#custom_polygon_clip').val(formatOutput(customPolygons[value].clip));
       makeClip();
     }
   });
   $('#remove_custom_polygon').click(function () {
-    var value = $('#custom_polygons_select').val();
-    if (value+'' === '0') {
+    var value = _.parseInt($('#custom_polygons_select').val());
+    if (value === 0) {
       alert('Cannot remove the default polygon.');
     } else if (value) {
       if (confirm('Remove custom polygon ' + value + '?')) {
-        var customPolygons = $.totalStorage('custom_polygons');
-        customPolygons[value] = null;
-        $.totalStorage('custom_polygons', customPolygons);
+        saveCustomPolygon(value, null);
         updateCustomPolygonsSelect();
       }
     }
@@ -1091,8 +1082,7 @@ function bindInputListeners() {
     var count = $('#custom_polygons_select option').length;
     if (count > 1) {
       if (confirm('Remove all ' + (count -1)  + ' custom polygons?')) {
-        $.totalStorage('custom_polygons', []);
-        setDefaultCustomPolygons();
+        setDefaultCustomPolygons(true);
         updateCustomPolygonsSelect();
       }
     }
@@ -1622,4 +1612,5 @@ window.onload = function () {
   setInputValues();
   makeClip();
   colorizeBoxes();
+  setDefaultCustomPolygons();
 };
