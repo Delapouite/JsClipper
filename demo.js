@@ -616,19 +616,24 @@ function deserializeClipperPolygon(polygonString) {
   return np;
 }
 
-function saveCustomPolygon(index, polygon) {
+function saveCustomPolygon(polygon, index) {
   var customPolygons = $.totalStorage('custom_polygons');
   if (!_.isArray(customPolygons) || _.isEmpty(customPolygons)) customPolygons = [];
-  customPolygons[index] = polygon;
-  $.totalStorage('custom_polygons', customPolygons);
+  if (typeof index === 'undefined') {
+    customPolygons.push(polygon);
+  } else {
+    customPolygons[index] = polygon;
+  }
+  updateCustomPolygonsSelect();
+  return $.totalStorage('custom_polygons', customPolygons);
 }
 
 function setDefaultCustomPolygons(reset) {
   if (reset) $.totalStorage('custom_polygons', []);
-  saveCustomPolygon(0, {
+  saveCustomPolygon({
     subj: defaultCustomSubjectPolygon,
     clip: defaultCustomClipPolygon
-  });
+  }, 0);
 }
 
 function updateCustomPolygonsSelect() {
@@ -782,8 +787,7 @@ var Benchmark = function (name) {
   this.minPointY = Number.POSITIVE_INFINITY;
   this.points = [];
 };
-// cat = category, which name belongs to
-// name = code region name or function, which is measured
+// cat = category, which name belongs to, name = code region name or function, which is measured
 Benchmark.prototype.start = function (cat, name) {
   if (!cat || !name) return;
   this.list.push({
@@ -1033,11 +1037,10 @@ function bindInputListeners() {
     if (subj === false || clip === false) return false;
     var value = _.parseInt($('#custom_polygons_select').val());
     if (value) {
-      saveCustomPolygon(value, {
+      saveCustomPolygon({
         subj: subj,
         clip: clip
-      });
-      updateCustomPolygonsSelect();
+      }, value);
       alert('Polygon ' + value + ' updated!');
     } else if (value === 0) {
       alert('The default custom polygon cannot be overwrited. If you want to modify it, save it first as a new.');
@@ -1048,13 +1051,10 @@ function bindInputListeners() {
     var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
     var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
     if (subj === false || clip === false) return false;
-    var customPolygons = $.totalStorage('custom_polygons');
-    customPolygons.push({
+    var customPolygons = saveCustomPolygon({
       subj: subj,
       clip: clip
     });
-    $.totalStorage('custom_polygons', customPolygons);
-    updateCustomPolygonsSelect();
     $('#custom_polygons_select').val(customPolygons.length - 1).change();
     alert('New polygon ' + (customPolygons.length - 1) + ' added!');
   });
@@ -1073,8 +1073,7 @@ function bindInputListeners() {
       alert('Cannot remove the default polygon.');
     } else if (value) {
       if (confirm('Remove custom polygon ' + value + '?')) {
-        saveCustomPolygon(value, null);
-        updateCustomPolygonsSelect();
+        saveCustomPolygon(null, value);
       }
     }
   });
@@ -1083,7 +1082,6 @@ function bindInputListeners() {
     if (count > 1) {
       if (confirm('Remove all ' + (count -1)  + ' custom polygons?')) {
         setDefaultCustomPolygons(true);
-        updateCustomPolygonsSelect();
       }
     }
   });
@@ -1154,7 +1152,6 @@ function bindInputListeners() {
   });
   $('input[name="joinType"]').change(function () {
     joinType = _.parseInt(this.value);
-    //makeOffset();
     makeClip();
   });
 
@@ -1522,7 +1519,6 @@ function makeOffset() {
 
   if (ClipperLib.biginteger_used === null) ClipperLib.biginteger_used = 0;
 
-  // Clean
   if (clean) {
     offsetResult = ClipperLib.Clean(offsetResult, cleanDelta * scale);
   }
@@ -1558,7 +1554,6 @@ function makeOffset() {
     bench.end(B0);
   }
 
-  // Lightening
   if (lighten) {
     offsetResult = ClipperLib.Lighten(offsetResult, lightenDistance * scale);
     // Because lighten may produce self-intersections, must Simplify to be sure that result is free of them, but only if user wants
@@ -1572,7 +1567,6 @@ function makeOffset() {
   SVG.addPaths(ss, cc, offsetResult, subj.fillType, clip.fillType);
   if (bench.includeSVG) bench.end(B3);
 
-  // Update BigIntegers Toggle
   if (ClipperLib.biginteger_used !== null) {
     $('#biginteger_used').html(ClipperLib.biginteger_used ? 'true' : 'false');
   }
