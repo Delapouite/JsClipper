@@ -437,20 +437,19 @@ function formatOutput(polygonString) {
     console.warn('Unable to parse polygon for output', err.message);
     return '';
   }
+  function getCoords(segment) {
+    return segment.X + ',' + segment.Y;
+  }
   if (outputFormat === 'Plain') {
     return '[' + polygons.map(function(polygon) {
-      return '[' + polygon.map(function(segment) {
-        return segment.X + ',' + segment.Y;
-      }).join(', ') + ']';
+      return '[' + polygon.map(getCoords).join(', ') + ']';
     }).join(',') + ']';
   }
   if (outputFormat === 'SVG') {
     var result = polygons.map(function(polygon) {
-      return polygon.map(function(segment, i) {
-        return (i === 0 ? 'M' : 'L') + segment.X + ',' + segment.Y;
-      }).join(' ') + 'Z';
+      return 'M' + polygon.map(getCoords).join(' L') + 'Z';
     }).join(' ');
-    return (result.trim() !== 'Z') ? result : '';
+    return (result.trim() !== 'MZ') ? result : '';
   }
 }
 
@@ -911,8 +910,9 @@ Benchmark.prototype.printMultipleRuns = function () {
 };
 
 function colorizeBoxes() {
-  var bgColor = new RGBColor($('#p').css('background-color'));
-  var fillColor, strokeColor, fillOpacity, strokeOpacity, box;
+  var bgColor = new RGBColor($('#p').css('background-color')),
+    boxes = ['subject', 'clip', 'solution'],
+    fillColor, strokeColor, fillOpacity, strokeOpacity;
   for (var i = 1; i <= 3; i++) {
     fillColor = new RGBColor($('#p' + i).css('fill'));
     fillOpacity = $('#p' + i).css('fill-opacity');
@@ -920,10 +920,7 @@ function colorizeBoxes() {
     strokeColor = new RGBColor($('#p' + i).css('stroke'));
     strokeOpacity = $('#p' + i).css('stroke-opacity');
     strokeColor = strokeColor.flattenRGBA(strokeOpacity, bgColor);
-    if (i === 1) box = '#subject_box';
-    else if (i === 2) box = '#clip_box';
-    else if (i === 3) box = '#solution_box';
-    $(box).css('background-color', fillColor);
+    $('#' + boxes[i - 1] + '_box').css('background-color', fillColor);
   }
 }
 
@@ -1502,7 +1499,6 @@ function makeOffset() {
     offsetResult = ClipperLib.Clean(offsetResult, cleanDelta * scale);
   }
 
-  // Simplify
   // Must simplify before offsetting, to get offsetting right in certain cases.
   // Other operations (boolean ones) doesn't need this.
   // This is needed when offsetting polygons that has selfintersecting parts ( eg. 5-point star needs this )
@@ -1526,10 +1522,10 @@ function makeOffset() {
   // Actual offset operation
   if (delta) {
     clipper.Clear();
-    var param_delta = _.round(delta * scale, 3);
-    var param_miterLimit = _.round(miterLimit, 3);
-    var B0 = bench.start('Offset', 'Offset(' + param_delta + ', ' + joinType + ', ' + param_miterLimit + ', ' + autoFix + ')');
-    offsetResult = clipper.OffsetPolygons(offsetResult, param_delta, joinType, param_miterLimit, autoFix);
+    var paramDelta = _.round(delta * scale, 3);
+    var paramMiterLimit = _.round(miterLimit, 3);
+    var B0 = bench.start('Offset', 'Offset(' + paramDelta + ', ' + joinType + ', ' + paramMiterLimit + ', ' + autoFix + ')');
+    offsetResult = clipper.OffsetPolygons(offsetResult, paramDelta, joinType, paramMiterLimit, autoFix);
     bench.end(B0);
   }
 
