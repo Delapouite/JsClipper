@@ -858,9 +858,9 @@ Benchmark.prototype.print = function (all) {
 };
 Benchmark.prototype.printMultipleRuns = function () {
   var tbl2 = '<table class="bench" id="benchmark_multiple_table"><thead><tr><th>Num</th><th>Calls</th><th>Sum</th><th>Avg</th></tr></thead><tbody>';
-  var i, m, item, time_sum = 0;
+  var i, item, time_sum = 0;
   var times = [];
-  for (i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
+  for (i = 0; i < this.totals_arr_multiple.length; i++) {
     times.push(this.totals_arr_multiple[i][1]);
   }
   var max = _.max(times);
@@ -870,7 +870,7 @@ Benchmark.prototype.printMultipleRuns = function () {
   var standardDeviation = _.stdDeviation(times).toFixed(4);
   var minusRange = min - average;
   var plusRange = max - average;
-  for (i = 0, m = this.totals_arr_multiple.length; i < m; i++) {
+  for (i = 0; i < this.totals_arr_multiple.length; i++) {
     tbl2 += '<tr><td>';
     tbl2 += (i + 1);
     tbl2 += '</td><td>';
@@ -1309,7 +1309,7 @@ function bindInputListeners() {
             for (offsettablePolyLocal = offsettablePolyLocal_start; offsettablePolyLocal < offsettablePolyLocal_end + 1; offsettablePolyLocal++) {
               if (polygon_id === 0 && offsettablePolyLocal === 2) continue;
               for (joinTypeLocal = 0; joinTypeLocal < 3; joinTypeLocal++) {
-                for (deltaLocal_i = 0, m = deltaLocals.length; deltaLocal_i < m; deltaLocal_i++) {
+                for (deltaLocal_i = 0; deltaLocal_i < deltaLocals.length; deltaLocal_i++) {
                   deltaLocal = deltaLocals[deltaLocal_i];
                   miterLimitLocal_start = 1;
                   miterLimitLocal_end = (joinTypeLocal === 2 && deltaLocal !== 0) ? 6 : 1;
