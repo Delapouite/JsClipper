@@ -57,7 +57,7 @@ th {
   height: 300px;
   width: 1230px;
 }
-div#svgcontainer {
+#svgcontainer {
   margin-right: 2px;
   margin-top: 6px;
 }
@@ -198,14 +198,10 @@ div#svgcontainer {
 .custom_polygon_inputs_table {
   border-collapse: collapse;
 }
-#help_builtin_polygon_sets, #help_output_format, #help_custom_polygon {
-  padding-left: 7px;
-  padding-right: 7px;
-}
 .bench {
   border-collapse: collapse;
   margin-bottom: 10px;
-  width: 317px;
+  width: 100%;
   white-space: nowrap;
 }
 .bench td, .bench th {
@@ -216,8 +212,6 @@ div#svgcontainer {
 }
 .bench tfoot td {
   background-color: #DDD;
-}
-.bench_foot {
   font-weight: bold;
 }
 /* for minus / plus buttons */

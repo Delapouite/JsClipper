@@ -749,12 +749,10 @@ function disableBenchmarkButton(button) {
   $('#explorer_enabled').trigger('change');
 }
 
-var Benchmark = function (name) {
-  this.name = typeof name === 'string' ? name : '';
+var Benchmark = function () {
   this.list = [];
   this.cats = [];
   this.cats.arr = [];
-  this.type = 'benchmark';
   this.includeSVG = true;
   this.totals = '';
   this.totals_arr = [];
@@ -795,7 +793,6 @@ Benchmark.prototype.clear = function () {
   this.cats = [];
   this.cats.arr = [];
   this.includeSVG = true;
-  return true;
 };
 Benchmark.prototype.print = function (all) {
   var i, tbl = '<table class="bench"><thead><tr><th>Num</th><th>Name</th><th>Category</th><th>Time</th></tr></thead><tbody>';
@@ -806,10 +803,7 @@ Benchmark.prototype.print = function (all) {
       if (startIndex < 0) startIndex = 0;
     }
     for (i = startIndex; i < this.list.length; i++) {
-      tbl += '<tr><td>' + (i + 1) + '</td>';
-      tbl += '<td>' + this.list[i].name + '</td>';
-      tbl += '<td>' + this.list[i].cat + '</td>';
-      tbl += '<td>' + this.list[i].time + '</td></tr>';
+      tbl += '<tr><td>' + (i + 1) + '</td><td>' + this.list[i].name + '</td><td>' + this.list[i].cat + '</td><td>' + this.list[i].time + '</td></tr>';
     }
   }
   tbl += '</tbody></table>';
@@ -841,7 +835,7 @@ Benchmark.prototype.print = function (all) {
     }
   tbl2 += '</tbody>';
   if (this.cats.arr.length > 0) {
-    tbl2 += '<tfoot><tr><td class="bench_foot" colspan="2">Total</td>';
+    tbl2 += '<tfoot><tr><td colspan="2">Total</td>';
     totals_arr_item.push(counts_sum);
     this.totals += counts_sum + ';';
     tbl2 += '<td>' + counts_sum + '</td>';
@@ -858,8 +852,8 @@ Benchmark.prototype.print = function (all) {
   this.totals_arr.push(totals_arr_item);
   tbl += tbl2;
   var disabled = benchmarkRunning ? 'disabled' : '';
-  tbl += '<button ' + disabled + ' onClick="try { ' + this.name + '.clear();$(\'#benchmark_div\').html(' + this.name + '.print()); return true; } catch (e) {return false}">Clear Benchmarks</button>';
-  tbl += '<button ' + disabled + ' onClick="try { $(\'#benchmark_div\').html(' + this.name + '.print(1)); } catch (e) {return false}">Show all</button>';
+  tbl += '<button ' + disabled + ' onClick="try { bench.clear();$(\'#benchmark_div\').html(bench.print()); } catch (e) {return false}">Clear Benchmarks</button>';
+  tbl += '<button ' + disabled + ' onClick="try { $(\'#benchmark_div\').html(bench.print(true)); } catch (e) {return false}">Show all</button>';
   return tbl;
 };
 Benchmark.prototype.printMultipleRuns = function () {
@@ -1295,16 +1289,10 @@ function bindInputListeners() {
     var count;
     var deltaLocals = [-5, 0, 10, 30];
     var deltaLocal_i, m;
-    var this_id = this.id;
-    repeatTimes = (this_id === 'benchmark1b' || this_id === 'benchmark2b') ? 5 : 1;
+    repeatTimes = (this.id === 'benchmark1b' || this.id === 'benchmark2b') ? 5 : 1;
     for (count = 0; count < 2; count++) {
-      if (this_id === 'benchmark1' || this_id === 'benchmark1b') {
-        scaleLocal = 100;
-        if (count === 1) continue;
-      } else if (this_id === 'benchmark2' || this_id === 'benchmark2b') {
-        scaleLocal = 100000000;
-        if (count === 1) continue;
-      }
+      scaleLocal = (this.id === 'benchmark1' || this.id === 'benchmark1b') ? 100 : 100000000;
+      if (count === 1) continue;
       for (polygon_id = 0; polygon_id < 10; polygon_id++) {
         if (!(polygon_id === 0 || polygon_id === 1 || polygon_id === 7 || polygon_id === 8 || polygon_id === 9)) continue;
         fillTypeLocal_start = (polygon_id === 4 || polygon_id === 5) ? 0 : 1;
@@ -1574,7 +1562,7 @@ function makeClip() {
 
 window.onload = function () {
   ClipperLibOriginalMaxSteps = ClipperLib.MaxSteps;
-  bench = new Benchmark('bench');
+  bench = new Benchmark();
   p = SVG.create();
   bindHelp();
   bindInputListeners();
