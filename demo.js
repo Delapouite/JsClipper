@@ -1463,9 +1463,20 @@ function setInputValues() {
   $('#output_format').val(outputFormat);
 }
 
-function makeOffset() {
-  // Select ofsettable polygon
-  var B3;
+function makeClip() {
+  var benchId;
+  ClipperLib.biginteger_used = null;
+  clipper.Clear();
+  getPolygons();
+  if (clipType !== '' && offsettablePoly === 'solution') {
+    clipper.AddPolygons(ss, ClipperLib.PolyType.ptSubject);
+    clipper.AddPolygons(cc, ClipperLib.PolyType.ptClip);
+    sss = new ClipperLib.Polygons();
+    benchId = bench.start('Boolean', 'Execute(' + clipType + ', sss, ' + subj.fillType + ', ' + clip.fillType + ')');
+    clipper.Execute(clipType, sss, subj.fillType, clip.fillType);
+    bench.end(benchId);
+  }
+
   offsettablePoly = $('input[name="offsettable_poly"]:checked').val();
   if (offsettablePoly === 'subject') {
     offsetResult = ClipperLib.Clone(ss);
@@ -1508,9 +1519,9 @@ function makeOffset() {
     clipper.Clear();
     var paramDelta = _.round(delta * scale, 3);
     var paramMiterLimit = _.round(miterLimit, 3);
-    var B0 = bench.start('Offset', 'Offset(' + paramDelta + ', ' + joinType + ', ' + paramMiterLimit + ', ' + autoFix + ')');
+    benchId = bench.start('Offset', 'Offset(' + paramDelta + ', ' + joinType + ', ' + paramMiterLimit + ', ' + autoFix + ')');
     offsetResult = clipper.OffsetPolygons(offsetResult, paramDelta, joinType, paramMiterLimit, autoFix);
-    bench.end(B0);
+    bench.end(benchId);
   }
 
   if (lighten) {
@@ -1522,9 +1533,9 @@ function makeOffset() {
   }
 
   SVG.update();
-  if (bench.includeSVG) B3 = bench.start('SVG', 'addPaths(ss, cc, offsetResult,  ' + subj.fillType + ', ' + clip.fillType + ')');
+  if (bench.includeSVG) benchId = bench.start('SVG', 'addPaths(ss, cc, offsetResult,  ' + subj.fillType + ', ' + clip.fillType + ')');
   SVG.addPaths(ss, cc, offsetResult, subj.fillType, clip.fillType);
-  if (bench.includeSVG) bench.end(B3);
+  if (bench.includeSVG) bench.end(benchId);
 
   if (ClipperLib.biginteger_used !== null) {
     $('#biginteger_used').html(ClipperLib.biginteger_used ? 'true' : 'false');
@@ -1539,21 +1550,6 @@ function makeOffset() {
   // Print benchmark
   $('#benchmark_div').html(bench.print());
   updateEnlargedSVGSource();
-}
-
-function makeClip() {
-  ClipperLib.biginteger_used = null;
-  clipper.Clear();
-  getPolygons();
-  if (clipType !== '' && offsettablePoly === 'solution') {
-    clipper.AddPolygons(ss, ClipperLib.PolyType.ptSubject);
-    clipper.AddPolygons(cc, ClipperLib.PolyType.ptClip);
-    sss = new ClipperLib.Polygons();
-    var B1 = bench.start('Boolean', 'Execute(' + clipType + ', sss, ' + subj.fillType + ', ' + clip.fillType + ')');
-    clipper.Execute(clipType, sss, subj.fillType, clip.fillType);
-    bench.end(B1);
-  }
-  makeOffset();
 }
 
 window.onload = function () {
