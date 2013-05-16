@@ -684,14 +684,14 @@ function benchmark2(i) {
   $('input[name="clipType"][value="' + clipType + '"]').prop('checked', true);
   scale = obj.scale;
   $('#scale').val(scale);
-  if (obj.polygon_id === 4 || obj.polygon_id === 5) randomSetting = obj.randomSetting;
-  $('input[name="polygons"][value="' + obj.polygon_id + '"]').prop('checked', true).trigger('change');
+  if (obj.polygonId === 4 || obj.polygonId === 5) randomSetting = obj.randomSetting;
+  $('input[name="polygons"][value="' + obj.polygonId + '"]').prop('checked', true).trigger('change');
   obj = null;
   lastCompletedBenchmark = i;
   var endTime = new Date().getTime();
   var time = endTime - startTime;
-  benchmarkGlob[i].measuredTime = time;
   benchmarkElapsedTime += time;
+  benchmarkGlob[i].measuredTime = time;
   benchmarkGlob[i].elapsedTime = benchmarkElapsedTime;
   // update next timeouts
   for (var lsk = i + 1; lsk < benchmarkGlob.length; lsk++) {
@@ -784,7 +784,7 @@ Benchmark.prototype.end = function (index) {
   if (typeof this.cats[this_list_cat_counts] === 'undefined') this.cats[this_list_cat_counts] = 0;
   this.cats[this_list_cat_time_sum] += this.list[index].time;
   this.cats[this_list_cat_counts]++;
-  if (typeof benchmarkGlob !== 'undefined' && benchmarkGlob.length > 0) {
+  if (benchmarkGlob.length > 0) {
     this.list[index].benchmarkGlob_index = lastCompletedBenchmark;
   }
 };
@@ -814,8 +814,7 @@ Benchmark.prototype.print = function (all) {
     item,
     counts_sum = 0,
     cat_time_sum = 0,
-    this_list_i_cat,
-    this_list_i_cat_time_sum, this_list_i_cat_counts;
+    this_list_i_cat, this_list_i_cat_time_sum, this_list_i_cat_counts;
   if (this.cats.arr.length > 0)
     for (i = 0; i < this.cats.arr.length; i++) {
       tbl2 += '<tr><td> ' + (i + 1) + '</td><td>';
@@ -902,7 +901,6 @@ Benchmark.prototype.printMultipleRuns = function () {
 
 function colorizeBoxes() {
   var bgColor = new RGBColor($('#p').css('background-color')),
-    boxes = ['subject', 'clip', 'solution'],
     fillColor, strokeColor, fillOpacity, strokeOpacity;
   for (var i = 1; i <= 3; i++) {
     fillColor = new RGBColor($('#p' + i).css('fill'));
@@ -911,7 +909,7 @@ function colorizeBoxes() {
     strokeColor = new RGBColor($('#p' + i).css('stroke'));
     strokeOpacity = $('#p' + i).css('stroke-opacity');
     strokeColor = strokeColor.flattenRGBA(strokeOpacity, bgColor);
-    $('#' + boxes[i - 1] + '_box').css('background-color', fillColor);
+    $('#' + ['subject', 'clip', 'solution'][i - 1] + '_box').css('background-color', fillColor);
   }
 }
 
@@ -1274,7 +1272,7 @@ function bindInputListeners() {
     bench.clear();
     bench.includeSVG = false;
     var scaleLocal;
-    var polygon_id;
+    var polygonId;
     var deltaLocal, clipTypeLocal, joinTypeLocal;
     var offsettablePolyLocal, offsettablePolyLocal_start, offsettablePolyLocal_end;
     var miterLimitLocal, miterLimitLocal_start, miterLimitLocal_end;
@@ -1283,16 +1281,14 @@ function bindInputListeners() {
     var timeout_time_addition = 0;
     lastCompletedBenchmark = '';
     benchmarkGlob.length = 0;
-    var count;
-    var deltaLocals = [-5, 0, 10, 30];
-    var deltaLocal_i, m;
+    var deltaLocals = [-5, 0, 10, 30], deltaLocal_i;
     repeatTimes = (this.id === 'benchmark1b' || this.id === 'benchmark2b') ? 5 : 1;
-    for (count = 0; count < 2; count++) {
+    for (var count = 0; count < 2; count++) {
       scaleLocal = (this.id === 'benchmark1' || this.id === 'benchmark1b') ? 100 : 100000000;
       if (count === 1) continue;
-      for (polygon_id = 0; polygon_id < 10; polygon_id++) {
-        if (!(polygon_id === 0 || polygon_id === 1 || polygon_id === 7 || polygon_id === 8 || polygon_id === 9)) continue;
-        fillTypeLocal_start = (polygon_id === 4 || polygon_id === 5) ? 0 : 1;
+      for (polygonId = 0; polygonId < 10; polygonId++) {
+        if (!(polygonId === 0 || polygonId === 1 || polygonId === 7 || polygonId === 8 || polygonId === 9)) continue;
+        fillTypeLocal_start = (polygonId === 4 || polygonId === 5) ? 0 : 1;
         fillTypeLocal_end = 1;
         for (fillTypeLocal = fillTypeLocal_start; fillTypeLocal < fillTypeLocal_end + 1; fillTypeLocal++) {
           for (clipTypeLocal = 0; clipTypeLocal < 5; clipTypeLocal++) {
@@ -1304,7 +1300,7 @@ function bindInputListeners() {
               offsettablePolyLocal_end = 3;
             }
             for (offsettablePolyLocal = offsettablePolyLocal_start; offsettablePolyLocal < offsettablePolyLocal_end + 1; offsettablePolyLocal++) {
-              if (polygon_id === 0 && offsettablePolyLocal === 2) continue;
+              if (polygonId === 0 && offsettablePolyLocal === 2) continue;
               for (joinTypeLocal = 0; joinTypeLocal < 3; joinTypeLocal++) {
                 for (deltaLocal_i = 0; deltaLocal_i < deltaLocals.length; deltaLocal_i++) {
                   deltaLocal = deltaLocals[deltaLocal_i];
@@ -1312,7 +1308,7 @@ function bindInputListeners() {
                   miterLimitLocal_end = (joinTypeLocal === 2 && deltaLocal !== 0) ? 6 : 1;
                   for (miterLimitLocal = miterLimitLocal_start; miterLimitLocal < miterLimitLocal_end + 1; miterLimitLocal += 2) {
                     benchmarkGlob[benchmarkGlob.length] = {
-                      polygon_id: polygon_id,
+                      polygonId: polygonId,
                       joinType: joinTypeLocal, // 0,1
                       offsettablePoly: ['', 'subject', 'clip', 'solution'][offsettablePolyLocal],
                       delta: deltaLocal, // -10 - 10
