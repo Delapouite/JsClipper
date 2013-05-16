@@ -857,9 +857,8 @@ Benchmark.prototype.print = function (all) {
   return tbl;
 };
 Benchmark.prototype.printMultipleRuns = function () {
-  var tbl2 = '<table class="bench" id="benchmark_multiple_table"><thead><tr><th>Num</th><th>Calls</th><th>Sum</th><th>Avg</th></tr></thead><tbody>';
-  var i, item, time_sum = 0;
-  var times = [];
+  var table = '<table class="bench" id="benchmark_multiple_table"><thead><tr><th>Num</th><th>Calls</th><th>Sum</th><th>Avg</th></tr></thead><tbody>';
+  var i, times = [];
   for (i = 0; i < this.totals_arr_multiple.length; i++) {
     times.push(this.totals_arr_multiple[i][1]);
   }
@@ -871,36 +870,34 @@ Benchmark.prototype.printMultipleRuns = function () {
   var minusRange = min - average;
   var plusRange = max - average;
   for (i = 0; i < this.totals_arr_multiple.length; i++) {
-    tbl2 += '<tr><td>';
-    tbl2 += (i + 1);
-    tbl2 += '</td><td>';
-    tbl2 += this.totals_arr_multiple[i][0];
-    tbl2 += '</td><td>';
-    item = this.totals_arr_multiple[i][1];
-    tbl2 += item;
-    time_sum += item;
-    tbl2 += '</td><td>';
-    tbl2 += this.totals_arr_multiple[i][2];
-    tbl2 += '</td></tr>';
+    table += '<tr><td>';
+    table += (i + 1);
+    table += '</td><td>';
+    table += this.totals_arr_multiple[i][0];
+    table += '</td><td>';
+    table += this.totals_arr_multiple[i][1];
+    table += '</td><td>';
+    table += this.totals_arr_multiple[i][2];
+    table += '</td></tr>';
   }
-  tbl2 += '<tr><td colspan="4" id="benchmark_multiple_status" style="display:none"></td></tr>';
+  table += '<tr><td colspan="4" id="benchmark_multiple_status" style="display:none"></td></tr>';
   if (!isNaN(average)) {
-    tbl2 += '<tr><td colspan="4">';
-    tbl2 += '<b>Average:</b> ' + average + ' ms<br>';
-    tbl2 += '<b>Min:</b> ' + min + ' ms<br>';
-    tbl2 += '<b>Max:</b> ' + max + ' ms<br>';
-    tbl2 += '<b>Range:</b> ' + range.toFixed(4) + ' ms<br>';
-    tbl2 += '<b>Minus-Range:</b> ' + minusRange.toFixed(4) + ' ms<br>';
-    tbl2 += '<b>Plus-Range:</b> ' + plusRange.toFixed(4) + ' ms<br>';
-    tbl2 += '<b>Stdev:</b> ' + standardDeviation + ' ms<br>';
-    tbl2 += '<b>Range/Average %:</b> ' + (range / average * 100).toFixed(4) + '<br>';
-    tbl2 += '<b>Minus-Range/Average %:</b> ' + (minusRange / average * 100).toFixed(4) + '<br>';
-    tbl2 += '<b>Plus-Range/Average %:</b> ' + (plusRange / average * 100).toFixed(4) + '<br>';
-    tbl2 += '<b>Stdev/Average %:</b> ' + (standardDeviation / average * 100).toFixed(4) + '<br>';
-    tbl2 += '</td></tr>';
+    table += '<tr><td colspan="4">';
+    table += '<b>Average:</b> ' + average + ' ms<br>';
+    table += '<b>Min:</b> ' + min + ' ms<br>';
+    table += '<b>Max:</b> ' + max + ' ms<br>';
+    table += '<b>Range:</b> ' + range.toFixed(4) + ' ms<br>';
+    table += '<b>Minus-Range:</b> ' + minusRange.toFixed(4) + ' ms<br>';
+    table += '<b>Plus-Range:</b> ' + plusRange.toFixed(4) + ' ms<br>';
+    table += '<b>Stdev:</b> ' + standardDeviation + ' ms<br>';
+    table += '<b>Range/Average %:</b> ' + (range / average * 100).toFixed(4) + '<br>';
+    table += '<b>Minus-Range/Average %:</b> ' + (minusRange / average * 100).toFixed(4) + '<br>';
+    table += '<b>Plus-Range/Average %:</b> ' + (plusRange / average * 100).toFixed(4) + '<br>';
+    table += '<b>Stdev/Average %:</b> ' + (standardDeviation / average * 100).toFixed(4) + '<br>';
+    table += '</td></tr>';
   }
-  tbl2 += '</tbody>';
-  return tbl2;
+  table += '</tbody>';
+  return table;
 };
 
 function colorizeBoxes() {
@@ -1314,11 +1311,10 @@ function bindInputListeners() {
                   miterLimitLocal_start = 1;
                   miterLimitLocal_end = (joinTypeLocal === 2 && deltaLocal !== 0) ? 6 : 1;
                   for (miterLimitLocal = miterLimitLocal_start; miterLimitLocal < miterLimitLocal_end + 1; miterLimitLocal += 2) {
-                    var tmpOffsettablePoly = ['', 'subject', 'clip', 'solution'];
                     benchmarkGlob[benchmarkGlob.length] = {
                       polygon_id: polygon_id,
                       joinType: joinTypeLocal, // 0,1
-                      offsettablePoly: tmpOffsettablePoly[offsettablePolyLocal],
+                      offsettablePoly: ['', 'subject', 'clip', 'solution'][offsettablePolyLocal],
                       delta: deltaLocal, // -10 - 10
                       miterLimit: miterLimitLocal, // 1 - 5
                       autoFix: true, // false, true
