@@ -1,6 +1,5 @@
 /* globals $, _, Raphael, ClipperLib, RGBColor */
 var selectedPolygons = 1; // Texts
-
 var subj = {
   fillType: 1,
   random: null,
@@ -17,9 +16,7 @@ var solution = {
   subPolygons: 0,
   totalPoints: 0
 };
-
 var clipType = 3; // Xor
-
 var clean = true;
 var cleanDeltaDefault = 0.1;
 var cleanDelta = cleanDeltaDefault;
@@ -27,17 +24,14 @@ var simplify = true;
 var lighten = true;
 var lightenDistanceDefault = 0.1;
 var lightenDistance = lightenDistanceDefault;
-
 var offsettablePoly = 'solution'; //, subject, clip
 var joinType = 0;
 var delta = -1;
 var miterLimit = 2.0;
 var autoFix = true;
-
 var scale = 100;
 var scaleAddition = 100;
 var dontRoundAndScale = false;
-
 var bevel = 0;
 var explorerEnabled = true;
 var clipper = new ClipperLib.Clipper();
@@ -373,12 +367,11 @@ function SVGPathToClipperPolygons(d) {
   arr = Raphael._pathToAbsolute(arr); // mahvstcsqz -> uppercase
   var str = _.flatten(arr).join(' '),
     paths = str.replace(/M/g, '|M').split('|'),
-    polygons_arr = [],
-    polygon_arr = [];
+    polygons = [], polygon;
   for (var k = 0; k < paths.length; k++) {
     if (paths[k].trim() === '') continue;
     arr = Raphael.parsePathString(paths[k].trim());
-    polygon_arr = [];
+    polygon = [];
     var letter = '',
       x = 0,
       y = 0,
@@ -405,7 +398,7 @@ function SVGPathToClipperPolygons(d) {
           if (typeof x !== 'undefined' && !isNaN(Number(x))) pt.X = Number(x);
           if (typeof y !== 'undefined' && !isNaN(Number(y))) pt.Y = Number(y);
           if (pt.X !== null && pt.Y !== null) {
-            polygon_arr.push(pt);
+            polygon.push(pt);
           } else {
             return false;
           }
@@ -420,9 +413,9 @@ function SVGPathToClipperPolygons(d) {
         y = subPathStart.y;
       }
     }
-    polygons_arr.push(polygon_arr);
+    polygons.push(polygon);
   }
-  return polygons_arr;
+  return polygons;
 }
 
 function formatOutput(polygonString) {
@@ -514,14 +507,12 @@ function getRandomPolygons(which, polygon) {
           } else {
             pp.Y = np[i][0].Y;
           }
-          np[i].push(pp);
         }
-        else np[i].push(pp);
       } else {
         pp.X = _.random(randomSetting.randomMinX, randomSetting.randomMaxX);
         pp.Y = _.random(randomSetting.randomMinY, randomSetting.randomMaxY);
-        np[i].push(pp);
       }
+      np[i].push(pp);
     }
     previousX = null;
     previousY = null;
@@ -651,7 +642,6 @@ function updateEnlargedSVGSource() {
     $('#dummy').remove();
     $('#_p').attr('viewBox', (bBox.x - 5) + ' ' + (bBox.y - 5) + ' ' + (bBox.width + 10) + ' ' + (bBox.height + 10));
     $('#enlarged_svg').html($('#enlarged_svg').html()).show();
-
     $('#_p').attr('width', windowWidth).attr('height', _.parseInt((windowWidth / originalWidth) * originalHeight));
     $('#_p1, #_p2, #_p3').css('stroke-width', 0.8 * (originalWidth / windowWidth));
   }
@@ -676,9 +666,9 @@ function benchmark2(i) {
   $('#autoFix').prop('checked', autoFix);
   simplify = obj.simplify;
   $('#simplify').prop('checked', simplify);
-  subj.fillType = obj.subject_fillType;
+  subj.fillType = obj.subjectFillType;
   $('input[name="subject_fillType"][value="' + subj.fillType + '"]').prop('checked', true);
-  clip.fillType = obj.clip_fillType;
+  clip.fillType = obj.clipFillType;
   $('input[name="clip_fillType"][value="' + clip.fillType + '"]').prop('checked', true);
   clipType = obj.clipType;
   $('input[name="clipType"][value="' + clipType + '"]').prop('checked', true);
@@ -1154,8 +1144,7 @@ function bindInputListeners() {
   $('#scale_minus').hold(function () {
     var original = $('#scale').val();
     if (original && !isNaN(original) && _.parseInt(original).toString() !== '0') scale = parseFloat(original);
-    scale = scale - scaleAddition;
-    scale = Math.round(scale / scaleAddition) * scaleAddition;
+    scale = Math.round((scale - scaleAddition) / scaleAddition) * scaleAddition;
     if (scale <= 0) scale = 1.0;
     $('#scale').val(scale.toFixed(1)).trigger('change');
   });
@@ -1170,8 +1159,7 @@ function bindInputListeners() {
   $('#scale_plus').hold(function () {
     var original = $('#scale').val();
     if (original && !isNaN(original) && _.parseInt(original).toString() !== '0') scale = parseFloat(original);
-    scale = scale + scaleAddition;
-    scale = Math.round(scale / scaleAddition) * scaleAddition;
+    scale = Math.round((scale + scaleAddition) / scaleAddition) * scaleAddition;
     $('#scale').val(scale.toFixed(1)).trigger('change');
   });
 
@@ -1315,8 +1303,8 @@ function bindInputListeners() {
                       miterLimit: miterLimitLocal, // 1 - 5
                       autoFix: true, // false, true
                       simplify: false, // false, true
-                      subject_fillType: fillTypeLocal, // 0,1
-                      clip_fillType: fillTypeLocal, //0, 1
+                      subjectFillType: fillTypeLocal, // 0,1
+                      clipFillType: fillTypeLocal, //0, 1
                       clipType: (clipTypeLocal === 0) ? '' : clipTypeLocal - 1, // '',0,1,2,3
                       scale: scaleLocal, // 100, 100 000, 1000 000 000
                       randomSetting: {
@@ -1348,7 +1336,7 @@ function bindInputListeners() {
         d = typeof id === 'undefined' ? scaledPaths[role].join(' ') : scaledPaths[role][id];
       SVG.highlightedPath = p.path(d);
       $(SVG.highlightedPath.node).removeAttr('fill stroke').attr({
-        'class': 'svg_mypath',
+        'class': 'highlightedPath',
         'fill-rule': $('#p' + role).attr('fill-rule'),
         'vector-effect': 'non-scaling-stroke'
       });
@@ -1380,18 +1368,16 @@ function bindInputListeners() {
         $('#polygon_explorer_string_inp').val('Some error occurred when parsing polygon points!');
       }
       $(SVG.highlightedPath.node).removeAttr('fill stroke').attr({
-        'class': 'svg_mypath',
+        'class': 'highlightedPath',
         'fill-rule': $('#p' + role).attr('fill-rule'),
         'vector-effect': 'non-scaling-stroke'
       });
       var bBox = SVG.highlightedPath.node.getBBox();
       var SVGWidth = _.parseInt($('#p').attr('width'));
       var SVGHeight = _.parseInt($('#p').attr('height'));
-      var x_scale = (SVGWidth - 20) / bBox.width;
-      var y_scale = (SVGHeight - 20) / bBox.height;
-      var scal = Math.min(x_scale, y_scale);
-      var x_trans = -(bBox.x + bBox.width / 2) + SVGWidth / 2;
-      var y_trans = -(bBox.y + bBox.height / 2) + SVGHeight / 2;
+      var scal = Math.min((SVGWidth - 20) / bBox.width, (SVGHeight - 20) / bBox.height);
+      var xTrans = -(bBox.x + bBox.width / 2) + SVGWidth / 2;
+      var yTrans = -(bBox.y + bBox.height / 2) + SVGHeight / 2;
       $('#StartMarker')[0].setAttribute('markerWidth', 10 / scal * 2);
       $('#StartMarker')[0].setAttribute('markerHeight', 10 / scal * 2);
       $('#MidMarker')[0].setAttribute('markerWidth', 4 / scal * 2);
@@ -1399,7 +1385,7 @@ function bindInputListeners() {
       $('#EndMarker')[0].setAttribute('markerWidth', 4 / scal * 2);
       $('#EndMarker')[0].setAttribute('markerHeight', 4 / scal * 2);
       SVG.highlightedPath.animate({
-        'transform': 't' + x_trans + ' ' + y_trans + 's' + scal + ' ' + scal
+        'transform': 't' + xTrans + ' ' + yTrans + 's' + scal + ' ' + scal
       }, 500, function () {
         $(SVG.highlightedPath.node).attr({
           'marker-start': 'url(#StartMarker)',

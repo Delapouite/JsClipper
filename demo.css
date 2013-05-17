@@ -26,32 +26,32 @@ th {
   background-color: #FFF;
   border: 2px solid #AAA;
 }
-.svg_mypath {
-  stroke:black;
+.highlightedPath {
+  stroke: black;
   stroke-width:1;
-  fill:black;
+  fill: black;
   fill-opacity:0.3;
 }
 #p1, #_p1 {
-  fill:#00009C;
-  fill-opacity:0.06;
-  stroke:#D3D3DA;
-  stroke-opacity:1.0;
-  stroke-width:0.8;
+  fill: #00009C;
+  fill-opacity: 0.06;
+  stroke: #D3D3DA;
+  stroke-opacity: 1.0;
+  stroke-width: 0.8;
 }
 #p2, #_p2 {
-  fill:#9C0000;
-  fill-opacity:0.06;
-  stroke:#FFA07A;
-  stroke-opacity:1.0;
-  stroke-width:0.8;
+  fill: #9C0000;
+  fill-opacity: 0.06;
+  stroke: #FFA07A;
+  stroke-opacity: 1.0;
+  stroke-width: 0.8;
 }
 #p3, #_p3 {
-  fill:#80ff9C;
-  fill-opacity:0.5;
-  stroke:#003300;
-  stroke-opacity:1.0;
-  stroke-width:0.8;
+  fill: #80ff9C;
+  fill-opacity: 0.5;
+  stroke: #003300;
+  stroke-opacity: 1.0;
+  stroke-width: 0.8;
 }
 #svg_source_textarea, #benchmark_exports_textarea {
   height: 300px;
@@ -100,9 +100,6 @@ th {
   text-align: left;
   white-space: normal;
   width: 461px;
-}
-.polygon_explorer th {
-  font-weight:bold;
 }
 .polygon_explorer > tr > th, .polygon_explorer > tr > td,
 .polygon_explorer > tbody > tr > th, .polygon_explorer > tbody > tr > td
