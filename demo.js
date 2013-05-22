@@ -280,144 +280,6 @@ var SVG = {
   }
 };
 
-/* Input can be JSON-stringified version of the following:
- - Array of arrays of points [[{"X":10,"Y":10},{"X":10,"Y":10},{"X":10,"Y":10}][{"X":10,"Y":10},{"X":10,"Y":10},{"X":10,"Y":10}]]
- - Array of points [{"X":10,"Y":10},{"X":10,"Y":10},{"X":10,"Y":10}]
- - The aboves in lowercase
- - Array of x,y-coordinates eg. [0, 10, 20, 30, 40, 50] or [0 10 20 30 40 50] or [0 10, 20 30, 40 50];
- - The above without []
- - SVG path string with commands MLVHZ and mlvhz
- Returns normalized Clipper Polygons object stringified or false in failure
-*/
-function normalizeClipperPoly(polygonString) {
-  if (typeof polygonString !== 'string') return false;
-  polygonString = polygonString.trim();
-  var np, poly;
-  if (polygonString.substr(0, 1).toUpperCase() === 'M') {
-    np = SVGPathToClipperPolygons(polygonString);
-    if (np === false) {
-      return !!console.warn('Unable to parse SVG path string');
-    }
-    return JSON.stringify(np);
-  }
-  polygonString = polygonString.replace(/[\s,]+/g, ',');
-  if (polygonString.substr(0, 1) !== '[') polygonString = '[' + polygonString;
-  if (polygonString.substr(-1, 1) !== ']') polygonString = polygonString + ']';
-  try {
-    poly = JSON.parse(polygonString);
-  } catch (err) {
-    return !!console.warn('Unable to parse polygon string');
-  }
-  // if only points without 'X' and 'Y'
-  var temp_n = [], i;
-  if (_.isArray(poly) && poly.length && typeof poly[0] === 'number') {
-    for (i = 0; i < poly.length; i = i + 2) {
-      temp_n.push({
-        X: poly[i],
-        Y: poly[i + 1]
-      });
-    }
-    poly = temp_n;
-  }
-  // if an array of array of points without 'X' and 'Y'
-  var temp_n2 = [], j;
-  if (_.isArray(poly) && poly.length && _.isArray(poly[0]) && typeof poly[0][0] !== 'undefined' && typeof poly[0][0].X === 'undefined' && typeof poly[0][0].x === 'undefined') {
-    for (j = 0; j < poly.length; j++) {
-      temp_n = [];
-      for (i = 0; i < poly[j].length; i = i + 2) {
-        temp_n.push({
-          X: poly[j][i],
-          Y: poly[j][i + 1]
-        });
-      }
-      temp_n2.push(temp_n);
-    }
-    poly = temp_n2;
-  }
-
-  // if not array of arrays, convert to array of arrays
-  if (_.isArray(poly) && poly.length > 0 && !_.isArray(poly[0])) poly = [poly];
-  var pp, x, y;
-  np = [[]];
-  for (i = 0; i < poly.length; i++) {
-    np[i] = [];
-    for (j = 0; j < poly[i].length; j++) {
-      pp = {};
-      y = null;
-      x = null;
-      if (typeof poly[i][j].X !== 'undefined' && !isNaN(Number(poly[i][j].X))) x = Number(poly[i][j].X);
-      else if (typeof poly[i][j].x !== 'undefined' && !isNaN(Number(poly[i][j].x))) x = Number(poly[i][j].x);
-      if (typeof poly[i][j].Y !== 'undefined' && !isNaN(Number(poly[i][j].Y))) y = Number(poly[i][j].Y);
-      else if (typeof poly[i][j].y !== 'undefined' && !isNaN(Number(poly[i][j].y))) y = Number(poly[i][j].y);
-      if (y !== null && x !== null) {
-        pp.X = x;
-        pp.Y = y;
-        np[i].push(pp);
-      } else {
-        return !!console.warn('Unable to parse polygon string Error: Coordinates are not in a right form.');
-      }
-    }
-  }
-  return JSON.stringify(np);
-}
-
-// helper function for normalizeClipperPoly()
-function SVGPathToClipperPolygons(d) {
-  var arr = Raphael.parsePathString(d.trim()); // str to array
-  arr = Raphael._pathToAbsolute(arr); // mahvstcsqz -> uppercase
-  var str = _.flatten(arr).join(' '),
-    paths = str.replace(/M/g, '|M').split('|'),
-    polygons = [], polygon;
-  for (var k = 0; k < paths.length; k++) {
-    if (paths[k].trim() === '') continue;
-    arr = Raphael.parsePathString(paths[k].trim());
-    polygon = [];
-    var letter = '',
-      x = 0,
-      y = 0,
-      pt = {},
-      subPathStart = {
-        x: '',
-        y: ''
-      };
-    for (var i = 0; i < arr.length; i++) {
-      letter = arr[i][0].toUpperCase();
-      if (letter !== 'M' && letter !== 'L' && letter !== 'Z') continue;
-      if (letter !== 'Z') {
-        for (var j = 1; j < arr[i].length; j = j + 2) {
-          if (letter === 'V') y = arr[i][j];
-          else if (letter === 'H') x = arr[i][j];
-          else {
-            x = arr[i][j];
-            y = arr[i][j + 1];
-          }
-          pt = {
-            X: null,
-            Y: null
-          };
-          if (typeof x !== 'undefined' && !isNaN(Number(x))) pt.X = Number(x);
-          if (typeof y !== 'undefined' && !isNaN(Number(y))) pt.Y = Number(y);
-          if (pt.X !== null && pt.Y !== null) {
-            polygon.push(pt);
-          } else {
-            return false;
-          }
-        }
-      }
-      if ((letter !== 'Z' && subPathStart.x === '') || letter === 'M') {
-        subPathStart.x = x;
-        subPathStart.y = y;
-      }
-      if (letter === 'Z') {
-        x = subPathStart.x;
-        y = subPathStart.y;
-      }
-    }
-    polygons.push(polygon);
-  }
-  return polygons;
-}
-
 function formatOutput(polygonString) {
   if (typeof polygonString !== 'string' || polygonString === '') return '';
   if (outputFormat === 'Clipper') {
@@ -987,8 +849,8 @@ function bindInputListeners() {
     $('#custom_polygon_clip').val(formatOutput(clip));
   });
   $('#save_custom_polygon').click(function () {
-    var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
-    var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
+    var subj = normalizeClipperPolygons($('#custom_polygon_subj').val());
+    var clip = normalizeClipperPolygons($('#custom_polygon_clip').val());
     if (subj === false || clip === false) return false;
     var value = _.parseInt($('#custom_polygons_select').val());
     if (value) {
@@ -1003,8 +865,8 @@ function bindInputListeners() {
     else alert('Polygon update failed!');
   });
   $('#add_as_new_custom_polygon').click(function () {
-    var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
-    var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
+    var subj = normalizeClipperPolygons($('#custom_polygon_subj').val());
+    var clip = normalizeClipperPolygons($('#custom_polygon_clip').val());
     if (subj === false || clip === false) return false;
     var customPolygons = saveCustomPolygon({
       subj: subj,
@@ -1227,14 +1089,14 @@ function bindInputListeners() {
   $('#output_format').change(function () {
     outputFormat = $(this).val();
     if (!$('#custom_polygons_fieldset').is(':hidden')) {
-      var subj = normalizeClipperPoly($('#custom_polygon_subj').val());
-      var clip = normalizeClipperPoly($('#custom_polygon_clip').val());
+      var subj = normalizeClipperPolygons($('#custom_polygon_subj').val());
+      var clip = normalizeClipperPolygons($('#custom_polygon_clip').val());
       if (subj !== false && clip !== false) {
         $('#custom_polygon_subj').val(formatOutput(subj));
         $('#custom_polygon_clip').val(formatOutput(clip));
       }
     }
-    var polygonExplorerString = normalizeClipperPoly($('#polygon_explorer_string_inp').val());
+    var polygonExplorerString = normalizeClipperPolygons($('#polygon_explorer_string_inp').val());
     if (polygonExplorerString !== false) {
       $('#polygon_explorer_string_inp').val(formatOutput(polygonExplorerString));
     }
@@ -1341,13 +1203,13 @@ function bindInputListeners() {
       var id = this.dataset.id,
         role = this.dataset.role,
         d = typeof id === 'undefined' ? SVG.scaledPaths[role].join(' ') : SVG.scaledPaths[role][id],
-        points_string = normalizeClipperPoly(d),
+        points_string = normalizeClipperPolygons(d),
         area = 0;
       if (points_string !== false) {
         if (typeof id === 'undefined') {
           $('#polygon_explorer_string_inp').val(formatOutput(points_string));
           for (var j = 0; j < SVG.scaledPaths.length; j++) {
-            var points_str = normalizeClipperPoly(SVG.scaledPaths[role][j], true);
+            var points_str = normalizeClipperPolygons(SVG.scaledPaths[role][j], true);
             if (points_str !== false) {
               var polygon = JSON.parse(points_str.replace(/^\[\[/, '[').replace(/\]\]$/, ']'));
               area += ClipperLib.Clipper.Area(polygon);
