@@ -421,30 +421,27 @@ function round(a) {
 
 function deserializeClipperPolygon(polygonString) {
   lsk++;
-  var poly = JSON.parse(polygonString);
-  var i, j, pp, n = [[]];
-  var np = new ClipperLib.Polygons();
-  for (i = 0; i < poly.length; i++) {
-    np[i] = new ClipperLib.Polygon();
-    for (j = 0; j < poly[i].length; j++) {
-      pp = new ClipperLib.IntPoint();
-      if (!isNaN(Number(poly[i][j].X)) && !isNaN(Number(poly[i][j].Y))) {
-        pp.X = round(Number(poly[i][j].X));
-        pp.Y = round(Number(poly[i][j].Y));
-        if (benchmarkRunning) {
-          if (pp.X > bench.maxPointX) bench.maxPointX = pp.X;
-          if (pp.Y > bench.maxPointY) bench.maxPointY = pp.Y;
-          if (pp.X < bench.minPointX) bench.minPointX = pp.X;
-          if (pp.Y < bench.minPointY) bench.minPointY = pp.Y;
-          if (typeof bench.points['L' + pp.X] === 'undefined') bench.points['L' + pp.X] = scale + ':' + pp.X + ':' + poly[i][j].X;
-          if (typeof bench.points['L' + pp.Y] === 'undefined') bench.points['L' + pp.Y] = scale + ':' + pp.Y + ':' + poly[i][j].Y;
-        }
-        np[i].push(pp);
+  var rawPolygons = JSON.parse(polygonString),
+    polygons = [[]], point;
+  for (var i = 0; i < rawPolygons.length; i++) {
+    polygons[i] = [];
+    for (var j = 0; j < rawPolygons[i].length; j++) {
+      if (isNaN(Number(rawPolygons[i][j].X)) || isNaN(Number(rawPolygons[i][j].Y))) {
+        return [[]];
       }
-      else return n;
+      point = new ClipperLib.IntPoint(round(Number(rawPolygons[i][j].X)), round(Number(rawPolygons[i][j].Y)));
+      if (benchmarkRunning) {
+        if (point.X > bench.maxPointX) bench.maxPointX = point.X;
+        if (point.Y > bench.maxPointY) bench.maxPointY = point.Y;
+        if (point.X < bench.minPointX) bench.minPointX = point.X;
+        if (point.Y < bench.minPointY) bench.minPointY = point.Y;
+        if (typeof bench.points['L' + point.X] === 'undefined') bench.points['L' + point.X] = scale + ':' + point.X + ':' + rawPolygons[i][j].X;
+        if (typeof bench.points['L' + point.Y] === 'undefined') bench.points['L' + point.Y] = scale + ':' + point.Y + ':' + rawPolygons[i][j].Y;
+      }
+      polygons[i].push(point);
     }
   }
-  return np;
+  return polygons;
 }
 
 function saveCustomPolygon(polygon, index) {
